@@ -112,6 +112,8 @@ model Image {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
+  billboard     Billboard?   @relation(fields: [billboardId], references: [id])
+  billboardId   String?
   Category      Category?    @relation(fields: [categoryId], references: [id])
   categoryId    String?
   SubCategory   SubCategory? @relation(fields: [subCategoryId], references: [id])
@@ -136,6 +138,21 @@ model Image {
   @@index([variantImageId])
 }
 
+model Billboard {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  images      Image[]
+  url         String  @unique
+  featured    Boolean @default(false)
+
+  categories    Category[]
+  subCategories SubCategory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Category {
   id          String  @id @default(uuid())
   name        String
@@ -144,11 +161,16 @@ model Category {
   url         String  @unique
   featured    Boolean @default(false)
 
+  billboardId String
+  billboard   Billboard @relation(fields: [billboardId], references: [id], onDelete: Cascade)
+
   subCategories SubCategory[]
   products      Product[]     @relation("CategoryToProduct")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([billboardId])
 }
 
 model SubCategory {
@@ -159,8 +181,10 @@ model SubCategory {
   url         String  @unique
   featured    Boolean @default(false)
 
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  billboardId String
+  billboard   Billboard @relation(fields: [billboardId], references: [id], onDelete: Cascade)
 
   products Product[] @relation("SubCategoryToProduct")
 
@@ -168,6 +192,7 @@ model SubCategory {
   updatedAt DateTime @updatedAt
 
   @@index([categoryId])
+  @@index([billboardId])
 }
 
 enum ShippingFeeMethod {

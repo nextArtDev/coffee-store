@@ -1,6 +1,6 @@
 import React from 'react'
 import { Bounded } from '@/components/shared/Bounded'
-import Image from 'next/image'
+// import Image from 'next/image'
 import heroImage from '../../../public/images/hero-image.webp'
 // import heroImage from '../../../public/images/bg.jpg'
 
