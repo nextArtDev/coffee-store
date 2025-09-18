@@ -8,6 +8,7 @@ import { FadeIn } from '@/components/shared/fade-in'
 import { RevealText } from '@/components/shared/reveal-text'
 import { SubCategoryForHomePage } from '@/lib/types/home'
 import { TransitionLink } from '../shared/TransitionLink'
+import FixedMotionImage from './fixed-motion-image'
 
 const Hero = ({
   subCategories,
@@ -20,17 +21,19 @@ const Hero = ({
     >
       <FadeIn
         vars={{ scale: 1, opacity: 0.5 }}
-        className=" absolute inset-0 pt-12 min-h-svh origin-top lg:h-svh motion-safe:scale-125 motion-reduce:opacity-50 "
+        className=" absolute inset-0   min-h-svh origin-top lg:h-svh motion-safe:scale-125 motion-reduce:opacity-50 "
       >
-        <Image
-          unoptimized
-          src={heroImage}
-          priority
-          fetchPriority="high"
-          alt="hero image"
-          fill
-          className="object-cover origin-top "
-        />
+        <FixedMotionImage imageUrl={heroImage.src}>
+          {/* <Image
+            unoptimized
+            src={heroImage}
+            priority
+            fetchPriority="high"
+            alt="hero image"
+            fill
+            className="object-cover origin-top "
+          /> */}{' '}
+        </FixedMotionImage>
       </FadeIn>
       <div className="relative flex h-screen flex-col justify-center items-center">
         <RevealText

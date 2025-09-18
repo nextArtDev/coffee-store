@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { FC } from 'react'
-import dateImage from '../../../public/images/palm-tree.png'
+import dateImage from '../../../public/images/coffee-bean.png'
 import { TransitionLink } from '../shared/TransitionLink'
 interface LogoProps {
   href?: string
@@ -13,7 +13,7 @@ const Logo: FC<LogoProps> = ({ href = '/' }) => {
         <Image
           src={dateImage || '/images/fallback-image.webp'}
           alt="logo"
-          className="object-cover scale-50"
+          className="object-cover scale-[0.1]"
         />
         {/* <Package2 className="h-6 w-6" /> */}
         {/* <span className="font-bold inline-block">خارَک</span> */}

@@ -204,7 +204,7 @@ MultiStepFormAuthProps) {
           setIsSuccess(true)
           toast.success('تایید موفقیت‌آمیز بود!')
           // onSuccess?.()
-          router.push('/')
+          router.refresh()
         }
       } catch (error) {
         console.error('OTP verification error:', error)

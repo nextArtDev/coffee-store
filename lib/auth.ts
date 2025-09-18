@@ -30,7 +30,6 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    admin(),
     phoneNumber({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       sendOTP: async ({ phoneNumber, code }, request) => {
@@ -78,6 +77,7 @@ export const auth = betterAuth({
         // console.log({ user })
       },
     }),
+    admin(),
     nextCookies(),
   ],
   session: {
