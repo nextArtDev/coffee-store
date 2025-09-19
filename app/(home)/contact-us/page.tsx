@@ -61,7 +61,7 @@ export default function AboutUs1() {
 
               <div className="space-y-4">
                 <h2 className="from-primary/90 to-primary/70 mb-4 bg-gradient-to-r bg-clip-text text-3xl font-bold text-transparent">
-                  آدرس کارگاه
+                  آدرس فروشگاه
                 </h2>
 
                 <p className="text-muted-foreground text-lg leading-relaxed">

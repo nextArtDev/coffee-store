@@ -43,13 +43,13 @@ const defaultValues: AboutUsProps['values'] = [
   {
     title: 'هنر و اصالت',
     description:
-      'در هر دوخت، اصالت هنر دست و عشق به چرم طبیعی را حفظ می‌کنیم. هر محصول داستان منحصربه‌فرد خود را روایت می‌کند.',
+      'در هر دوخت، اصالت هنر دست و عشق به قهوه طبیعی را حفظ می‌کنیم. هر محصول داستان منحصربه‌فرد خود را روایت می‌کند.',
     icon: 'ScanHeart',
   },
   {
     title: 'کیفیت و ماندگاری',
     description:
-      'از برترین چرم‌های طبیعی و محکم‌ترین دوخت استفاده می‌کنیم تا محصولاتی بیافرینیم که برای سال‌ها همراه شما بمانند.',
+      'از برترین قهوه‌های طبیعی و محکم‌ترین دوخت استفاده می‌کنیم تا محصولاتی بیافرینیم که برای سال‌ها همراه شما بمانند.',
     icon: 'ShieldCheck',
   },
   {
@@ -61,7 +61,7 @@ const defaultValues: AboutUsProps['values'] = [
   {
     title: 'ارتباط پایدار', // Sustainable Connection
     description:
-      'به دنبال ایجاد رابطه‌ای پایدار با مشتریان و محیط زیست هستیم. چرمی که به عمر محصولی ارزشمند تبدیل شود، پایدارترین انتخاب است.',
+      'به دنبال ایجاد رابطه‌ای پایدار با مشتریان و محیط زیست هستیم. قهوهی که به عمر محصولی ارزشمند تبدیل شود، پایدارترین انتخاب است.',
     icon: 'Hop',
   },
 ]
@@ -80,9 +80,9 @@ export default function AboutUs1() {
   const aboutData = {
     title: 'درباره ما', // About Us
     subtitle:
-      'آفرینش کیف‌هایی برای زندگی، با عشق به هنر چرم‌دوزی و احترام به اصالت.', // Creating bags for life, with a love for the art of leathercraft and respect for authenticity.
+      'آفرینش کیف‌هایی برای زندگی، با عشق به هنر قهوه‌دوزی و احترام به اصالت.', // Creating bags for life, with a love for the art of leathercraft and respect for authenticity.
     mission:
-      'ماموریت ما احیای هنر چرم‌دوزی دست‌ساز و عرضه محصولاتی است که نه تنها کاربردی باشند، بلکه میراثی ارزشمند برای نسل‌های آینده تبدیل شوند.', // Our mission is to revive the art of handmade leathercraft and offer products that are not only functional but become a valuable legacy for future generations.
+      'ماموریت ما احیای هنر قهوه‌دوزی دست‌ساز و عرضه محصولاتی است که نه تنها کاربردی باشند، بلکه میراثی ارزشمند برای نسل‌های آینده تبدیل شوند.', // Our mission is to revive the art of handmade leathercraft and offer products that are not only functional but become a valuable legacy for future generations.
     vision:
       'تصور ما جهانی است که در آن هرکس ارزش کیفیت، اصالت و داستان پشت یک محصول دست‌ساز را درک می‌کند و آن را به کالای مصرفی بی‌هویت ترجیح می‌دهد.', // We envision a world where everyone understands the value of quality, authenticity, and the story behind a handmade product and prefers it over impersonal mass-produced goods.
     values: defaultValues,

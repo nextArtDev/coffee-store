@@ -274,20 +274,14 @@ export async function generateSearchMetadata(params: {
       query,
       'جست‌وجو',
       'محصولات',
-      'فروشگاه چرم آنلاین',
-      'فروشگاه چرم',
+      'فروشگاه قهوه آنلاین',
+      'فروشگاه قهوه',
     ]
   } else {
     title = `محصولات${page > 1 ? ` - Page ${page}` : ''} | ${STORE_NAME}`
     description = 'جست‌وجوی محصولات کامل فروشگاه'
     // 'Discover our complete product collection. Filter by category, price, color, and size to find exactly what you need.'
-    keywords = [
-      'چرم طبیعی',
-      'کیف چرمی',
-      'خرید آنلاین',
-      'فروشگاه چرم',
-      'فروشگاه چرم',
-    ]
+    keywords = ['قهوه طبیعی', 'خرید آنلاین', 'فروشگاه قهوه', 'فروشگاه قهوه']
   }
 
   // Add filter-based keywords

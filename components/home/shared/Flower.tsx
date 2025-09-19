@@ -1751,28 +1751,28 @@ export const StyledFlower = () => {
           visibility: hidden;
         }
         .flowerFrame .st0 {
-          fill: #ffffff;
+          fill: oklch(0.7529 0.0629 72.3107);
         }
         .flowerFrame .st1 {
           fill: none;
-          stroke: #215f7e;
+          stroke: oklch(0.3299 0.045 23.9357);
           stroke-width: 2;
           stroke-linecap: round;
           stroke-linejoin: round;
         }
         .flowerFrame .st2 {
-          fill: #64c1bb;
+          fill: #34a203;
         }
         .flowerFrame .st3 {
           fill: none;
-          stroke: #21a5af;
+          stroke: oklch(0.4539 0.0568 55.6365);
           stroke-width: 2;
           stroke-linecap: round;
           stroke-linejoin: round;
         }
         .flowerFrame .st4 {
           fill: none;
-          stroke: #21a5af;
+          stroke: oklch(0.4198 0.0289 21.5408);
           stroke-linecap: round;
           stroke-linejoin: round;
         }
@@ -1780,29 +1780,29 @@ export const StyledFlower = () => {
           fill: #fcd8c5;
         }
         .flowerFrame .st6 {
-          fill: #21a5af;
+          fill: oklch(0.3046 0.0256 22.522);
         }
         .flowerFrame .st7 {
           fill: none;
-          stroke: #21a5af;
+          stroke: oklch(0.3299 0.045 23.9357);
           stroke-width: 4;
           stroke-linecap: round;
           stroke-linejoin: round;
         }
         .flowerFrame .st8 {
-          fill: #f7a998;
+          fill: oklch(0.6875 0.142 21.4566);
         }
         .flowerFrame .st9 {
-          fill: #f3ce7f;
+          fill: oklch(0.1891 0.0154 25.858);
         }
         .flowerFrame .st10 {
-          fill: #14a4ae;
+          fill: oklch(0.3299 0.045 23.9357);
         }
         .flowerFrame .st11 {
-          fill: #61bfba;
+          fill: oklch(0.618 0.0609 63.6799);
         }
         .flowerFrame .st12 {
-          fill: #fdd9c6;
+          fill: oklch(0.1891 0.0154 25.858);
         }
         .flowerFrame .st13 {
           fill: none;
@@ -1837,9 +1837,9 @@ export const StyledFlower = () => {
               {/* Since 1898, we have been dreaming up, designing and crafting premium and
             essential bags and accessories that have stood the test of the years,
             with their truly timeless design. */}
-              کارگاه کوچک ما، جایی است که رویاهای چرمی به واقعیت می‌پیوندند. ما
-              با اشتیاقی وافر و چشمداشت به فردایی درخشان، کار خود را با طراحی و
-              ساخت کیف‌ها و اکسسوری‌ها آغاز کرده‌ایم. بر این باوریم که طراحی
+              فروشگاه کوچک ما، جایی است که رویاهای قهوهی به واقعیت می‌پیوندند.
+              ما با اشتیاقی وافر و چشمداشت به فردایی درخشان، کار خود را با طراحی
+              و ساخت کیف‌ها و اکسسوری‌ها آغاز کرده‌ایم. بر این باوریم که طراحی
               بی‌زمان و کیفیت استثنایی، هسته اصلی خلق محصولاتی هستند که قرار است
               برای سال‌ها همراه همیشگی شما باشند.
             </p>

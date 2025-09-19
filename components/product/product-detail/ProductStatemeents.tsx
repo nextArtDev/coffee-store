@@ -22,7 +22,7 @@ const ProductStatements = () => {
         </span>
         <p className="text-xs text-center">
           {/* Full-grain, pebbled calf leather. Fabric lining. */}
-          اصالت چرم تمامی کالا ها تایید می گردد.
+          اصالت قهوه تمامی کالا ها تایید می گردد.
         </p>
       </span>
       <span className="max-w-[120px]  flex flex-col gap-2 items-center justify-center text-center">

@@ -1,8 +1,8 @@
 
 {
-  "name": "کارگاه چرم خارَک",
-  "short_name": "خارَک",
-  "description": "فروش محصولات چرمی دست‌ساز",
+  "name": "فروشگاه قهوه",
+  "short_name": "قهوه",
+  "description": "فروش محصولات قهوه",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

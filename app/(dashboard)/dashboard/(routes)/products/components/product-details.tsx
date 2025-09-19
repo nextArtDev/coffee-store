@@ -639,7 +639,7 @@ const ProductDetails: FC<ProductFormProps> = ({
                             maxItems={10}
                             value={field?.value || []}
                             onValueChange={field.onChange}
-                            placeholder="چرم گاوی"
+                            placeholder="قهوه کافئین بالا"
                           />
                         </FormControl>
                       </FormItem>
@@ -715,7 +715,7 @@ const ProductDetails: FC<ProductFormProps> = ({
 
               <InputFieldset
                 label="متد پست محصول"
-                description="پست چرم داخلی با وزن است."
+                description="پست قهوه داخلی با وزن است."
                 isMandatory
               >
                 <FormField
