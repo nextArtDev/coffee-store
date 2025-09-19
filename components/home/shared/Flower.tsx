@@ -7,6 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { FadeIn } from '@/components/shared/fade-in'
 import { RevealText } from '@/components/shared/reveal-text'
 
+gsap.registerPlugin(ScrollTrigger)
 // --- Animation Component Definition ---
 // The FlowerAnimation component is now defined in the same file to avoid import issues.
 const FlowerAnimation = () => {
@@ -15,7 +16,6 @@ const FlowerAnimation = () => {
   useGSAP(
     () => {
       // 1. Register the ScrollTrigger plugin
-      gsap.registerPlugin(ScrollTrigger)
 
       // --- SETUP FOR DRAWING ANIMATION ---
       const allDrawablePaths = gsap.utils.toArray<SVGPathElement>(
@@ -177,7 +177,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['80% 45%', '20% 45%'] },
+            // cycle: { transformOrigin: ['80% 45%', '20% 45%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['80% 45%', '20% 45%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 0 },
           'flower1-=1'
@@ -187,7 +191,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['80% 25%', '60% 35%', '70% 75%'] },
+            // cycle: { transformOrigin: ['80% 25%', '60% 35%', '70% 75%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['80% 25%', '60% 35%', '70% 75%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 0.5 },
           'flower1'
@@ -197,7 +205,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['20% 25%', '40% 35%', '30% 75%'] },
+            // cycle: { transformOrigin: ['20% 25%', '40% 35%', '30% 75%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['20% 25%', '40% 35%', '30% 75%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 0.5 },
           'flower1'
@@ -207,7 +219,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['90% 70%', '100% 100%', '0% 90%'] },
+            // cycle: { transformOrigin: ['90% 70%', '100% 100%', '0% 90%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['90% 70%', '100% 100%', '0% 90%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 0.5 },
           'flower2'
@@ -217,7 +233,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['10% 70%', '0% 100%', '100% 90%'] },
+            // cycle: { transformOrigin: ['10% 70%', '0% 100%', '100% 90%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['10% 70%', '0% 100%', '100% 90%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 0.5 },
           'flower2'
@@ -227,7 +247,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['0% 90%', '10% 50%', '70% 60%'] },
+            // cycle: { transformOrigin: ['0% 90%', '10% 50%', '70% 60%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['0% 90%', '10% 50%', '70% 60%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 0.5 },
           'flower3'
@@ -237,7 +261,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['100% 90%', '90% 50%', '30% 60%'] },
+            // cycle: { transformOrigin: ['100% 90%', '90% 50%', '30% 60%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['100% 90%', '90% 50%', '30% 60%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 0.5 },
           'flower3'
@@ -247,7 +275,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['220% -10%', '55% 100%'] },
+            // cycle: { transformOrigin: ['220% -10%', '55% 100%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['220% -10%', '55% 100%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 2.75 },
           'flower1-=0.75'
@@ -257,7 +289,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['-120% -10%', '45% 100%'] },
+            // cycle: { transformOrigin: ['-120% -10%', '45% 100%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['-120% -10%', '45% 100%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 2.75 },
           'flower1-=0.75'
@@ -267,8 +303,12 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: {
-              transformOrigin: ['10% 110%', '0% 100%', '0% 100%', '80% 100%'],
+            // cycle: {
+            //   transformOrigin: ['10% 110%', '0% 100%', '0% 100%', '80% 100%'],
+            // },
+            transformOrigin: (i: number) => {
+              const origins = ['10% 110%', '0% 100%', '0% 100%', '80% 100%']
+              return origins[i % origins.length]
             },
           },
           { scale: 1, duration: 2, stagger: 0.5 },
@@ -279,13 +319,17 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: {
-              transformOrigin: [
-                '90% 110%',
-                '100% 100%',
-                '100% 100%',
-                '20% 100%',
-              ],
+            // cycle: {
+            // transformOrigin: [
+            //   '90% 110%',
+            //   '100% 100%',
+            //   '100% 100%',
+            //   '20% 100%',
+            // ],
+            // },
+            transformOrigin: (i: number) => {
+              const origins = ['90% 110%', '100% 100%', '100% 100%', '20% 100%']
+              return origins[i % origins.length]
             },
           },
           { scale: 1, duration: 2, stagger: 0.5 },
@@ -296,7 +340,11 @@ const FlowerAnimation = () => {
           {
             autoAlpha: 1,
             scale: 0,
-            cycle: { transformOrigin: ['-50% 120%', '150% 120%'] },
+            // cycle: { transformOrigin: ['-50% 120%', '150% 120%'] },
+            transformOrigin: (i: number) => {
+              const origins = ['-50% 120%', '150% 120%']
+              return origins[i % origins.length]
+            },
           },
           { scale: 1, duration: 2, stagger: 0 },
           'flower2-=0.5'
