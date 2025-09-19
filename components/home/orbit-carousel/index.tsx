@@ -32,50 +32,43 @@ const data: Group[] = [
         id: 'm1',
         name: 'Albert Einstein',
         role: 'Theoretical Physicist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/d/d3/Albert_Einstein_Head.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm2',
         name: 'Isaac Newton',
         role: 'Physicist & Mathematician',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/f/f7/Portrait_of_Sir_Isaac_Newton%2C_1689_%28brightened%29.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm3',
         name: 'Galileo Galilei',
         role: 'Astronomer & Physicist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Justus_Sustermans_-_Portrait_of_Galileo_Galilei%2C_1636.jpg/800px-Justus_Sustermans_-_Portrait_of_Galileo_Galilei%2C_1636.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm4',
         name: 'Stephen Hawking',
         role: 'Theoretical Physicist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/e/eb/Stephen_Hawking.StarChild.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm5',
         name: 'Richard Feynman',
         role: 'Theoretical Physicist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/en/4/42/Richard_Feynman_Nobel.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm6',
         name: 'Max Planck',
         role: 'Quantum Theorist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/a/a7/Max_Planck_%281858-1947%29.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm7',
         name: 'Carl Sagan',
         role: 'Astrophysicist & Author',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/b/be/Carl_Sagan_Planetary_Society.JPG',
+        profile: '/images/coffee-bean.png',
       },
     ],
   },
@@ -89,50 +82,43 @@ const data: Group[] = [
         id: 'm8',
         name: 'Marie Curie',
         role: 'Physicist & Chemist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/7/7e/Marie_Curie_c1920.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm9',
         name: 'Dmitri Mendeleev',
         role: 'Creator of Periodic Table',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/c/c8/DIMendeleevCab.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm10',
         name: 'Rosalind Franklin',
         role: 'Chemist & X-ray Crystallographer',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/en/9/97/Rosalind_Franklin.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm11',
         name: 'Linus Pauling',
         role: 'Chemist & Peace Activist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/e/e8/Linus_Pauling_1955.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm12',
         name: 'Antoine Lavoisier',
         role: 'Father of Modern Chemistry',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/0/07/Antoine_lavoisier.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm13',
         name: 'Dorothy Hodgkin',
         role: 'Nobel Laureate in Chemistry',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Dorothy_Hodgkin_1947.jpg/800px-Dorothy_Hodgkin_1947.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm14',
         name: 'Michael Faraday',
         role: 'Chemist & Physicist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/8/88/M_Faraday_Th_Phillips_oil_1842.jpg',
+        profile: '/images/coffee-bean.png',
       },
     ],
   },
@@ -146,50 +132,43 @@ const data: Group[] = [
         id: 'm15',
         name: 'Charles Darwin',
         role: 'Naturalist & Biologist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/q/qe/Charles_Darwin_by_Julia_Margaret_Cameron_2.jpg/800px-Charles_Darwin_by_Julia_Margaret_Cameron_2.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm16',
         name: 'Gregor Mendel',
         role: 'Father of Genetics',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Gregor_Mendel.png/800px-Gregor_Mendel.png',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm17',
         name: 'Jane Goodall',
         role: 'Primatologist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Jane_Goodall_and_Gigi_1972.jpg/800px-Jane_Goodall_and_Gigi_1972.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm18',
         name: 'Louis Pasteur',
         role: 'Microbiologist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Louis_Pasteur%2C_foto_av_Paul_Nadar.jpg/800px-Louis_Pasteur%2C_foto_av_Paul_Nadar.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm19',
         name: 'Rachel Carson',
         role: 'Marine Biologist & Author',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Rachel-Carson.jpg/800px-Rachel-Carson.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm20',
         name: 'Alexander Fleming',
         role: 'Discoverer of Penicillin',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/4/4c/Alexander_Fleming_circa_1945.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm21',
         name: 'Francis Crick',
         role: 'Co-discoverer of DNA',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/en/e/e4/Francis_Crick.png',
+        profile: '/images/coffee-bean.png',
       },
     ],
   },
@@ -203,50 +182,43 @@ const data: Group[] = [
         id: 'm22',
         name: 'Nikola Tesla',
         role: 'Inventor & Engineer',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/d/d4/N.Tesla.JPG',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm23',
         name: 'Leonardo da Vinci',
         role: 'Inventor & Polymath',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Leonardo_da_Vinci_-_presumed_self-portrait_-_WGA12798.jpg/800px-Leonardo_da_Vinci_-_presumed_self-portrait_-_WGA12798.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm24',
         name: 'Hedy Lamarr',
         role: 'Inventor & Actress',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/a/a2/Hedy_Lamarr_in_The_Heavenly_Body_trailer_2.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm25',
         name: 'Thomas Edison',
         role: 'Inventor & Businessman',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Thomas_Edison2.jpg/800px-Thomas_Edison2.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm26',
         name: 'Archimedes',
         role: 'Ancient Engineer',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Domenico-Fetti_Archimedes_1620.jpg/800px-Domenico-Fetti_Archimedes_1620.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm27',
         name: 'Grace Hopper',
         role: 'Computer Scientist',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/a/ad/Commodore_Grace_M._Hopper%2C_USN_%28covered%29.jpg',
+        profile: '/images/coffee-bean.png',
       },
       {
         id: 'm28',
         name: 'Elon Musk',
         role: 'Engineer & Entrepreneur',
-        profile:
-          'https://upload.wikimedia.org/wikipedia/commons/3/34/Elon_Musk_Royal_Society_%28crop2%29.jpg',
+        profile: '/images/coffee-bean.png',
       },
     ],
   },
@@ -267,7 +239,7 @@ const useIsMobile = (breakpoint = 768) => {
 
 const safeImage = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
   const target = e.target as HTMLImageElement
-  target.src = 'https://placehold.co/100x100/E0E7FF/4338CA?text=Error'
+  target.src = '/images/coffee-bean.png'
 }
 
 // --- Main Component ---
@@ -308,13 +280,13 @@ export default function DualOrbitCarousel() {
 
   return (
     <div
-      className="flex items-center justify-center relative w-full overflow-hidden bg-gray-50 dark:bg-gray-900 transition-colors duration-300"
+      className="   flex items-center justify-center relative w-full overflow-hidden transition-colors duration-300"
       style={{ height: containerSize }}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
       <div
-        className="relative"
+        className="relative "
         style={{ width: containerSize, height: containerSize }}
       >
         {/* Outer Orbit (Members) */}
@@ -340,17 +312,19 @@ export default function DualOrbitCarousel() {
               return (
                 <div
                   key={member.id}
-                  className="absolute top-1/2 left-1/2"
+                  className="absolute top-1/2 left-1/2 flex flex-col items-center justify-center gap-1 "
                   style={{
                     transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-${outerRadius}px)`,
                   }}
                 >
+                  <p>{member.name}</p>
                   {/* ⭐ FIX: This inner motion.img now counter-rotates */}
                   <motion.img
                     src={member.profile}
                     alt={member.name}
                     onError={safeImage}
-                    className="object-cover rounded-full shadow-md border-2 border-gray-300 dark:border-gray-600"
+                    // className="object-cover rounded-full shadow-md border-2 border-gray-300 dark:border-gray-600"
+                    className="object-cover rounded-full shadow-md  "
                     style={{
                       width: memberSize,
                       height: memberSize,
@@ -389,16 +363,17 @@ export default function DualOrbitCarousel() {
             return (
               <div
                 key={group.id}
-                className="absolute top-1/2 left-1/2"
+                className="absolute top-1/2 left-1/2 flex flex-col items-center justify-center gap-1"
                 style={{
                   transform: `translate(-50%, -50%) rotate(${angle}deg) translateY(-${innerRadius}px)`,
-                  backgroundImage: '/images/4.png',
-                  maskImage: group.svg,
-                  maskSize: 'contain',
-                  maskRepeat: 'no-repeat',
-                  maskPosition: 'center',
+                  //   backgroundImage: '/images/4.png',
+                  //   maskImage: group.svg,
+                  //   maskSize: 'contain',
+                  //   maskRepeat: 'no-repeat',
+                  //   maskPosition: 'center',
                 }}
               >
+                <p>{group.name}</p>
                 {/* ⭐ FIX: This inner motion.div now counter-rotates */}
                 <motion.div
                   onClick={() => handleGroupClick(i)}
