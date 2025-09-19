@@ -1,5 +1,6 @@
 import DiscoverMoreCarousel from '@/components/home/discover-more/DiscoverMoreCarousel'
 import Hero from '@/components/home/hero/hero'
+import DualOrbitCarousel from '@/components/home/orbit-carousel'
 import Commitments from '@/components/home/shared/Commitments'
 import StoreStatement from '@/components/home/shared/StoreStatement'
 import WorkVideo from '@/components/home/shared/WorkVideo'
@@ -332,6 +333,9 @@ export default async function Home() {
       <Hero subCategories={subCategories} />
       <div className="py-16">
         <StoreStatement />
+      </div>
+      <div className="py-16">
+        <DualOrbitCarousel />
       </div>
       {!!bestSellers && (
         <section className="w-full h-full flex flex-col gap-8 py-8 px-3 ">
