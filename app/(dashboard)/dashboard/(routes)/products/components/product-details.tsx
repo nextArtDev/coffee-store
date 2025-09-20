@@ -452,7 +452,7 @@ const ProductDetails: FC<ProductFormProps> = ({
                     quantity: 'تعداد',
                     price: 'قیمت',
                     discount: 'تخفیف',
-                    weight: 'وزن (kg)',
+                    weight: 'وزن (g)',
                     length: 'طول (cm)',
                     width: 'عرض (cm)',
                     height: 'ارتفاع (cm)',

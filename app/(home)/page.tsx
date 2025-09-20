@@ -335,7 +335,7 @@ export default async function Home() {
       <div className="py-16">
         <StoreStatement />
       </div>
-      <div className="py-16">
+      <div className="py-16 w-full min-h-dvh">
         {/* <DualOrbitCarousel /> */}
         <GooeyCarousel categories={categories} />
       </div>
