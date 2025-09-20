@@ -5,9 +5,9 @@ import prisma from '@/lib/prisma'
 export default async function EditSubCategoryPage({
   params,
 }: {
-  params: Promise<{ subcategoryId: string }>
+  params: Promise<{ subCategoryId: string }>
 }) {
-  const subcategoryId = (await params).subcategoryId
+  const subcategoryId = (await params).subCategoryId
 
   const subcategory = await prisma.subCategory.findFirst({
     where: {

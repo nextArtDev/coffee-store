@@ -1,9 +1,11 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { useState, useEffect, FC } from 'react'
+import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
-//https://www.fancycomponents.dev/docs/components/filter/gooey-svg-filter
-// --- Mock Components for Demonstration ---
+import { CategoryWithStats } from '@/lib/types/home'
+import { Loader } from '@/components/shared/loader'
+
+// Mock Components
 const useDetectBrowser = () => 'Chrome'
 const useScreenSize = () => ({
   lessThan: (size: string) =>
@@ -25,49 +27,35 @@ const GooeySvgFilter = ({ id, strength }: { id: string; strength: number }) => (
     </defs>
   </svg>
 )
-// --- End Mock Components ---
 
-const TAB_CONTENT = [
-  {
-    title: 'قهوه',
-    files: [
-      { id: '1', title: 'learning-to-meditate.md', imageSrc: '/images/4.png' },
-      { id: '2', title: 'spring-garden-plans.md', imageSrc: '/images/4.png' },
-      { id: '3', title: 'travel-wishlist.md', imageSrc: '/images/4.png' },
-      { id: '4', title: 'new-coding-projects.md', imageSrc: '/images/4.png' },
-      { id: '5', title: 'learning-to-meditate.md', imageSrc: '/images/4.png' },
-    ],
+const listContainerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15, // Slower stagger
+      delayChildren: 0.2, // More delay
+    },
   },
-  {
-    title: 'تجهیزات',
-    files: [
-      { id: '1', title: 'year-in-review.md', imageSrc: '/images/4.png' },
-      { id: '2', title: 'marathon-training-log.md', imageSrc: '/images/4.png' },
-      { id: '3', title: 'recipe-collection.md', imageSrc: '/images/4.png' },
-      { id: '4', title: 'book-reflections.md', imageSrc: '/images/4.png' },
-    ],
-  },
-  {
-    title: 'فروش عمده',
-    files: [
-      { id: '1', title: 'moving-to-a-new-city.md', imageSrc: '/images/4.png' },
-      { id: '2', title: 'starting-a-blog.md', imageSrc: '/images/4.png' },
-      { id: '3', title: 'photography-basics.md', imageSrc: '/images/4.png' },
-      { id: '4', title: 'first-coding-project.md', imageSrc: '/images/4.png' },
-    ],
-  },
-  {
-    title: 'اکسسوری',
-    files: [
-      { id: '1', title: 'goals-and-aspirations.md', imageSrc: '/images/4.png' },
-      { id: '2', title: 'daily-gratitude.md', imageSrc: '/images/4.png' },
-      { id: '3', title: 'learning-to-cook.md', imageSrc: '/images/4.png' },
-      { id: '4', title: 'remote-work-journal.md', imageSrc: '/images/4.png' },
-    ],
-  },
-]
+}
 
-export default function GooeyCarousel() {
+const listItemVariants: Variants = {
+  hidden: { scale: 0.8, opacity: 0 }, // Use scale instead of y movement
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: 'easeOut',
+    },
+  },
+}
+
+interface GooeyCarouselProps {
+  categories: CategoryWithStats[]
+}
+
+const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
   const [activeTab, setActiveTab] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
 
@@ -78,15 +66,24 @@ export default function GooeyCarousel() {
   useEffect(() => {
     if (isHovering) return
     const interval = setInterval(() => {
-      setActiveTab((prevTab) => (prevTab + 1) % TAB_CONTENT.length)
+      if (categories && categories.length > 0) {
+        setActiveTab((prevTab) => (prevTab + 1) % categories.length)
+      }
     }, 3000)
     return () => clearInterval(interval)
-  }, [isHovering, activeTab])
+  }, [isHovering, activeTab, categories.length, categories])
+
+  if (!categories || categories.length === 0) {
+    return (
+      <div className="flex items-center justify-center w-full h-full">
+        <Loader />
+      </div>
+    )
+  }
 
   return (
     <div
-      // ⭐ RESPONSIVE: Adjusted padding for smaller screens
-      className="relative w-full h-full flex justify-center items-center p-4 sm:p-6 md:p-8 font-sans  "
+      className="relative w-full h-full flex justify-center items-center p-4 sm:p-6 md:p-8 font-sans"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
@@ -95,22 +92,18 @@ export default function GooeyCarousel() {
         strength={screenSize.lessThan('md') ? 8 : 15}
       />
 
-      {/* ⭐ REMOVED: The "Disable/Enable Gooey" button is gone */}
-
-      {/* ⭐ RESPONSIVE: Using max-w for a flexible, centered layout */}
       <div className="w-full max-w-3xl relative">
         <div
           className="absolute inset-0"
-          // The gooey filter is now always on
           style={{ filter: 'url(#gooey-filter)' }}
         >
           <div className="flex w-full">
-            {TAB_CONTENT.map((_, index) => (
+            {categories?.map((_, index) => (
               <div key={index} className="relative flex-1 h-8 md:h-12">
                 {activeTab === index && (
                   <motion.div
                     layoutId="active-tab"
-                    className="absolute inset-0 bg-primary  "
+                    className="absolute inset-0 bg-secondary"
                     transition={{
                       type: 'spring',
                       bounce: 0.1,
@@ -122,42 +115,61 @@ export default function GooeyCarousel() {
             ))}
           </div>
 
-          {/* ⭐ RESPONSIVE: Using min-height to allow content to grow */}
-          <div className="w-full min-h-[260px] sm:min-h-[280px] bg-primary   overflow-hidden text-gray-500 dark:text-gray-400">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTab}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                // ⭐ RESPONSIVE: Adjusted padding
-                className="p-6 md:p-10"
+          <div className="w-full min-h-[260px] sm:min-h-[280px] bg-secondary overflow-hidden text-gray-500 dark:text-gray-400">
+            <motion.div
+              key={activeTab}
+              className="p-2"
+              initial="hidden"
+              animate="visible"
+              variants={listContainerVariants}
+            >
+              <motion.ul
+                className="relative space-y-2 flex justify-evenly items-center flex-wrap gap-0.5  py-10 min-h-[70dvh]"
+                variants={listContainerVariants}
               >
-                <ul className="space-y-2   flex justify-evenly items-center flex-wrap gap-0.5">
-                  {TAB_CONTENT[activeTab].files.map((file) => (
-                    <li
-                      key={file.id}
-                      className="relative w-1/3 aspect-square flex items-center justify-center text-center rounded-md border-b border-gray-400/50 dark:border-gray-600/50 pt-2 pb-1 text-black dark:text-white text-sm sm:text-base"
-                    >
-                      {file.title}
-                      <Image
-                        fill
-                        className="object-cover opacity-50"
-                        alt=""
-                        src={file.imageSrc}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            </AnimatePresence>
+                <Image
+                  fill
+                  className="object-cover rounded-md opacity-60"
+                  alt={categories[activeTab]?.name}
+                  src={categories[activeTab]?.images.map((img) => img.url)[0]}
+                />
+                {categories[activeTab]?.subCategories?.map((subcategory) => (
+                  <motion.li
+                    key={subcategory.id}
+                    className=" relative w-[25%] aspect-square grid grid-rows-1 place-content-center place-items-center rounded-md text-black dark:text-white text-xs sm:text-sm"
+                    variants={listItemVariants}
+                  >
+                    <Image
+                      fill
+                      className="object-cover rounded-md z-[0] opacity-70"
+                      alt={subcategory.name}
+                      src={subcategory.images.map((img) => img.url)[0]}
+                    />
+                    <div className="z-[1] absolute inset-0 flex items-center justify-center p-2">
+                      {/* SOLUTION 1: Solid background instead of semi-transparent */}
+                      <span className="text-center font-bold bg-white/55 text-black border border-gray-200 rounded-md aspect-square flex items-center justify-center p-2 leading-tight  shadow-sm">
+                        {subcategory.name}
+                      </span>
+
+                      {/* SOLUTION 2: Remove backdrop-blur entirely */}
+                      {/* <span className="text-center bg-white text-black border border-gray-300 rounded-full aspect-square flex items-center justify-center p-2 leading-tight font-medium">
+                        {subcategory.name}
+                      </span> */}
+
+                      {/* SOLUTION 3: Different styling approach */}
+                      {/* <span className="text-center bg-gray-800/90 text-white border border-gray-600 rounded-full aspect-square flex items-center justify-center p-2 leading-tight font-medium">
+                        {subcategory.name}
+                      </span> */}
+                    </div>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
           </div>
         </div>
 
-        {/* Interactive text overlay, no filter */}
-        <div className="relative flex w-full ">
-          {TAB_CONTENT.map((tab, index) => (
+        <div className="relative flex w-full">
+          {categories.map((tab, index) => (
             <button
               key={index}
               onClick={() => setActiveTab(index)}
@@ -173,7 +185,7 @@ export default function GooeyCarousel() {
                   }
                 `}
               >
-                {tab.title}
+                {tab.name}
               </span>
             </button>
           ))}
@@ -182,3 +194,5 @@ export default function GooeyCarousel() {
     </div>
   )
 }
+
+export default GooeyCarousel

@@ -1,6 +1,5 @@
 import DiscoverMoreCarousel from '@/components/home/discover-more/DiscoverMoreCarousel'
 import Hero from '@/components/home/hero/hero'
-import DualOrbitCarousel from '@/components/home/orbit-carousel'
 import GooeyCarousel from '@/components/home/orbit-carousel/tabs-carousel'
 import Commitments from '@/components/home/shared/Commitments'
 import StoreStatement from '@/components/home/shared/StoreStatement'
@@ -65,7 +64,7 @@ export async function generateMetadata(): Promise<Metadata> {
           alt: 'قهوه- فروشگاه قهوه',
         },
       ],
-      locale: 'en_US',
+      locale: 'fa_IR',
     },
 
     // Twitter Card
@@ -123,13 +122,14 @@ export default async function Home() {
   //     getSubCategories(),
   //     getHomePageReviews(),
   //   ])
-  const [products, bestSellers, subCategories, reviews] = await Promise.all([
-    getHomepageProducts(),
-    getBestSellers(),
-    // getCategoriesWithStats(),
-    getSubCategories(),
-    getHomePageReviews(),
-  ])
+  const [products, bestSellers, categories, subCategories, reviews] =
+    await Promise.all([
+      getHomepageProducts(),
+      getBestSellers(),
+      getCategoriesWithStats(),
+      getSubCategories(),
+      getHomePageReviews(),
+    ])
 
   const organizationData = {
     '@context': 'https://schema.org',
@@ -337,7 +337,7 @@ export default async function Home() {
       </div>
       <div className="py-16">
         {/* <DualOrbitCarousel /> */}
-        <GooeyCarousel />
+        <GooeyCarousel categories={categories} />
       </div>
       {!!bestSellers && (
         <section className="w-full h-full flex flex-col gap-8 py-8 px-3 ">
