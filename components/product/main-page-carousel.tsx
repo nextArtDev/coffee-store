@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils'
 import { TransitionLink } from '../home/shared/TransitionLink'
 import { ProgressiveBlur } from '../shared/progressive-blur'
 import Progress from '../shared/progress'
+import BatteryLevel from '../shared/widget/widgest'
 
 export type item = {
   id: string
@@ -87,6 +88,7 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                       className="pointer-events-none absolute bottom-0 left-0 h-[60%] w-full rounded-b-md"
                       blurIntensity={5}
                     />
+                    <BatteryLevel />
                     <div className="absolute left-0 bottom-0 flex  w-fit h-1/2 items-center gap-2">
                       <Progress
                         direction="vertical"
