@@ -15,7 +15,7 @@ import Autoplay from 'embla-carousel-autoplay'
 import { cn } from '@/lib/utils'
 import { TransitionLink } from '../home/shared/TransitionLink'
 import { ProgressiveBlur } from '../shared/progressive-blur'
-import Progress from '../shared/progress'
+// import Progress from '../shared/progress'
 import BatteryLevel from '../shared/widget/widgest'
 
 export type item = {
@@ -85,12 +85,14 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                       className="object-cover mix-blend-darken rounded-xl" // Uncommented; remove if not needed
                     />
                     <ProgressiveBlur
-                      className="pointer-events-none absolute bottom-0 left-0 h-[60%] w-full rounded-b-md"
+                      className="pointer-events-none absolute bottom-0 left-0 h-[90%] w-full rounded-b-md"
                       blurIntensity={5}
                     />
-                    <BatteryLevel />
-                    <div className="absolute left-0 bottom-0 flex  w-fit h-1/2 items-center gap-2">
-                      <Progress
+                    <div className="relative w-full h-fit">
+                      <BatteryLevel />
+                    </div>
+                    <div className="absolute left-0 bottom-0 flex  w-fit h-full items-center gap-2">
+                      {/* <Progress
                         direction="vertical"
                         progress={100}
                         gradientColors={['#fcae65', '#f79401', '#2c1b06']}
@@ -99,7 +101,7 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                         direction="vertical"
                         progress={50}
                         gradientColors={['#c7aa8e', '#f79401', '#2c1b06']}
-                      />
+                      /> */}
                     </div>
                     <article className="absolute h-1/2 w-full bottom-0 flex flex-col gap-1 justify-evenly py-3 px-2 text-pretty text-xs md:text-sm lg:text-base rounded-b-md">
                       <p className="font-semibold">{item.category!.name}</p>
