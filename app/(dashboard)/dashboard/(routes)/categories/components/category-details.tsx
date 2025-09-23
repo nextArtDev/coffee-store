@@ -40,6 +40,13 @@ import { CategoryFormSchema } from '../../../lib/schemas'
 import { Loader2 } from 'lucide-react'
 import { handleServerErrors } from '../../../lib/server-utils'
 import { createCategory, editCategory } from '../../../lib/actions/category'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface CategoryDetailsProps {
   initialData?: Category & { images: Image[] }
@@ -139,9 +146,35 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
                       <FormLabel>
                         نام دسته‌بندی <span className="text-rose-500">*</span>
                       </FormLabel>
-                      <FormControl>
-                        <Input placeholder="مثلا: محصولات مردانه" {...field} />
-                      </FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value.toString()}
+                      >
+                        <FormControl>
+                          {/* <Input placeholder="مثلا: محصولات مردانه" {...field} /> */}
+                          <SelectTrigger>
+                            <SelectValue placeholder="یک دسته‌بندی را انتخاب کنید" />
+                          </SelectTrigger>
+                          {/* <Select name="type">
+                          <option value="GENERAL">عمومی</option>
+                          <option value="COFFEE">قهوه</option>
+                          <option value="EQUIPMENT">تجهیزات</option>
+                          <option value="ACCESSORY">لوازم جانبی</option>
+                          </Select> */}
+                        </FormControl>
+                        <SelectContent>
+                          {[
+                            { label: 'عمومی', value: 'GENERAL' },
+                            { label: 'قهوه', value: 'COFFEE' },
+                            { label: 'تجهیزات', value: 'EQUIPMENT' },
+                            { label: 'اکسسوری', value: 'ACCESSORY' },
+                          ].map((cat) => (
+                            <SelectItem key={cat.value} value={cat.value}>
+                              {cat.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}

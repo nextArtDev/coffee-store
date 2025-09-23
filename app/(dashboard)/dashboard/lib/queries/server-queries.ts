@@ -13,6 +13,13 @@ export const getSubCategoryByCategoryId = cache(async (categoryId: string) => {
       orderBy: {
         updatedAt: 'desc',
       },
+      include: {
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
     })
 
     return subCategories
@@ -37,3 +44,16 @@ export const getCityByProvinceId = cache(async (provinceId: string) => {
     console.log(error)
   }
 })
+
+export async function getCategoryWithType(categoryId: string) {
+  if (!categoryId) return null
+
+  return await prisma.category.findUnique({
+    where: { id: categoryId },
+    select: {
+      id: true,
+      name: true,
+      type: true, // This is the new field we added
+    },
+  })
+}

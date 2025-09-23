@@ -182,7 +182,7 @@ export const ProductFormSchema = z.object({
         length: z.number().min(0),
         width: z.number().min(0),
         height: z.number().min(0),
-        sku: z.string().optional(),
+        // sku: z.string().optional(),
       })
     )
     .min(1, 'حداقل یک نوع محصول (وریانت) باید اضافه کنید.'),
@@ -394,4 +394,73 @@ export const updateUserSchema = z.object({
   name: z.string().optional(),
   phoneNumber: z.string().min(10, 'شماره موبایل نمی‌تواند خالی باشد.'),
   role: z.string().min(1, 'مشخص کردن نقش کاربر الزامی است.'),
+})
+
+export const CoffeeCharacteristicsSchema = z.object({
+  caffeineContent: z.number().min(0).max(500).optional(),
+  roastLevel: z
+    .enum([
+      'LIGHT',
+      'MEDIUM_LIGHT',
+      'MEDIUM',
+      'MEDIUM_DARK',
+      'DARK',
+      'EXTRA_DARK',
+    ])
+    .optional(),
+  origin: z.string().optional(),
+  processingMethod: z
+    .enum(['WASHED', 'NATURAL', 'HONEY', 'SEMI_WASHED', 'WET_HULLED'])
+    .optional(),
+  altitude: z.number().min(0).max(3000).optional(),
+  harvestYear: z.number().min(2020).max(2030).optional(),
+  acidity: z.number().min(1).max(10).optional(),
+  bitterness: z.number().min(1).max(10).optional(),
+  sweetness: z.number().min(1).max(10).optional(),
+  body: z.number().min(1).max(10).optional(),
+  flavorNotes: z.array(z.string()).optional(),
+  aromaNotes: z.array(z.string()).optional(),
+  grindSize: z
+    .enum([
+      'EXTRA_COARSE',
+      'COARSE',
+      'MEDIUM_COARSE',
+      'MEDIUM',
+      'MEDIUM_FINE',
+      'FINE',
+      'EXTRA_FINE',
+    ])
+    .optional(),
+  brewingMethods: z.array(z.string()).optional(),
+  waterTemp: z.number().min(60).max(100).optional(),
+  brewTime: z.number().min(30).max(600).optional(),
+  coffeeToWaterRatio: z.string().optional(),
+})
+
+export const EquipmentSpecsSchema = z.object({
+  material: z.string().optional(),
+  capacity: z.number().min(0).optional(),
+  powerConsumption: z.number().min(0).max(5000).optional(),
+  dimensions: z.string().optional(),
+  weight: z.number().min(0).optional(),
+  pressureLevel: z.number().min(0).max(20).optional(),
+  heatingTime: z.number().min(0).optional(),
+  temperatureRange: z.string().optional(),
+  burrType: z.enum(['CERAMIC', 'STEEL', 'TITANIUM']).optional(),
+  grindSettings: z.number().min(1).max(100).optional(),
+  grindCapacity: z.number().min(0).optional(),
+  filterType: z.enum(['PAPER', 'METAL', 'CLOTH', 'PERMANENT']).optional(),
+  compatibility: z.string().optional(),
+})
+
+export const AccessorySpecsSchema = z.object({
+  material: z.string().optional(),
+  capacity: z.number().min(0).max(2000).optional(),
+  heatRetention: z.boolean().optional(),
+  microwaveSafe: z.boolean().optional(),
+  dishwasherSafe: z.boolean().optional(),
+  handleType: z.string().optional(),
+  lidType: z.string().optional(),
+  dimensions: z.string().optional(),
+  weight: z.number().min(0).optional(),
 })

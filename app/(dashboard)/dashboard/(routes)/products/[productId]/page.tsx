@@ -1,8 +1,8 @@
 import prisma from '@/lib/prisma'
 
 import { notFound } from 'next/navigation'
-import ProductForm from '../components/product-details'
 import { getAllOfferTags, getCategoryList } from '../../../lib/queries'
+import ProductDetails from '../components/product-details'
 
 export default async function SellerNewProductPage({
   params,
@@ -21,12 +21,19 @@ export default async function SellerNewProductPage({
       specs: { select: { name: true, value: true, id: true } },
       questions: { select: { question: true, answer: true, id: true } },
       category: { select: { name: true, id: true } },
+      accessorySpecs: true,
+      coffeeCharacteristics: true,
+      equipmentSpecs: true,
+
       variants: {
         include: { color: true, size: true, images: true },
       },
     },
   })
   if (!product) return notFound()
+  // if (product.accessorySpecs && !Array.isArray(product.accessorySpecs)) {
+  //   product?.accessorySpecs = [product.accessorySpecs]
+  // }
   const categories = await getCategoryList()
   // console.log({ categories })
 
@@ -34,7 +41,7 @@ export default async function SellerNewProductPage({
 
   return (
     <div className="w-full">
-      <ProductForm
+      <ProductDetails
         categories={categories}
         offerTags={offerTags}
         data={product}

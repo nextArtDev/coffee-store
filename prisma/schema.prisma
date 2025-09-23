@@ -137,18 +137,25 @@ model Image {
 }
 
 model Category {
-  id          String  @id @default(uuid())
-  name        String
-  description String?
-  images      Image[]
-  url         String  @unique
-  featured    Boolean @default(false)
-
+  id            String                 @id @default(uuid())
+  name          String
+  description   String?
+  images        Image[]
+  url           String                 @unique
+  featured      Boolean                @default(false)
+  type          ProductType            @default(GENERAL)
   subCategories SubCategory[]
-  products      Product[]     @relation("CategoryToProduct")
+  products      Product[]              @relation("CategoryToProduct")
+  specTemplates CategorySpecTemplate[] @relation("CategoryToSpecTemplate")
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+}
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum ProductType {
+  COFFEE
+  EQUIPMENT
+  ACCESSORY
+  GENERAL
 }
 
 model SubCategory {
@@ -201,6 +208,10 @@ model Product {
   questions Question[]       @relation("ProductQuestion")
   reviews   Review[]         @relation("ReviewToProduct")
 
+  coffeeCharacteristics CoffeeCharacteristics? @relation("ProductCoffeeCharacteristics")
+  equipmentSpecs        EquipmentSpecs?        @relation("ProductEquipmentSpecs")
+  accessorySpecs        AccessorySpecs?        @relation("ProductAccessorySpecs")
+
   categoryId String
   category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id], onDelete: Cascade)
 
@@ -210,9 +221,9 @@ model Product {
   offerTagId String?
   offerTag   OfferTag? @relation("OfferTagToProduct", fields: [offerTagId], references: [id])
 
+  CartItem  CartItem[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @default(now()) @updatedAt
-  CartItem  CartItem[]
 
   @@index([categoryId])
   @@index([subCategoryId])
@@ -221,7 +232,7 @@ model Product {
 
 model ProductVariant {
   id       String  @id @default(uuid())
-  sku      String? @unique
+  sku      String?
   price    Float
   quantity Int
   discount Float   @default(0)
@@ -742,4 +753,169 @@ model PaymentRateLimit {
   createdAt DateTime @default(now())
 
   @@index([userId, createdAt])
+}
+
+// Coffee Specific
+model CategorySpecTemplate {
+  id         String       @id @default(uuid())
+  name       String // e.g., "Caffeine Content", "Roast Level", "Origin"
+  dataType   SpecDataType @default(TEXT) // TEXT, NUMBER, SELECT, RANGE
+  unit       String? // e.g., "mg", "%", "°C"
+  isRequired Boolean      @default(false)
+  options    String? // JSON array for SELECT type: ["Light", "Medium", "Dark"]
+  minValue   Float? // For NUMBER and RANGE types
+  maxValue   Float? // For NUMBER and RANGE types
+
+  categoryId String
+  category   Category @relation("CategoryToSpecTemplate", fields: [categoryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+}
+
+enum SpecDataType {
+  TEXT
+  NUMBER
+  SELECT
+  RANGE
+  BOOLEAN
+}
+
+model CoffeeCharacteristics {
+  id String @id @default(uuid())
+
+  // Core coffee attributes
+  caffeineContent  Float? // mg per serving
+  origin           String? // Single origin or blend
+  roastLevel       RoastLevel?
+  processingMethod ProcessingMethod?
+  altitude         Int? // meters above sea level
+  harvestYear      Int?
+
+  // Taste profile (1-10 scale)
+  acidity    Float? // 1-10
+  bitterness Float? // 1-10
+  sweetness  Float? // 1-10
+  body       Float? // 1-10 (light to full)
+
+  // Flavor notes
+  flavorNotes String? // JSON array: ["chocolate", "nutty", "fruity"]
+  aromaNotes  String? // JSON array: ["floral", "earthy", "citrus"]
+
+  // Brewing recommendations
+  grindSize          GrindSize?
+  brewingMethods     String? // JSON array: ["espresso", "pour-over", "french-press"]
+  waterTemp          Int? // Celsius
+  brewTime           Int? // seconds
+  coffeeToWaterRatio String? // e.g., "1:15"
+
+  productId String  @unique
+  product   Product @relation("ProductCoffeeCharacteristics", fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum RoastLevel {
+  LIGHT
+  MEDIUM_LIGHT
+  MEDIUM
+  MEDIUM_DARK
+  DARK
+  EXTRA_DARK
+}
+
+enum ProcessingMethod {
+  WASHED
+  NATURAL
+  HONEY
+  SEMI_WASHED
+  WET_HULLED
+  CARBONIC_MACERATION
+}
+
+enum GrindSize {
+  EXTRA_COARSE
+  COARSE
+  MEDIUM_COARSE
+  MEDIUM
+  MEDIUM_FINE
+  FINE
+  EXTRA_FINE
+}
+
+// model Roaster {
+//   id          String          @id @default(cuid())
+//   name        String          @unique
+//   location    String?
+//   description String?
+//   logoUrl     String?
+//   coffees     CoffeeProfile[]
+// }
+// Equipment specifications
+model EquipmentSpecs {
+  id String @id @default(uuid())
+
+  // General equipment specs
+  material         String? // Steel, Ceramic, Glass, etc.
+  capacity         Float? // ml or cups
+  powerConsumption Int? // watts
+  dimensions       String? // JSON: {"length": 30, "width": 20, "height": 25}
+  weight           Float? // kg
+
+  // Coffee machine specific
+  pressureLevel    Float? // bars for espresso machines
+  heatingTime      Int? // seconds
+  temperatureRange String? // JSON: {"min": 85, "max": 96}
+
+  // Grinder specific
+  burrType      BurrType?
+  grindSettings Int? // number of grind settings
+  grindCapacity Float? // grams
+
+  // Filter specific
+  filterType    FilterType?
+  compatibility String? // Compatible with which machines
+
+  productId String  @unique
+  product   Product @relation("ProductEquipmentSpecs", fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum BurrType {
+  CERAMIC
+  STEEL
+  TITANIUM
+}
+
+enum FilterType {
+  PAPER
+  METAL
+  CLOTH
+  PERMANENT
+}
+
+// Accessory specifications
+model AccessorySpecs {
+  id String @id @default(uuid())
+
+  material       String? // Ceramic, Glass, Stainless Steel
+  capacity       Float? // ml for mugs, cups
+  heatRetention  Boolean? // For thermal mugs
+  microwaveSafe  Boolean?
+  dishwasherSafe Boolean?
+
+  // Mug/Cup specific
+  handleType String? // Ergonomic, Classic, None
+  lidType    String? // Snap-on, Screw-on, Sliding
+
+  productId String  @unique
+  product   Product @relation("ProductAccessorySpecs", fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

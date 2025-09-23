@@ -36,8 +36,11 @@ import {
 
 import { Switch } from '@/components/ui/switch'
 import {
+  AccessorySpecs,
   Category,
+  CoffeeCharacteristics,
   Color,
+  EquipmentSpecs,
   Image,
   OfferTag,
   Product,
@@ -52,7 +55,7 @@ import { useQuery } from '@tanstack/react-query'
 // import { NumberInput } from '@tremor/react'
 import { Loader2 } from 'lucide-react'
 import { usePathname } from 'next/navigation'
-import { FC, useTransition } from 'react'
+import { FC, useEffect, useState, useTransition } from 'react'
 import ClickToAddInputsRHF from '../../../components/click-to-add'
 import { DateTimePicker } from '../../../components/date-time/date-time-picker'
 import InputFileUpload from '../../../components/file-input/InputFileUpload'
@@ -62,8 +65,16 @@ import { TagsInput } from '../../../components/tag-input'
 import RichTextEditor from '../../../components/text-editor/react-text-editor'
 import { createProduct, editProduct } from '../../../lib/actions/products'
 import { getSubCategoryByCategoryId } from '../../../lib/queries/server-queries'
-import { ProductFormSchema } from '../../../lib/schemas'
+import {
+  AccessorySpecsSchema,
+  CoffeeCharacteristicsSchema,
+  EquipmentSpecsSchema,
+  ProductFormSchema,
+} from '../../../lib/schemas'
 import { handleServerErrors } from '../../../lib/server-utils'
+import CoffeeCharacteristicsForm from './CoffeeCharacteristics'
+import EquipmentSpecsForm from './EquipmentSpecs'
+import AccessorySpecsForm from './AccessorySpecs'
 
 const shippingFeeMethods = [
   {
@@ -83,6 +94,12 @@ const shippingFeeMethods = [
   },
 ]
 
+export const EnhancedProductFormSchema = ProductFormSchema.extend({
+  coffeeCharacteristics: CoffeeCharacteristicsSchema.optional(),
+  equipmentSpecs: EquipmentSpecsSchema.optional(),
+  accessorySpecs: AccessorySpecsSchema.optional(),
+})
+
 interface ProductFormProps {
   data?: Partial<
     Product & { images: Partial<Image>[] | null } & {
@@ -97,7 +114,9 @@ interface ProductFormProps {
             images: Partial<Image>[] | null
           })[]
         | null
-    }
+    } & { accessorySpecs: Partial<AccessorySpecs> | null } & {
+      coffeeCharacteristics: Partial<CoffeeCharacteristics> | null
+    } & { equipmentSpecs: Partial<EquipmentSpecs> | null }
   >
   categories: Partial<Category>[]
   offerTags: OfferTag[]
@@ -111,11 +130,12 @@ const ProductDetails: FC<ProductFormProps> = ({
   offerTags,
 }) => {
   const path = usePathname()
+  const [categoryType, setCategoryType] = useState<string>('GENERAL')
 
   const [isPending, startTransition] = useTransition()
 
-  const form = useForm<z.infer<typeof ProductFormSchema>>({
-    resolver: zodResolver(ProductFormSchema),
+  const form = useForm<z.infer<typeof EnhancedProductFormSchema>>({
+    resolver: zodResolver(EnhancedProductFormSchema),
     defaultValues: {
       name: data?.name,
       description: data?.description,
@@ -151,7 +171,7 @@ const ProductDetails: FC<ProductFormProps> = ({
         length: v.length || 0,
         width: v.width || 0,
         height: v.height || 0,
-        sku: v.sku || '',
+        // sku: v.sku || '',
       })) ?? [
         {
           size: '',
@@ -164,7 +184,7 @@ const ProductDetails: FC<ProductFormProps> = ({
           length: 0,
           width: 0,
           height: 0,
-          sku: '',
+          // sku: '',
         },
       ],
 
@@ -173,6 +193,70 @@ const ProductDetails: FC<ProductFormProps> = ({
         ? new Date(data.saleEndDate)
         : new Date(new Date().setHours(0, 0, 0, 0)),
       keywords: data?.keywords ? data.keywords.split(',') : [],
+
+      coffeeCharacteristics: data?.coffeeCharacteristics
+        ? {
+            caffeineContent:
+              data.coffeeCharacteristics.caffeineContent ?? undefined,
+            roastLevel: data.coffeeCharacteristics.roastLevel ?? undefined,
+            origin: data.coffeeCharacteristics.origin ?? undefined,
+            processingMethod:
+              data.coffeeCharacteristics.processingMethod ===
+              'CARBONIC_MACERATION'
+                ? 'NATURAL'
+                : data.coffeeCharacteristics.processingMethod ?? undefined,
+            altitude: data.coffeeCharacteristics.altitude ?? undefined,
+            harvestYear: data.coffeeCharacteristics.harvestYear ?? undefined,
+            acidity: data.coffeeCharacteristics.acidity ?? undefined,
+            bitterness: data.coffeeCharacteristics.bitterness ?? undefined,
+            sweetness: data.coffeeCharacteristics.sweetness ?? undefined,
+            body: data.coffeeCharacteristics.body ?? undefined,
+            flavorNotes: data.coffeeCharacteristics.flavorNotes
+              ? JSON.parse(data.coffeeCharacteristics.flavorNotes)
+              : [],
+            aromaNotes: data.coffeeCharacteristics.aromaNotes
+              ? JSON.parse(data.coffeeCharacteristics.aromaNotes)
+              : [],
+            grindSize: data.coffeeCharacteristics.grindSize ?? undefined,
+            brewingMethods: data.coffeeCharacteristics.brewingMethods
+              ? JSON.parse(data.coffeeCharacteristics.brewingMethods)
+              : [],
+            waterTemp: data.coffeeCharacteristics.waterTemp ?? undefined,
+            brewTime: data.coffeeCharacteristics.brewTime ?? undefined,
+            coffeeToWaterRatio:
+              data.coffeeCharacteristics.coffeeToWaterRatio ?? undefined,
+          }
+        : undefined,
+
+      // Equipment specs defaults
+      equipmentSpecs: data?.equipmentSpecs
+        ? {
+            material: data.equipmentSpecs.material ?? undefined,
+            capacity: data.equipmentSpecs.capacity ?? undefined,
+            powerConsumption: data.equipmentSpecs.powerConsumption ?? undefined,
+            weight: data.equipmentSpecs.weight ?? undefined,
+            pressureLevel: data.equipmentSpecs.pressureLevel ?? undefined,
+            heatingTime: data.equipmentSpecs.heatingTime ?? undefined,
+            burrType: data.equipmentSpecs.burrType ?? undefined,
+            grindSettings: data.equipmentSpecs.grindSettings ?? undefined,
+            grindCapacity: data.equipmentSpecs.grindCapacity ?? undefined,
+            filterType: data.equipmentSpecs.filterType ?? undefined,
+            compatibility: data.equipmentSpecs.compatibility ?? undefined,
+          }
+        : undefined,
+
+      // Accessory specs defaults
+      accessorySpecs: data?.accessorySpecs
+        ? {
+            material: data.accessorySpecs.material ?? undefined,
+            capacity: data.accessorySpecs.capacity ?? undefined,
+            heatRetention: data.accessorySpecs.heatRetention ?? undefined,
+            microwaveSafe: data.accessorySpecs.microwaveSafe ?? undefined,
+            dishwasherSafe: data.accessorySpecs.dishwasherSafe ?? undefined,
+            handleType: data.accessorySpecs.handleType ?? undefined,
+            lidType: data.accessorySpecs.lidType ?? undefined,
+          }
+        : undefined,
     },
   })
 
@@ -193,23 +277,6 @@ const ProductDetails: FC<ProductFormProps> = ({
     name: 'questions',
   })
 
-  // const {
-  //   fields: colorFields,
-  //   append: appendColor,
-  //   remove: removeColor,
-  // } = useFieldArray({
-  //   control: form.control,
-  //   name: 'colors',
-  // })
-
-  // const {
-  //   fields: sizeFields,
-  //   append: appendSize,
-  //   remove: removeSize,
-  // } = useFieldArray({
-  //   control: form.control,
-  //   name: 'sizes',
-  // })
   const {
     fields: variantFields,
     append: appendVariant,
@@ -223,6 +290,18 @@ const ProductDetails: FC<ProductFormProps> = ({
     queryKey: ['subCateByCat', form.watch().categoryId],
     queryFn: () => getSubCategoryByCategoryId(form.watch().categoryId),
   })
+
+  // const { data: categoryData } = useQuery({
+  //   queryKey: ['categoryWithType', form.watch().categoryId],
+  //   queryFn: () => getCategoryWithType(form.watch().categoryId),
+  //   enabled: !!form.watch().categoryId,
+  // })
+
+  useEffect(() => {
+    if (SubCategories?.length) {
+      setCategoryType(SubCategories.map((sub) => sub.category.name)[0])
+    }
+  }, [SubCategories])
   // const { data: citiesForFreeShipping } = useQuery({
   //   queryKey: ['province-for-shipping', provinceNameForShopping],
   //   queryFn: () => getCityByProvinceId(provinceNameForShopping),
@@ -231,12 +310,14 @@ const ProductDetails: FC<ProductFormProps> = ({
   // console.log({ citiesForFreeShipping })
   const errors = form.formState.errors
   // console.log(errors)
-  const handleSubmit = async (values: z.infer<typeof ProductFormSchema>) => {
+  const handleSubmit = async (
+    values: z.infer<typeof EnhancedProductFormSchema>
+  ) => {
     // console.log({ values })
     startTransition(async () => {
       try {
-        if (data) {
-          const res = await editProduct(values, data.id as string, path)
+        if (data?.id) {
+          const res = await editProduct(values, data.id, path)
           if (res?.errors) handleServerErrors(res.errors, form.setError)
         } else {
           const res = await createProduct(values, path)
@@ -248,6 +329,41 @@ const ProductDetails: FC<ProductFormProps> = ({
         }
         toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')
       }
+      // try {
+      //   const transformedData = {
+      //     ...values,
+      //     coffeeCharacteristics: values.coffeeCharacteristics
+      //       ? {
+      //           ...values.coffeeCharacteristics,
+      //           flavorNotes: JSON.stringify(
+      //             values.coffeeCharacteristics.flavorNotes || []
+      //           ),
+      //           aromaNotes: JSON.stringify(
+      //             values.coffeeCharacteristics.aromaNotes || []
+      //           ),
+      //           brewingMethods: JSON.stringify(
+      //             values.coffeeCharacteristics.brewingMethods || []
+      //           ),
+      //         }
+      //       : undefined,
+      //   }
+      //   if (data) {
+      //     const res = await editProduct(
+      //       transformedData,
+      //       data.id as string,
+      //       path
+      //     )
+      //     if (res?.errors) handleServerErrors(res.errors, form.setError)
+      //   } else {
+      //     const res = await createProduct(transformedData, path)
+      //     if (res?.errors) handleServerErrors(res.errors, form.setError)
+      //   }
+      // } catch (error) {
+      //   if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
+      //     return
+      //   }
+      //   toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')
+      // }
     })
   }
   // const addMainVariantColor = (newColorValue: string) => {
@@ -281,7 +397,7 @@ const ProductDetails: FC<ProductFormProps> = ({
       length: 0,
       width: 0,
       height: 0,
-      sku: '',
+      // sku: '',
     })
     toast.success(
       `ایجاد شد، لطفا جزئیات آنرا پر کنید. ${color.name} وریانت رنگ`
@@ -293,6 +409,7 @@ const ProductDetails: FC<ProductFormProps> = ({
   //   const updatedValues = currentValues?.filter((_, i) => i !== index)
   //   form.setValue('freeShippingCityIds', updatedValues)
   // }
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -428,7 +545,7 @@ const ProductDetails: FC<ProductFormProps> = ({
                       length: 0,
                       width: 0,
                       height: 0,
-                      sku: '',
+                      // sku: '',
                     })
                   }
                   onRemove={removeVariant}
@@ -443,7 +560,7 @@ const ProductDetails: FC<ProductFormProps> = ({
                     length: 0,
                     width: 0,
                     height: 0,
-                    sku: '',
+                    // sku: '',
                   }}
                   labels={{
                     size: 'سایز',
@@ -647,6 +764,18 @@ const ProductDetails: FC<ProductFormProps> = ({
                   />
                 </div>
               </InputFieldset>
+
+              {!isPendingCategory && categoryType === 'COFFEE' && (
+                <CoffeeCharacteristicsForm form={form} disabled={isPending} />
+              )}
+
+              {!isPendingCategory && categoryType === 'EQUIPMENT' && (
+                <EquipmentSpecsForm form={form} disabled={isPending} />
+              )}
+
+              {!isPendingCategory && categoryType === 'ACCESSORY' && (
+                <AccessorySpecsForm form={form} disabled={isPending} />
+              )}
 
               <InputFieldset label="خصوصیات محصول" description={''}>
                 <div className="w-full flex flex-col gap-y-3">
