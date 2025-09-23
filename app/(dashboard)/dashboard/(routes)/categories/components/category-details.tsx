@@ -26,20 +26,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-
-// import {
-//   createCategory,
-//   editCategory,
-// } from '@/lib/actions/dashboard/categories'
-
-import { toast } from 'sonner'
-import { Category, Image } from '@/lib/generated/prisma'
-import { usePathname } from 'next/navigation'
-import InputFileUpload from '../../../components/file-input/InputFileUpload'
-import { CategoryFormSchema } from '../../../lib/schemas'
-import { Loader2 } from 'lucide-react'
-import { handleServerErrors } from '../../../lib/server-utils'
-import { createCategory, editCategory } from '../../../lib/actions/category'
 import {
   Select,
   SelectContent,
@@ -48,31 +34,37 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 
+import { toast } from 'sonner'
+import { Category, Image } from '@/lib/generated/prisma'
+import { usePathname } from 'next/navigation'
+import InputFileUpload from '../../../components/file-input/InputFileUpload'
+import { Loader2 } from 'lucide-react'
+import { handleServerErrors } from '../../../lib/server-utils'
+import { createCategory, editCategory } from '../../../lib/actions/category'
+import { CategoryFormSchema } from '../../../lib/schemas'
+
 interface CategoryDetailsProps {
   initialData?: Category & { images: Image[] }
 }
 
 const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
-  // Initializing necessary hooks
-  // const router = useRouter() // Hook for routing
   const path = usePathname()
   const [isPending, startTransition] = useTransition()
-  // Form hook for managing form state and validation
+
   const form = useForm<z.infer<typeof CategoryFormSchema>>({
-    mode: 'onChange', // Form validation mode
-    resolver: zodResolver(CategoryFormSchema), // Resolver for form validation
+    mode: 'onChange',
+    resolver: zodResolver(CategoryFormSchema),
     defaultValues: {
       name: initialData?.name ?? '',
+      type: initialData?.type ?? 'GENERAL', // Add this line
       images: initialData?.images
         ? initialData.images.map((image) => ({ url: image.url }))
         : [],
-      // images: initialData?.images ?? [],
       url: initialData?.url ?? '',
       featured: initialData?.featured ?? false,
     },
   })
 
-  // Submit handler for form submission
   const handleSubmit = (data: z.infer<typeof CategoryFormSchema>) => {
     startTransition(async () => {
       try {
@@ -84,12 +76,9 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
           if (res?.errors) handleServerErrors(res.errors, form.setError)
         }
       } catch (error) {
-        // Catch errors, including the expected NEXT_REDIRECT error from Next.js
         if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
-          // This is an expected error when a redirect occurs, so we can ignore it.
           return
         }
-        // Handle unexpected errors
         toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')
       }
     })
@@ -106,6 +95,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
       form.setValue('url', slugify(categoryName), { shouldValidate: true })
     }
   }, [categoryName, isUrlManuallyEdited, form])
+
   return (
     <AlertDialog>
       <Card className="w-full">
@@ -114,7 +104,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
           <CardDescription>
             {initialData?.id
               ? `آپدیت دسته‌بندی ${initialData?.name}`
-              : ' دسته‌بندی جدید ایجاد کنید. شما می‌توانید بعدا از جدول دسته‌بندیها آنرا ویرایش کنید.'}
+              : 'دسته‌بندی جدید ایجاد کنید. شما می‌توانید بعدا از جدول دسته‌بندیها آنرا ویرایش کنید.'}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -123,12 +113,9 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
               onSubmit={form.handleSubmit(handleSubmit)}
               className="space-y-6"
             >
-              {/* This grid is the core of the new responsive layout.
-              1 column on mobile, 2 on medium screens and up.
-            */}
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 ">
-                {/* Image upload now spans both columns for better layout */}
-                <div className="md:col-span-2 max-w-lg mx-auto ">
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {/* Image upload */}
+                <div className="md:col-span-2 max-w-lg mx-auto">
                   <InputFileUpload
                     initialDataImages={initialData?.images || []}
                     name="images"
@@ -136,7 +123,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
                   />
                 </div>
 
-                {/* Name Field */}
+                {/* Category Name Field - FREE TEXT INPUT */}
                 <FormField
                   disabled={isPending}
                   control={form.control}
@@ -146,40 +133,56 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
                       <FormLabel>
                         نام دسته‌بندی <span className="text-rose-500">*</span>
                       </FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value.toString()}
-                      >
-                        <FormControl>
-                          {/* <Input placeholder="مثلا: محصولات مردانه" {...field} /> */}
-                          <SelectTrigger>
-                            <SelectValue placeholder="یک دسته‌بندی را انتخاب کنید" />
-                          </SelectTrigger>
-                          {/* <Select name="type">
-                          <option value="GENERAL">عمومی</option>
-                          <option value="COFFEE">قهوه</option>
-                          <option value="EQUIPMENT">تجهیزات</option>
-                          <option value="ACCESSORY">لوازم جانبی</option>
-                          </Select> */}
-                        </FormControl>
-                        <SelectContent>
-                          {[
-                            { label: 'عمومی', value: 'GENERAL' },
-                            { label: 'قهوه', value: 'COFFEE' },
-                            { label: 'تجهیزات', value: 'EQUIPMENT' },
-                            { label: 'اکسسوری', value: 'ACCESSORY' },
-                          ].map((cat) => (
-                            <SelectItem key={cat.value} value={cat.value}>
-                              {cat.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      <FormControl>
+                        <Input
+                          placeholder="مثال: قهوه عربیکا، دستگاه اسپرسو، فنجان سرامیکی"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        نام دسته‌بندی که به کاربران نمایش داده می‌شود
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
+                {/* Category Type Field - SEPARATE DROPDOWN */}
+                <FormField
+                  disabled={isPending}
+                  control={form.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        نوع دسته‌بندی <span className="text-rose-500">*</span>
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="نوع دسته‌بندی را انتخاب کنید" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="GENERAL">عمومی</SelectItem>
+                          <SelectItem value="COFFEE">قهوه</SelectItem>
+                          <SelectItem value="EQUIPMENT">تجهیزات</SelectItem>
+                          <SelectItem value="ACCESSORY">لوازم جانبی</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        این نوع تعیین می‌کند چه فیلدهای اختصاصی در فرم محصول
+                        نمایش داده شود
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* URL Field */}
                 <FormField
                   disabled={isPending}
                   control={form.control}
@@ -191,7 +194,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder=" بصورت خودکار ساخته می‌شود"
+                          placeholder="بصورت خودکار ساخته می‌شود"
                           {...field}
                           onChange={(e) => {
                             field.onChange(e)
@@ -207,6 +210,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
                   )}
                 />
 
+                {/* Featured checkbox */}
                 <div className="md:col-span-2">
                   <FormField
                     control={form.control}

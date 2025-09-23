@@ -79,6 +79,7 @@ export async function createCategory(
         name: result.data.name,
         url: result.data.url,
         featured: result.data.featured,
+        type: result.data.type,
         images: {
           connect: imageIds.map((id) => ({
             id: id,
@@ -235,6 +236,7 @@ export async function editCategory(
           name: result.data.name,
           url: result.data.url,
           featured: result.data.featured,
+          type: result.data.type,
           images: {
             connect: imageIds.map((id) => ({
               id: id,
@@ -251,6 +253,7 @@ export async function editCategory(
           name: result.data.name,
           url: result.data.url,
           featured: result.data.featured,
+          type: result.data.type,
         },
       })
     }

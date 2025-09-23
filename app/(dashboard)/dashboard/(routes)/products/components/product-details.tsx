@@ -290,10 +290,10 @@ const ProductDetails: FC<ProductFormProps> = ({
   })
 
   useEffect(() => {
-    if (categoryData?.name) {
-      setCategoryType(categoryData?.name)
+    if (categoryData?.type) {
+      setCategoryType(categoryData?.type)
     }
-  }, [SubCategories, categoryData?.name, categoryType])
+  }, [SubCategories, categoryData?.type, categoryType])
 
   const errors = form.formState.errors
   // console.log(errors)
@@ -302,7 +302,7 @@ const ProductDetails: FC<ProductFormProps> = ({
   ) => {
     // console.log({ values })
     startTransition(async () => {
-      console.log({ values })
+      // console.log({ values })
       try {
         if (data?.id) {
           const res = await editProduct(values, data.id, path)
@@ -317,41 +317,6 @@ const ProductDetails: FC<ProductFormProps> = ({
         }
         toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')
       }
-      // try {
-      //   const transformedData = {
-      //     ...values,
-      //     coffeeCharacteristics: values.coffeeCharacteristics
-      //       ? {
-      //           ...values.coffeeCharacteristics,
-      //           flavorNotes: JSON.stringify(
-      //             values.coffeeCharacteristics.flavorNotes || []
-      //           ),
-      //           aromaNotes: JSON.stringify(
-      //             values.coffeeCharacteristics.aromaNotes || []
-      //           ),
-      //           brewingMethods: JSON.stringify(
-      //             values.coffeeCharacteristics.brewingMethods || []
-      //           ),
-      //         }
-      //       : undefined,
-      //   }
-      //   if (data) {
-      //     const res = await editProduct(
-      //       transformedData,
-      //       data.id as string,
-      //       path
-      //     )
-      //     if (res?.errors) handleServerErrors(res.errors, form.setError)
-      //   } else {
-      //     const res = await createProduct(transformedData, path)
-      //     if (res?.errors) handleServerErrors(res.errors, form.setError)
-      //   }
-      // } catch (error) {
-      //   if (error instanceof Error && error.message.includes('NEXT_REDIRECT')) {
-      //     return
-      //   }
-      //   toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')
-      // }
     })
   }
   // const addMainVariantColor = (newColorValue: string) => {
@@ -757,8 +722,8 @@ const ProductDetails: FC<ProductFormProps> = ({
                 <CoffeeCharacteristicsForm form={form} disabled={isPending} />
               )}
 
-              {/* {!isPendingCategory && categoryType === 'EQUIPMENT' && ( */}
-              {!isPendingCategory && categoryType === 'تجهیزات قهوه' && (
+              {/* {!isPendingCategory && categoryType === 'تجهیزات قهوه' && ( */}
+              {!isPendingCategory && categoryType === 'EQUIPMENT' && (
                 <EquipmentSpecsForm form={form} disabled={isPending} />
               )}
 

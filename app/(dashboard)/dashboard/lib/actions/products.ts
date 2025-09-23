@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { deleteFileFromS3, uploadFileToS3 } from './s3Upload'
-import { EnhancedProductFormSchema, ProductFormSchema } from '../schemas'
+import { EnhancedProductFormSchema } from '../schemas'
 import { currentUser } from '@/lib/auth'
 import prisma from '@/lib/prisma'
 import { generateUniqueSlug } from '../server-utils'
@@ -30,17 +30,19 @@ interface CreateProductFormState {
   }
 }
 
-export async function createProduct(data: unknown, path: string) {
-  console.log(' ok')
+export async function createProduct(
+  data: unknown,
+  path: string
+): Promise<CreateProductFormState> {
   const result = EnhancedProductFormSchema.safeParse(data)
 
-  console.log({ result })
   if (!result.success) {
     console.error(result.error.flatten().fieldErrors)
     return {
       errors: result.error.flatten().fieldErrors,
     }
   }
+
   const user = await currentUser()
   if (!user || user.role !== 'admin') {
     return {
@@ -50,147 +52,184 @@ export async function createProduct(data: unknown, path: string) {
     }
   }
 
-  // try {
-  //   const {
-  //     variants,
-  //     images,
-  //     variantImages,
-  //     specs,
-  //     questions,
-  //     brand,
-  //     ...productData
-  //   } = result.data
+  try {
+    const {
+      variants,
+      images,
+      variantImages,
+      specs,
+      questions,
+      brand,
+      coffeeCharacteristics,
+      equipmentSpecs,
+      accessorySpecs,
+      ...productData
+    } = result.data
 
-  //   const isExistingProduct = await prisma.product.findFirst({
-  //     where: {
-  //       name: result.data.name,
-  //     },
-  //   })
+    const isExistingProduct = await prisma.product.findFirst({
+      where: {
+        name: result.data.name,
+      },
+    })
 
-  //   if (isExistingProduct) {
-  //     return {
-  //       errors: {
-  //         _form: ['محصول با این نام موجود است!'],
-  //       },
-  //     }
-  //   }
+    if (isExistingProduct) {
+      return {
+        errors: {
+          _form: ['محصول با این نام موجود است!'],
+        },
+      }
+    }
 
-  //   const productSlug = await generateUniqueSlug(
-  //     slugify(result.data.name, {
-  //       replacement: '-',
-  //       lower: true,
-  //       trim: true,
-  //     }),
-  //     'product'
-  //   )
+    const productSlug = await generateUniqueSlug(
+      slugify(result.data.name, {
+        replacement: '-',
+        lower: true,
+        trim: true,
+      }),
+      'product'
+    )
 
-  //   // Handle main product images
-  //   let imageIds: string[] = []
-  //   if (images) {
-  //     const filesToUpload = images.filter(
-  //       (img): img is File => img instanceof File
-  //     )
-  //     const newImageUploadPromises = filesToUpload.map(async (img: File) => {
-  //       const buffer = Buffer.from(await img.arrayBuffer())
-  //       return uploadFileToS3(buffer, img.name)
-  //     })
-  //     const uploadedImages = await Promise.all(newImageUploadPromises)
-  //     imageIds = uploadedImages
-  //       .map((res) => res?.imageId)
-  //       .filter(Boolean) as string[]
-  //   }
+    // Handle main product images
+    let imageIds: string[] = []
+    if (images) {
+      const filesToUpload = images.filter(
+        (img): img is File => img instanceof File
+      )
+      const newImageUploadPromises = filesToUpload.map(async (img: File) => {
+        const buffer = Buffer.from(await img.arrayBuffer())
+        return uploadFileToS3(buffer, img.name)
+      })
+      const uploadedImages = await Promise.all(newImageUploadPromises)
+      imageIds = uploadedImages
+        .map((res) => res?.imageId)
+        .filter(Boolean) as string[]
+    }
 
-  //   // Handle variant images (global variant images)
-  //   let variantImageIds: string[] = []
-  //   if (variantImages) {
-  //     const filesToUpload = variantImages.filter(
-  //       (img): img is File => img instanceof File
-  //     )
-  //     const newImageUploadPromises = filesToUpload.map(async (img: File) => {
-  //       const buffer = Buffer.from(await img.arrayBuffer())
-  //       return uploadFileToS3(buffer, img.name)
-  //     })
-  //     const uploadedImages = await Promise.all(newImageUploadPromises)
-  //     variantImageIds = uploadedImages
-  //       .map((res) => res?.imageId)
-  //       .filter(Boolean) as string[]
-  //   }
+    // Handle variant images (global variant images)
+    let variantImageIds: string[] = []
+    if (variantImages) {
+      const filesToUpload = variantImages.filter(
+        (img): img is File => img instanceof File
+      )
+      const newImageUploadPromises = filesToUpload.map(async (img: File) => {
+        const buffer = Buffer.from(await img.arrayBuffer())
+        return uploadFileToS3(buffer, img.name)
+      })
+      const uploadedImages = await Promise.all(newImageUploadPromises)
+      variantImageIds = uploadedImages
+        .map((res) => res?.imageId)
+        .filter(Boolean) as string[]
+    }
 
-  //   await prisma.$transaction(async (tx) => {
-  //     // Create the main product
-  //     const product = await tx.product.create({
-  //       data: {
-  //         ...productData,
-  //         brand: brand || '',
-  //         slug: productSlug,
-  //         keywords: productData.keywords?.join(',') ?? '',
-  //         saleEndDate: String(productData.saleEndDate),
-  //         images: { connect: imageIds.map((id) => ({ id })) },
-  //       },
-  //     })
+    await prisma.$transaction(async (tx) => {
+      // Create the main product
+      const product = await tx.product.create({
+        data: {
+          ...productData,
+          brand: brand || '',
+          slug: productSlug,
+          keywords: productData.keywords?.join(',') ?? '',
+          saleEndDate: String(productData.saleEndDate),
+          images: { connect: imageIds.map((id) => ({ id })) },
+        },
+      })
 
-  //     // Create Variants
-  //     for (const variantData of variants) {
-  //       // Create or get Size
-  //       const size = await tx.size.upsert({
-  //         where: { name: variantData.size },
-  //         update: {},
-  //         create: { name: variantData.size },
-  //       })
+      // Create Variants
+      for (const variantData of variants) {
+        // Create or get Size
+        const size = await tx.size.upsert({
+          where: { name: variantData.size },
+          update: {},
+          create: { name: variantData.size },
+        })
 
-  //       // Create or get Color
-  //       const color = await tx.color.upsert({
-  //         where: { hex: variantData.colorHex },
-  //         update: { name: variantData.color },
-  //         create: { name: variantData.color, hex: variantData.colorHex },
-  //       })
+        // Create or get Color
+        const color = await tx.color.upsert({
+          where: { hex: variantData.colorHex },
+          update: { name: variantData.color },
+          create: { name: variantData.color, hex: variantData.colorHex },
+        })
 
-  //       // Create the variant
-  //       await tx.productVariant.create({
-  //         data: {
-  //           productId: product.id,
-  //           sizeId: size.id,
-  //           colorId: color.id,
-  //           price: variantData.price,
-  //           quantity: variantData.quantity,
-  //           discount: variantData.discount || 0,
-  //           weight: variantData.weight,
-  //           length: variantData.length,
-  //           width: variantData.width,
-  //           height: variantData.height,
-  //           // sku: variantData.sku,
-  //           // Connect variant images (these are shared across all variants for now)
-  //           images: { connect: variantImageIds.map((id) => ({ id })) },
-  //         },
-  //       })
-  //     }
+        // Create the variant
+        await tx.productVariant.create({
+          data: {
+            productId: product.id,
+            sizeId: size.id,
+            colorId: color.id,
+            price: variantData.price,
+            quantity: variantData.quantity,
+            discount: variantData.discount || 0,
+            weight: variantData.weight,
+            length: variantData.length,
+            width: variantData.width,
+            height: variantData.height,
+            // sku: variantData.sku,
+            // Connect variant images (these are shared across all variants for now)
+            images: { connect: variantImageIds.map((id) => ({ id })) },
+          },
+        })
+      }
 
-  //     // Create Specs if they exist
-  //     if (specs && specs.length > 0) {
-  //       await tx.spec.createMany({
-  //         data: specs
-  //           .filter((s) => s.name && s.name.trim() !== '')
-  //           .map((spec) => ({ ...spec, productId: product.id })),
-  //       })
-  //     }
+      // Create Specs if they exist
+      if (specs && specs.length > 0) {
+        await tx.spec.createMany({
+          data: specs
+            .filter((s) => s.name && s.name.trim() !== '')
+            .map((spec) => ({ ...spec, productId: product.id })),
+        })
+      }
 
-  //     // Create Questions if they exist
-  //     if (questions && questions.length > 0) {
-  //       await tx.question.createMany({
-  //         data: questions
-  //           .filter((q) => q.question && q.question.trim() !== '')
-  //           .map((q) => ({ ...q, productId: product.id })),
-  //       })
-  //     }
-  //   })
-  // } catch (err: unknown) {
-  //   const message =
-  //     err instanceof Error ? err.message : 'مشکلی در سرور پیش آمده.'
-  //   return { errors: { _form: [message] } }
-  // }
+      // Create Questions if they exist
+      if (questions && questions.length > 0) {
+        await tx.question.createMany({
+          data: questions
+            .filter((q) => q.question && q.question.trim() !== '')
+            .map((q) => ({ ...q, productId: product.id })),
+        })
+      }
+      const category = await tx.category.findFirst({
+        where: { id: result.data.categoryId },
+      })
+      if (category?.type === 'COFFEE' && coffeeCharacteristics) {
+        await tx.coffeeCharacteristics.create({
+          data: {
+            ...coffeeCharacteristics,
+            flavorNotes: coffeeCharacteristics.flavorNotes
+              ? coffeeCharacteristics.flavorNotes.join(',')
+              : undefined,
+            aromaNotes: coffeeCharacteristics.aromaNotes
+              ? coffeeCharacteristics.aromaNotes.join(',')
+              : undefined,
+            brewingMethods: coffeeCharacteristics.brewingMethods
+              ? coffeeCharacteristics.brewingMethods.join(',')
+              : undefined,
+            productId: product.id,
+          },
+        })
+      } else if (category?.type === 'EQUIPMENT' && equipmentSpecs) {
+        await tx.equipmentSpecs.create({
+          data: {
+            ...equipmentSpecs,
+            productId: product.id,
+          },
+        })
+      } else if (category?.type === 'ACCESSORY' && accessorySpecs) {
+        await tx.accessorySpecs.create({
+          data: {
+            ...accessorySpecs,
+            productId: product.id,
+          },
+        })
+      }
+    })
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : 'مشکلی در سرور پیش آمده.'
+    return { errors: { _form: [message] } }
+  }
 
-  // revalidatePath(path)
-  // redirect(`/dashboard/products`)
+  revalidatePath(path)
+  redirect(`/dashboard/products`)
 }
 
 export async function editProduct(
@@ -198,7 +237,7 @@ export async function editProduct(
   productId: string,
   path: string
 ): Promise<CreateProductFormState> {
-  const result = ProductFormSchema.safeParse(data)
+  const result = EnhancedProductFormSchema.safeParse(data)
 
   if (!result.success) {
     console.error(result.error.flatten().fieldErrors)
@@ -225,6 +264,18 @@ export async function editProduct(
   }
 
   try {
+    const {
+      // variants,
+      // images,
+      // variantImages,
+      // specs,
+      // questions,
+      // brand,
+      coffeeCharacteristics,
+      equipmentSpecs,
+      accessorySpecs,
+      // ...productData
+    } = result.data
     const isExisting = await prisma.product.findFirst({
       where: { id: productId },
       include: {
@@ -236,6 +287,9 @@ export async function editProduct(
             color: true,
           },
         },
+        coffeeCharacteristics: true,
+        equipmentSpecs: true,
+        accessorySpecs: true,
       },
     })
 
@@ -336,6 +390,19 @@ export async function editProduct(
             },
           },
         })
+      }
+    }
+
+    const category = await prisma.category.findUnique({
+      where: { id: result.data.categoryId },
+      select: { id: true, name: true, type: true },
+    })
+
+    if (!category) {
+      return {
+        errors: {
+          _form: ['دسته‌بندی انتخاب شده موجود نیست!'],
+        },
       }
     }
 
@@ -507,6 +574,57 @@ export async function editProduct(
           })
         }
       }
+      const categoryType = category.type
+
+      // Delete existing characteristics first
+      if (isExisting.coffeeCharacteristics) {
+        await tx.coffeeCharacteristics.delete({
+          where: { productId },
+        })
+      }
+      if (isExisting.equipmentSpecs) {
+        await tx.equipmentSpecs.delete({
+          where: { productId },
+        })
+      }
+      if (isExisting.accessorySpecs) {
+        await tx.accessorySpecs.delete({
+          where: { productId },
+        })
+      }
+
+      // Create new characteristics based on category
+      if (categoryType === 'COFFEE') {
+        if (coffeeCharacteristics) {
+          await tx.coffeeCharacteristics.create({
+            data: {
+              ...coffeeCharacteristics,
+              flavorNotes: coffeeCharacteristics.flavorNotes?.join('، '),
+              aromaNotes: coffeeCharacteristics.aromaNotes?.join('، '),
+              brewingMethods: coffeeCharacteristics.brewingMethods?.join('، '),
+              productId,
+            },
+          })
+        }
+      } else if (categoryType === 'EQUIPMENT') {
+        if (equipmentSpecs) {
+          await tx.equipmentSpecs.create({
+            data: {
+              ...equipmentSpecs,
+              productId,
+            },
+          })
+        }
+      } else if (categoryType === 'ACCESSORY') {
+        if (accessorySpecs) {
+          await tx.accessorySpecs.create({
+            data: {
+              ...accessorySpecs,
+              productId,
+            },
+          })
+        }
+      }
     })
   } catch (err: unknown) {
     const message =
@@ -560,6 +678,9 @@ export async function deleteProduct(
             images: true,
           },
         },
+        coffeeCharacteristics: true,
+        equipmentSpecs: true,
+        accessorySpecs: true,
       },
     })
 

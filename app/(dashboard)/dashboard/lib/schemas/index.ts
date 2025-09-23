@@ -219,6 +219,10 @@ export const CategoryFormSchema = z.object({
     .regex(/^[a-zA-Z0-9\s'&-‌\u0600-\u06FF]+$/, {
       message: 'تنها استفاده از حروف، اعداد و اسپیس در نام دسته‌بندی مجاز است.',
     }),
+  type: z.enum(['GENERAL', 'COFFEE', 'EQUIPMENT', 'ACCESSORY']),
+  // type: z.enum(['COFFEE', 'EQUIPMENT', 'ACCESSORY', 'GENERAL'], {
+  //   required_error: 'نوع دسته‌بندی مورد نیاز است',
+  // }),
 
   images: z
     .union([
