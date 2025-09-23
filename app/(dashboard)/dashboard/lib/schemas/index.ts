@@ -441,8 +441,8 @@ export const EquipmentSpecsSchema = z.object({
   material: z.string().optional(),
   capacity: z.number().min(0).optional(),
   powerConsumption: z.number().min(0).max(5000).optional(),
-  dimensions: z.string().optional(),
-  weight: z.number().min(0).optional(),
+  // dimensions: z.string().optional(),
+  // weight: z.number().min(0).optional(),
   pressureLevel: z.number().min(0).max(20).optional(),
   heatingTime: z.number().min(0).optional(),
   temperatureRange: z.string().optional(),
@@ -461,6 +461,12 @@ export const AccessorySpecsSchema = z.object({
   dishwasherSafe: z.boolean().optional(),
   handleType: z.string().optional(),
   lidType: z.string().optional(),
-  dimensions: z.string().optional(),
-  weight: z.number().min(0).optional(),
+  // dimensions: z.string().optional(), //aditional
+  // weight: z.number().min(0).optional(), //aditional
+})
+
+export const EnhancedProductFormSchema = ProductFormSchema.extend({
+  coffeeCharacteristics: CoffeeCharacteristicsSchema.optional(),
+  equipmentSpecs: EquipmentSpecsSchema.optional(),
+  accessorySpecs: AccessorySpecsSchema.optional(),
 })

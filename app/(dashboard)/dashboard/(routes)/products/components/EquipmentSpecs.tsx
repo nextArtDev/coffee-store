@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Wrench } from 'lucide-react'
-import { EnhancedProductFormSchema } from './product-details'
+import { EnhancedProductFormSchema } from '../../../lib/schemas'
 
 interface EquipmentSpecsProps {
   form: UseFormReturn<z.infer<typeof EnhancedProductFormSchema>>
@@ -87,7 +87,7 @@ const EquipmentSpecsForm: FC<EquipmentSpecsProps> = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="equipmentSpecs.weight"
               render={({ field }) => (
@@ -111,9 +111,9 @@ const EquipmentSpecsForm: FC<EquipmentSpecsProps> = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="equipmentSpecs.dimensions"
               render={({ field }) => (
@@ -129,7 +129,7 @@ const EquipmentSpecsForm: FC<EquipmentSpecsProps> = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={form.control}

@@ -862,8 +862,8 @@ model EquipmentSpecs {
   material         String? // Steel, Ceramic, Glass, etc.
   capacity         Float? // ml or cups
   powerConsumption Int? // watts
-  dimensions       String? // JSON: {"length": 30, "width": 20, "height": 25}
-  weight           Float? // kg
+  // dimensions       String? // JSON: {"length": 30, "width": 20, "height": 25}
+  // weight           Float? // kg
 
   // Coffee machine specific
   pressureLevel    Float? // bars for espresso machines

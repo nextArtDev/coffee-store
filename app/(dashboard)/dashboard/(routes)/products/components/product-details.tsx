@@ -64,13 +64,11 @@ import InputFieldset from '../../../components/input-fieldset'
 import { TagsInput } from '../../../components/tag-input'
 import RichTextEditor from '../../../components/text-editor/react-text-editor'
 import { createProduct, editProduct } from '../../../lib/actions/products'
-import { getSubCategoryByCategoryId } from '../../../lib/queries/server-queries'
 import {
-  AccessorySpecsSchema,
-  CoffeeCharacteristicsSchema,
-  EquipmentSpecsSchema,
-  ProductFormSchema,
-} from '../../../lib/schemas'
+  getCategoryWithType,
+  getSubCategoryByCategoryId,
+} from '../../../lib/queries/server-queries'
+import { EnhancedProductFormSchema } from '../../../lib/schemas'
 import { handleServerErrors } from '../../../lib/server-utils'
 import CoffeeCharacteristicsForm from './CoffeeCharacteristics'
 import EquipmentSpecsForm from './EquipmentSpecs'
@@ -93,12 +91,6 @@ const shippingFeeMethods = [
     // description: 'FIXED (Fees are fixed.)',
   },
 ]
-
-export const EnhancedProductFormSchema = ProductFormSchema.extend({
-  coffeeCharacteristics: CoffeeCharacteristicsSchema.optional(),
-  equipmentSpecs: EquipmentSpecsSchema.optional(),
-  accessorySpecs: AccessorySpecsSchema.optional(),
-})
 
 interface ProductFormProps {
   data?: Partial<
@@ -234,7 +226,7 @@ const ProductDetails: FC<ProductFormProps> = ({
             material: data.equipmentSpecs.material ?? undefined,
             capacity: data.equipmentSpecs.capacity ?? undefined,
             powerConsumption: data.equipmentSpecs.powerConsumption ?? undefined,
-            weight: data.equipmentSpecs.weight ?? undefined,
+            // weight: data.equipmentSpecs.weight ?? undefined,
             pressureLevel: data.equipmentSpecs.pressureLevel ?? undefined,
             heatingTime: data.equipmentSpecs.heatingTime ?? undefined,
             burrType: data.equipmentSpecs.burrType ?? undefined,
@@ -291,23 +283,18 @@ const ProductDetails: FC<ProductFormProps> = ({
     queryFn: () => getSubCategoryByCategoryId(form.watch().categoryId),
   })
 
-  // const { data: categoryData } = useQuery({
-  //   queryKey: ['categoryWithType', form.watch().categoryId],
-  //   queryFn: () => getCategoryWithType(form.watch().categoryId),
-  //   enabled: !!form.watch().categoryId,
-  // })
+  const { data: categoryData } = useQuery({
+    queryKey: ['categoryWithType', form.watch().categoryId],
+    queryFn: () => getCategoryWithType(form.watch().categoryId),
+    enabled: !!form.watch().categoryId,
+  })
 
   useEffect(() => {
-    if (SubCategories?.length) {
-      setCategoryType(SubCategories.map((sub) => sub.category.name)[0])
+    if (categoryData?.name) {
+      setCategoryType(categoryData?.name)
     }
-  }, [SubCategories])
-  // const { data: citiesForFreeShipping } = useQuery({
-  //   queryKey: ['province-for-shipping', provinceNameForShopping],
-  //   queryFn: () => getCityByProvinceId(provinceNameForShopping),
-  //   enabled: !!provinceNameForShopping,
-  // })
-  // console.log({ citiesForFreeShipping })
+  }, [SubCategories, categoryData?.name, categoryType])
+
   const errors = form.formState.errors
   // console.log(errors)
   const handleSubmit = async (
@@ -315,6 +302,7 @@ const ProductDetails: FC<ProductFormProps> = ({
   ) => {
     // console.log({ values })
     startTransition(async () => {
+      console.log({ values })
       try {
         if (data?.id) {
           const res = await editProduct(values, data.id, path)
@@ -769,7 +757,8 @@ const ProductDetails: FC<ProductFormProps> = ({
                 <CoffeeCharacteristicsForm form={form} disabled={isPending} />
               )}
 
-              {!isPendingCategory && categoryType === 'EQUIPMENT' && (
+              {/* {!isPendingCategory && categoryType === 'EQUIPMENT' && ( */}
+              {!isPendingCategory && categoryType === 'تجهیزات قهوه' && (
                 <EquipmentSpecsForm form={form} disabled={isPending} />
               )}
 

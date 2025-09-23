@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Package } from 'lucide-react'
-import { EnhancedProductFormSchema } from './product-details'
+import { EnhancedProductFormSchema } from '../../../lib/schemas'
 
 interface AccessorySpecsProps {
   form: UseFormReturn<z.infer<typeof EnhancedProductFormSchema>>
@@ -82,7 +82,7 @@ const AccessorySpecsForm: FC<AccessorySpecsProps> = ({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="accessorySpecs.weight"
               render={({ field }) => (
@@ -123,7 +123,7 @@ const AccessorySpecsForm: FC<AccessorySpecsProps> = ({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
           </div>
         </div>
 
