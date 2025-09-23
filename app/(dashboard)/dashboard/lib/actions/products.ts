@@ -194,15 +194,15 @@ export async function createProduct(
         await tx.coffeeCharacteristics.create({
           data: {
             ...coffeeCharacteristics,
-            flavorNotes: coffeeCharacteristics.flavorNotes
+            flavorNotes: Array.isArray(coffeeCharacteristics.flavorNotes)
               ? coffeeCharacteristics.flavorNotes.join(',')
-              : undefined,
-            aromaNotes: coffeeCharacteristics.aromaNotes
+              : coffeeCharacteristics.flavorNotes,
+            aromaNotes: Array.isArray(coffeeCharacteristics.aromaNotes)
               ? coffeeCharacteristics.aromaNotes.join(',')
-              : undefined,
-            brewingMethods: coffeeCharacteristics.brewingMethods
+              : coffeeCharacteristics.aromaNotes,
+            brewingMethods: Array.isArray(coffeeCharacteristics.brewingMethods)
               ? coffeeCharacteristics.brewingMethods.join(',')
-              : undefined,
+              : coffeeCharacteristics.brewingMethods,
             productId: product.id,
           },
         })
@@ -599,9 +599,17 @@ export async function editProduct(
           await tx.coffeeCharacteristics.create({
             data: {
               ...coffeeCharacteristics,
-              flavorNotes: coffeeCharacteristics.flavorNotes?.join('، '),
-              aromaNotes: coffeeCharacteristics.aromaNotes?.join('، '),
-              brewingMethods: coffeeCharacteristics.brewingMethods?.join('، '),
+              flavorNotes: Array.isArray(coffeeCharacteristics.flavorNotes)
+                ? coffeeCharacteristics.flavorNotes.join(',')
+                : coffeeCharacteristics.flavorNotes,
+              aromaNotes: Array.isArray(coffeeCharacteristics.aromaNotes)
+                ? coffeeCharacteristics.aromaNotes.join(',')
+                : coffeeCharacteristics.aromaNotes,
+              brewingMethods: Array.isArray(
+                coffeeCharacteristics.brewingMethods
+              )
+                ? coffeeCharacteristics.brewingMethods.join(',')
+                : coffeeCharacteristics.brewingMethods,
               productId,
             },
           })

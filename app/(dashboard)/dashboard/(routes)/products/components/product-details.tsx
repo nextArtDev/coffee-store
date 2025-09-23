@@ -73,6 +73,7 @@ import { handleServerErrors } from '../../../lib/server-utils'
 import CoffeeCharacteristicsForm from './CoffeeCharacteristics'
 import EquipmentSpecsForm from './EquipmentSpecs'
 import AccessorySpecsForm from './AccessorySpecs'
+import { safeParseToArray } from '../../../lib/utils'
 
 const shippingFeeMethods = [
   {
@@ -121,6 +122,7 @@ const ProductDetails: FC<ProductFormProps> = ({
   categories,
   offerTags,
 }) => {
+  // console.log({data})
   const path = usePathname()
   const [categoryType, setCategoryType] = useState<string>('GENERAL')
 
@@ -203,16 +205,17 @@ const ProductDetails: FC<ProductFormProps> = ({
             bitterness: data.coffeeCharacteristics.bitterness ?? undefined,
             sweetness: data.coffeeCharacteristics.sweetness ?? undefined,
             body: data.coffeeCharacteristics.body ?? undefined,
-            flavorNotes: data.coffeeCharacteristics.flavorNotes
-              ? JSON.parse(data.coffeeCharacteristics.flavorNotes)
-              : [],
-            aromaNotes: data.coffeeCharacteristics.aromaNotes
-              ? JSON.parse(data.coffeeCharacteristics.aromaNotes)
-              : [],
+
+            // FIXED: Safe JSON parsing for arrays
+            flavorNotes: safeParseToArray(
+              data.coffeeCharacteristics.flavorNotes
+            ),
+            aromaNotes: safeParseToArray(data.coffeeCharacteristics.aromaNotes),
+            brewingMethods: safeParseToArray(
+              data.coffeeCharacteristics.brewingMethods
+            ),
+
             grindSize: data.coffeeCharacteristics.grindSize ?? undefined,
-            brewingMethods: data.coffeeCharacteristics.brewingMethods
-              ? JSON.parse(data.coffeeCharacteristics.brewingMethods)
-              : [],
             waterTemp: data.coffeeCharacteristics.waterTemp ?? undefined,
             brewTime: data.coffeeCharacteristics.brewTime ?? undefined,
             coffeeToWaterRatio:
@@ -220,13 +223,12 @@ const ProductDetails: FC<ProductFormProps> = ({
           }
         : undefined,
 
-      // Equipment specs defaults
+      // FIXED: Safe equipment specs parsing
       equipmentSpecs: data?.equipmentSpecs
         ? {
             material: data.equipmentSpecs.material ?? undefined,
             capacity: data.equipmentSpecs.capacity ?? undefined,
             powerConsumption: data.equipmentSpecs.powerConsumption ?? undefined,
-            // weight: data.equipmentSpecs.weight ?? undefined,
             pressureLevel: data.equipmentSpecs.pressureLevel ?? undefined,
             heatingTime: data.equipmentSpecs.heatingTime ?? undefined,
             burrType: data.equipmentSpecs.burrType ?? undefined,
@@ -234,10 +236,11 @@ const ProductDetails: FC<ProductFormProps> = ({
             grindCapacity: data.equipmentSpecs.grindCapacity ?? undefined,
             filterType: data.equipmentSpecs.filterType ?? undefined,
             compatibility: data.equipmentSpecs.compatibility ?? undefined,
+            temperatureRange: data.equipmentSpecs.temperatureRange ?? undefined,
           }
         : undefined,
 
-      // Accessory specs defaults
+      // FIXED: Safe accessory specs parsing
       accessorySpecs: data?.accessorySpecs
         ? {
             material: data.accessorySpecs.material ?? undefined,

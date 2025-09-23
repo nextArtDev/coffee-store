@@ -77,3 +77,26 @@ export const getTimeUntil = (
 
   return { days: totalDays, hours: totalHours }
 }
+
+export const safeParseToArray = (
+  value: string | null | undefined
+): string[] => {
+  if (!value || value.trim() === '') return []
+
+  // First check if it looks like JSON (starts with [ )
+  if (value.trim().startsWith('[')) {
+    try {
+      const parsed = JSON.parse(value)
+      return Array.isArray(parsed) ? parsed : []
+    } catch (error) {
+      console.warn('Failed to parse JSON array:', value, error)
+      return []
+    }
+  }
+
+  // Otherwise treat as comma-separated string or single string
+  return value
+    .split(',')
+    .map((item) => item.trim())
+    .filter((item) => item !== '')
+}

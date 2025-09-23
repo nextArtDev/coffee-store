@@ -9,7 +9,7 @@ import { Image } from '@/lib/generated/prisma'
 export type CategoryColumn = {
   id: string
   name: string
-  url: string
+  type: string
   featured: boolean
   images: Image[]
   createdAt: string
@@ -44,10 +44,10 @@ export const columns: ColumnDef<CategoryColumn>[] = [
   },
 
   {
-    accessorKey: 'url',
-    header: 'URL',
+    accessorKey: 'دسته',
+    header: 'type',
     cell: ({ row }) => {
-      return <span>{row.original.url}</span>
+      return <span>{row.original.type}</span>
     },
   },
   {

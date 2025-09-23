@@ -61,7 +61,7 @@ export default async function CategoriesPage({
     categoriesResponse.categories?.map((item) => ({
       id: item.id,
       name: item.name,
-      url: item.url,
+      type: item.type,
       featured: item.featured,
       images: item.images,
       // categories: categories,

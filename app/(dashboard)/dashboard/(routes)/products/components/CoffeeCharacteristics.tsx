@@ -23,7 +23,7 @@ import { Slider } from '@/components/ui/slider'
 
 import { Coffee } from 'lucide-react'
 import { TagsInput } from '../../../components/tag-input'
-import { EnhancedProductFormSchema } from './product-details'
+import { EnhancedProductFormSchema } from '../../../lib/schemas'
 
 interface CoffeeCharacteristicsProps {
   form: UseFormReturn<z.infer<typeof EnhancedProductFormSchema>>
