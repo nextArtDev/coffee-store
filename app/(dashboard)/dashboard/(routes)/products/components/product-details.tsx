@@ -38,6 +38,7 @@ import { Switch } from '@/components/ui/switch'
 import {
   AccessorySpecs,
   Category,
+  ChocolateCharacteristics,
   CoffeeCharacteristics,
   Color,
   EquipmentSpecs,
@@ -74,6 +75,7 @@ import CoffeeCharacteristicsForm from './CoffeeCharacteristics'
 import EquipmentSpecsForm from './EquipmentSpecs'
 import AccessorySpecsForm from './AccessorySpecs'
 import { safeParseToArray } from '../../../lib/utils'
+import ChocolateCharacteristicsForm from './ChocolateCharacteristics'
 
 const shippingFeeMethods = [
   {
@@ -108,6 +110,8 @@ interface ProductFormProps {
           })[]
         | null
     } & { accessorySpecs: Partial<AccessorySpecs> | null } & {
+      chocolateCharacteristics: Partial<ChocolateCharacteristics> | null
+    } & {
       coffeeCharacteristics: Partial<CoffeeCharacteristics> | null
     } & { equipmentSpecs: Partial<EquipmentSpecs> | null }
   >
@@ -250,6 +254,42 @@ const ProductDetails: FC<ProductFormProps> = ({
             dishwasherSafe: data.accessorySpecs.dishwasherSafe ?? undefined,
             handleType: data.accessorySpecs.handleType ?? undefined,
             lidType: data.accessorySpecs.lidType ?? undefined,
+          }
+        : undefined,
+      chocolateCharacteristics: data?.chocolateCharacteristics
+        ? {
+            cocoaPercentage:
+              data.chocolateCharacteristics.cocoaPercentage ?? undefined,
+            chocolateType:
+              data.chocolateCharacteristics.chocolateType ?? undefined,
+            origin: data.chocolateCharacteristics.origin ?? undefined,
+            beanVariety: data.chocolateCharacteristics.beanVariety ?? undefined,
+            processingMethod:
+              data.chocolateCharacteristics.processingMethod ?? undefined,
+            conchingTime:
+              data.chocolateCharacteristics.conchingTime ?? undefined,
+            temperingMethod:
+              data.chocolateCharacteristics.temperingMethod ?? undefined,
+            texture: data.chocolateCharacteristics.texture ?? undefined,
+            sweetness: data.chocolateCharacteristics.sweetness ?? undefined,
+            bitterness: data.chocolateCharacteristics.bitterness ?? undefined,
+            acidity: data.chocolateCharacteristics.acidity ?? undefined,
+            fruitiness: data.chocolateCharacteristics.fruitiness ?? undefined,
+            flavorNotes: safeParseToArray(
+              data.chocolateCharacteristics.flavorNotes
+            ),
+            mouthfeel: data.chocolateCharacteristics.mouthfeel ?? undefined,
+            finish: data.chocolateCharacteristics.finish ?? undefined,
+            pairings: safeParseToArray(data.chocolateCharacteristics.pairings),
+            servingTemp: data.chocolateCharacteristics.servingTemp ?? undefined,
+            organic: data.chocolateCharacteristics.organic ?? undefined,
+            fairTrade: data.chocolateCharacteristics.fairTrade ?? undefined,
+            singleOrigin:
+              data.chocolateCharacteristics.singleOrigin ?? undefined,
+            rawChocolate:
+              data.chocolateCharacteristics.rawChocolate ?? undefined,
+            vegan: data.chocolateCharacteristics.vegan ?? undefined,
+            glutenFree: data.chocolateCharacteristics.glutenFree ?? undefined,
           }
         : undefined,
     },
@@ -732,6 +772,12 @@ const ProductDetails: FC<ProductFormProps> = ({
 
               {!isPendingCategory && categoryType === 'ACCESSORY' && (
                 <AccessorySpecsForm form={form} disabled={isPending} />
+              )}
+              {!isPendingCategory && categoryType === 'CHOCOLATE' && (
+                <ChocolateCharacteristicsForm
+                  form={form}
+                  disabled={isPending}
+                />
               )}
 
               <InputFieldset label="خصوصیات محصول" description={''}>

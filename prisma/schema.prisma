@@ -156,6 +156,7 @@ enum ProductType {
   EQUIPMENT
   ACCESSORY
   GENERAL
+  CHOCOLATE
 }
 
 model SubCategory {
@@ -208,9 +209,10 @@ model Product {
   questions Question[]       @relation("ProductQuestion")
   reviews   Review[]         @relation("ReviewToProduct")
 
-  coffeeCharacteristics CoffeeCharacteristics? @relation("ProductCoffeeCharacteristics")
-  equipmentSpecs        EquipmentSpecs?        @relation("ProductEquipmentSpecs")
-  accessorySpecs        AccessorySpecs?        @relation("ProductAccessorySpecs")
+  coffeeCharacteristics    CoffeeCharacteristics?    @relation("ProductCoffeeCharacteristics")
+  equipmentSpecs           EquipmentSpecs?           @relation("ProductEquipmentSpecs")
+  accessorySpecs           AccessorySpecs?           @relation("ProductAccessorySpecs")
+  chocolateCharacteristics ChocolateCharacteristics? @relation("ProductChocolateSpecs")
 
   categoryId String
   category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id], onDelete: Cascade)
@@ -915,6 +917,68 @@ model AccessorySpecs {
 
   productId String  @unique
   product   Product @relation("ProductAccessorySpecs", fields: [productId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum ChocolateType {
+  DARK
+  MILK
+  WHITE
+  RUBY
+  RAW
+  UNSWEETENED
+}
+
+enum ChocolateTexture {
+  SMOOTH
+  GRAINY
+  CREAMY
+  CRUNCHY
+  VELVETY
+}
+
+model ChocolateCharacteristics {
+  id String @id @default(uuid())
+
+  // Chocolate basics
+  cocoaPercentage Float? // 70%, 85%, etc.
+  chocolateType   ChocolateType?
+  origin          String? // Ecuador, Ghana, Madagascar
+  beanVariety     String? // Criollo, Forastero, Trinitario
+
+  // Processing & texture
+  processingMethod String? // Bean-to-bar, mass-produced
+  conchingTime     Int? // hours
+  temperingMethod  String? // Traditional, modern
+  texture          ChocolateTexture?
+
+  // Flavor profile (1-10 scale)
+  sweetness  Float? // 1-10
+  bitterness Float? // 1-10
+  acidity    Float? // 1-10
+  fruitiness Float? // 1-10
+
+  // Flavor notes and characteristics
+  flavorNotes String? // JSON array
+  mouthfeel   String? // Smooth, grainy, creamy
+  finish      String? // Short, long, lingering
+
+  // Pairing suggestions
+  pairings    String? // JSON array: wines, coffees, nuts
+  servingTemp String? // Room temperature, chilled
+
+  // Certifications & attributes
+  organic      Boolean?
+  fairTrade    Boolean?
+  singleOrigin Boolean?
+  rawChocolate Boolean?
+  vegan        Boolean?
+  glutenFree   Boolean?
+
+  productId String  @unique
+  product   Product @relation("ProductChocolateSpecs", fields: [productId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

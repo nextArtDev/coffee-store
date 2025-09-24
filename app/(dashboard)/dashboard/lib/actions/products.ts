@@ -63,6 +63,7 @@ export async function createProduct(
       coffeeCharacteristics,
       equipmentSpecs,
       accessorySpecs,
+      chocolateCharacteristics,
       ...productData
     } = result.data
 
@@ -220,6 +221,21 @@ export async function createProduct(
             productId: product.id,
           },
         })
+      } else if (category?.type === 'CHOCOLATE' && accessorySpecs) {
+        if (chocolateCharacteristics) {
+          await tx.chocolateCharacteristics.create({
+            data: {
+              ...chocolateCharacteristics,
+              flavorNotes: Array.isArray(chocolateCharacteristics.flavorNotes)
+                ? chocolateCharacteristics.flavorNotes.join(',')
+                : chocolateCharacteristics.flavorNotes,
+              pairings: Array.isArray(chocolateCharacteristics.pairings)
+                ? chocolateCharacteristics.pairings.join(',')
+                : chocolateCharacteristics.pairings,
+              productId: product.id,
+            },
+          })
+        }
       }
     })
   } catch (err: unknown) {
@@ -274,6 +290,7 @@ export async function editProduct(
       coffeeCharacteristics,
       equipmentSpecs,
       accessorySpecs,
+      chocolateCharacteristics,
       // ...productData
     } = result.data
     const isExisting = await prisma.product.findFirst({
@@ -290,6 +307,7 @@ export async function editProduct(
         coffeeCharacteristics: true,
         equipmentSpecs: true,
         accessorySpecs: true,
+        chocolateCharacteristics: true,
       },
     })
 
@@ -592,6 +610,11 @@ export async function editProduct(
           where: { productId },
         })
       }
+      if (isExisting.chocolateCharacteristics) {
+        await tx.chocolateCharacteristics.delete({
+          where: { productId },
+        })
+      }
 
       // Create new characteristics based on category
       if (categoryType === 'COFFEE') {
@@ -628,6 +651,21 @@ export async function editProduct(
           await tx.accessorySpecs.create({
             data: {
               ...accessorySpecs,
+              productId,
+            },
+          })
+        }
+      } else if (category?.type === 'CHOCOLATE' && accessorySpecs) {
+        if (chocolateCharacteristics) {
+          await tx.chocolateCharacteristics.create({
+            data: {
+              ...chocolateCharacteristics,
+              flavorNotes: Array.isArray(chocolateCharacteristics.flavorNotes)
+                ? chocolateCharacteristics.flavorNotes.join(',')
+                : chocolateCharacteristics.flavorNotes,
+              pairings: Array.isArray(chocolateCharacteristics.pairings)
+                ? chocolateCharacteristics.pairings.join(',')
+                : chocolateCharacteristics.pairings,
               productId,
             },
           })

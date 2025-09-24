@@ -219,7 +219,7 @@ export const CategoryFormSchema = z.object({
     .regex(/^[a-zA-Z0-9\s'&-‌\u0600-\u06FF]+$/, {
       message: 'تنها استفاده از حروف، اعداد و اسپیس در نام دسته‌بندی مجاز است.',
     }),
-  type: z.enum(['GENERAL', 'COFFEE', 'EQUIPMENT', 'ACCESSORY']),
+  type: z.enum(['GENERAL', 'COFFEE', 'EQUIPMENT', 'ACCESSORY', 'CHOCOLATE']),
   // type: z.enum(['COFFEE', 'EQUIPMENT', 'ACCESSORY', 'GENERAL'], {
   //   required_error: 'نوع دسته‌بندی مورد نیاز است',
   // }),
@@ -469,8 +469,38 @@ export const AccessorySpecsSchema = z.object({
   // weight: z.number().min(0).optional(), //aditional
 })
 
+export const ChocolateCharacteristicsSchema = z.object({
+  cocoaPercentage: z.number().min(0).max(100).optional(),
+  chocolateType: z
+    .enum(['DARK', 'MILK', 'WHITE', 'RUBY', 'RAW', 'UNSWEETENED'])
+    .optional(),
+  origin: z.string().optional(),
+  beanVariety: z.string().optional(),
+  processingMethod: z.string().optional(),
+  conchingTime: z.number().min(0).max(168).optional(), // max 1 week
+  temperingMethod: z.string().optional(),
+  texture: z
+    .enum(['SMOOTH', 'GRAINY', 'CREAMY', 'CRUNCHY', 'VELVETY'])
+    .optional(),
+  sweetness: z.number().min(1).max(10).optional(),
+  bitterness: z.number().min(1).max(10).optional(),
+  acidity: z.number().min(1).max(10).optional(),
+  fruitiness: z.number().min(1).max(10).optional(),
+  flavorNotes: z.array(z.string()).optional(),
+  mouthfeel: z.string().optional(),
+  finish: z.string().optional(),
+  pairings: z.array(z.string()).optional(),
+  servingTemp: z.string().optional(),
+  organic: z.boolean().optional(),
+  fairTrade: z.boolean().optional(),
+  singleOrigin: z.boolean().optional(),
+  rawChocolate: z.boolean().optional(),
+  vegan: z.boolean().optional(),
+  glutenFree: z.boolean().optional(),
+})
 export const EnhancedProductFormSchema = ProductFormSchema.extend({
   coffeeCharacteristics: CoffeeCharacteristicsSchema.optional(),
   equipmentSpecs: EquipmentSpecsSchema.optional(),
   accessorySpecs: AccessorySpecsSchema.optional(),
+  chocolateCharacteristics: ChocolateCharacteristicsSchema.optional(),
 })

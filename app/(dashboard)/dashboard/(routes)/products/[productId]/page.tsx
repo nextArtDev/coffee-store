@@ -23,6 +23,7 @@ export default async function SellerNewProductPage({
       category: { select: { name: true, id: true } },
       accessorySpecs: true,
       coffeeCharacteristics: true,
+      chocolateCharacteristics: true,
       equipmentSpecs: true,
 
       variants: {

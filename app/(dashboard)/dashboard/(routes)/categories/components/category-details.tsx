@@ -171,6 +171,7 @@ const CategoryDetails: FC<CategoryDetailsProps> = ({ initialData }) => {
                           <SelectItem value="COFFEE">قهوه</SelectItem>
                           <SelectItem value="EQUIPMENT">تجهیزات</SelectItem>
                           <SelectItem value="ACCESSORY">لوازم جانبی</SelectItem>
+                          <SelectItem value="CHOCOLATE">شکلات</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormDescription>
