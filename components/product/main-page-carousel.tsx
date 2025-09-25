@@ -17,6 +17,8 @@ import { TransitionLink } from '../home/shared/TransitionLink'
 import { ProgressiveBlur } from '../shared/progressive-blur'
 // import Progress from '../shared/progress'
 import BatteryLevel from '../shared/widget/widgest'
+import { BlurredCardWithClearCenter } from './BluredCard'
+import GlassSurface from '../shared/glass-surface/GlassSurface'
 
 export type item = {
   id: string
@@ -85,12 +87,34 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                       className="object-cover mix-blend-darken rounded-xl" // Uncommented; remove if not needed
                     />
                     <ProgressiveBlur
-                      className="pointer-events-none absolute bottom-0 left-0 h-[90%] w-full rounded-b-md"
+                      className="pointer-events-none absolute bottom-0 left-0 h-full w-full rounded-b-md"
                       blurIntensity={5}
                     />
-                    <div className="relative w-full h-fit">
-                      <BatteryLevel />
-                    </div>
+                    <GlassSurface
+                      width={100}
+                      height={100}
+                      borderRadius={999}
+                      borderWidth={0.07}
+                      brightness={50}
+                      opacity={0.93}
+                      blur={11}
+                      displace={0}
+                      backgroundOpacity={0}
+                      saturation={1}
+                      distortionScale={-180}
+                      className="p-1 rounded-full aspect-square"
+                    >
+                      {item.name!}
+                    </GlassSurface>
+                    <BlurredCardWithClearCenter
+                      clearRadius={120}
+                      blurIntensity={500}
+                      className="z-10 "
+                    >
+                      <div className="relative w-full h-full ">
+                        <BatteryLevel />
+                      </div>
+                    </BlurredCardWithClearCenter>
                     <div className="absolute left-0 bottom-0 flex  w-fit h-full items-center gap-2">
                       {/* <Progress
                         direction="vertical"
