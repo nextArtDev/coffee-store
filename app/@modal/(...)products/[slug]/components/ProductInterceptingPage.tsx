@@ -1,8 +1,9 @@
+'use client'
 import ProductDetailCarousel from '@/components/product/product-detail-carousel'
 import AddToCardBtn from '@/components/product/product-detail/AddToCardBtn'
 
 import { SingleStarRating } from '@/components/home/testemonial/SingleStartRating'
-import { buttonVariants } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { ProductDetails } from '@/lib/types/home'
 import { FC, useMemo } from 'react'
@@ -228,16 +229,14 @@ const ProductInterceptingPage: FC<ProductInterceptingPageProp> = ({
             </div>
           )}
         </article>
-
-        <Link
-          className={cn(
-            buttonVariants({ variant: 'outline' }),
-            'max-w-sm mx-auto '
-          )}
-          href={'/cart'}
+        <Separator />
+        <Button
+          variant={'secondary'}
+          className="w-full max-w-sm mx-auto "
+          onClick={() => (window.location.href = `/products/${slug}`)}
         >
-          سبد خرید
-        </Link>
+          صفحه محصول
+        </Button>
       </div>
     </section>
   )

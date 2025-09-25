@@ -1,8 +1,8 @@
 import { getProductDetails } from '@/lib/home/queries/products'
 import { notFound } from 'next/navigation'
-import ModalWrapper from '../../components/ModalWrapper'
+// import ModalWrapper from '../../components/ModalWrapper'
 
-import { ProductInterceptDrawer } from './components/ProductInterceptingDrawer'
+import { ProductInterceptWrapper } from './components/ProductInterceptingWrapper'
 import ProductInterceptingPage from './components/ProductInterceptingPage'
 import prisma from '@/lib/prisma'
 const ProductDetailsPage = async ({
@@ -45,51 +45,26 @@ const ProductDetailsPage = async ({
   })
 
   return (
-    <div className="z-[999]">
-      <article className="z-[999] ">
-        <ModalWrapper>
-          <ProductInterceptingPage
-            data={product}
-            selectedSizeId={
-              selectedVariant.size?.id ? selectedVariant.size?.id : ''
-            }
-            selectedColorId={
-              selectedVariant.color ? selectedVariant.color?.id : ''
-            }
-            productAverageRating={
-              !!productAverageRating._avg.rating &&
-              !!productAverageRating._count
-                ? {
-                    rating: productAverageRating._avg.rating,
-                    count: productAverageRating._count,
-                  }
-                : null
-            }
-          />
-        </ModalWrapper>
-      </article>
-      <article className=" hidden">
-        <ProductInterceptDrawer slug={slug} name={product.name} className=" ">
-          <ProductInterceptingPage
-            data={product}
-            selectedSizeId={
-              selectedVariant.size?.id ? selectedVariant.size?.id : ''
-            }
-            selectedColorId={
-              selectedVariant.color ? selectedVariant.color?.id : ''
-            }
-            productAverageRating={
-              !!productAverageRating._avg.rating &&
-              !!productAverageRating._count
-                ? {
-                    rating: productAverageRating._avg.rating,
-                    count: productAverageRating._count,
-                  }
-                : null
-            }
-          />
-        </ProductInterceptDrawer>
-      </article>
+    <div className=" ">
+      <ProductInterceptWrapper name={product.name} className=" ">
+        <ProductInterceptingPage
+          data={product}
+          selectedSizeId={
+            selectedVariant.size?.id ? selectedVariant.size?.id : ''
+          }
+          selectedColorId={
+            selectedVariant.color ? selectedVariant.color?.id : ''
+          }
+          productAverageRating={
+            !!productAverageRating._avg.rating && !!productAverageRating._count
+              ? {
+                  rating: productAverageRating._avg.rating,
+                  count: productAverageRating._count,
+                }
+              : null
+          }
+        />
+      </ProductInterceptWrapper>
     </div>
   )
 }
