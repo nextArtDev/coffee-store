@@ -7,6 +7,7 @@ import {
   SubCategoryForHomePage,
 } from '@/lib/types/home'
 import { redirect } from 'next/navigation'
+import { cache } from 'react'
 
 // Homepage Products (with basic info + first image)
 export async function getHomepageProducts(limit: number = 12) {
@@ -406,139 +407,141 @@ export async function updateSearchFilters(filters: Partial<SearchFilters>) {
   redirect(`/search?${params.toString()}`)
 }
 // 6. SINGLE PRODUCT PAGE - Full details
-export async function getProductDetails(slug: string): Promise<ProductDetails> {
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: {
-      images: {
-        select: {
-          // id: true,
-          url: true,
-          // key: true,
+export const getProductDetails = cache(
+  async (slug: string): Promise<ProductDetails> => {
+    const product = await prisma.product.findUnique({
+      where: { slug },
+      include: {
+        images: {
+          select: {
+            // id: true,
+            url: true,
+            // key: true,
+          },
         },
-      },
-      variants: {
-        select: {
-          id: true,
-          price: true,
-          quantity: true,
-          discount: true,
-          weight: true,
-          length: true,
-          width: true,
-          height: true,
+        variants: {
+          select: {
+            id: true,
+            price: true,
+            quantity: true,
+            discount: true,
+            weight: true,
+            length: true,
+            width: true,
+            height: true,
 
-          images: {
-            select: {
-              url: true,
+            images: {
+              select: {
+                url: true,
+              },
+            },
+            color: {
+              select: {
+                id: true,
+                name: true,
+                hex: true,
+              },
+            },
+            size: {
+              select: {
+                id: true,
+                name: true,
+              },
             },
           },
-          color: {
-            select: {
-              id: true,
-              name: true,
-              hex: true,
-            },
-          },
-          size: {
-            select: {
-              id: true,
-              name: true,
-            },
+          orderBy: {
+            price: 'asc',
           },
         },
-        orderBy: {
-          price: 'asc',
+        specs: {
+          select: {
+            name: true,
+            value: true,
+          },
         },
-      },
-      specs: {
-        select: {
-          name: true,
-          value: true,
+        questions: {
+          select: {
+            question: true,
+            answer: true,
+          },
         },
-      },
-      questions: {
-        select: {
-          question: true,
-          answer: true,
-        },
-      },
-      reviews: {
-        where: {
-          isPending: false,
-        },
-        select: {
-          id: true,
-          isFeatured: true,
-          isPending: true,
-          isVerifiedPurchase: true,
-          rating: true,
-          title: true,
-          description: true,
+        reviews: {
+          where: {
+            isPending: false,
+          },
+          select: {
+            id: true,
+            isFeatured: true,
+            isPending: true,
+            isVerifiedPurchase: true,
+            rating: true,
+            title: true,
+            description: true,
 
-          likes: true,
-          createdAt: true,
-          user: {
-            select: {
-              name: true,
-              //   avatar: true,
+            likes: true,
+            createdAt: true,
+            user: {
+              select: {
+                name: true,
+                //   avatar: true,
+              },
+            },
+            images: {
+              select: {
+                url: true,
+              },
             },
           },
-          images: {
-            select: {
-              url: true,
-            },
+          orderBy: {
+            createdAt: 'desc',
+          },
+          take: 10,
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            url: true,
           },
         },
-        orderBy: {
-          createdAt: 'desc',
+        subCategory: {
+          select: {
+            id: true,
+            name: true,
+            url: true,
+          },
         },
-        take: 10,
-      },
-      category: {
-        select: {
-          id: true,
-          name: true,
-          url: true,
+        offerTag: {
+          select: {
+            name: true,
+            url: true,
+          },
         },
-      },
-      subCategory: {
-        select: {
-          id: true,
-          name: true,
-          url: true,
-        },
-      },
-      offerTag: {
-        select: {
-          name: true,
-          url: true,
-        },
-      },
-      freeShipping: {
-        include: {
-          eligibleCities: {
-            include: {
-              city: true,
+        freeShipping: {
+          include: {
+            eligibleCities: {
+              include: {
+                city: true,
+              },
             },
           },
         },
       },
-    },
-  })
+    })
 
-  // Increment view count (do this async without blocking)
-  if (product) {
-    prisma.product
-      .update({
-        where: { id: product.id },
-        data: { views: { increment: 1 } },
-      })
-      .catch(console.error)
+    // Increment view count (do this async without blocking)
+    if (product) {
+      prisma.product
+        .update({
+          where: { id: product.id },
+          data: { views: { increment: 1 } },
+        })
+        .catch(console.error)
+    }
+
+    return product
   }
-
-  return product
-}
+)
 
 // 7. RELATED PRODUCTS
 export async function getRelatedProducts(

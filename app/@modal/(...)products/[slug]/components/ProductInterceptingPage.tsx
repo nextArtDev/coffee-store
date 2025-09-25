@@ -2,73 +2,42 @@ import ProductDetailCarousel from '@/components/product/product-detail-carousel'
 import AddToCardBtn from '@/components/product/product-detail/AddToCardBtn'
 
 import { SingleStarRating } from '@/components/home/testemonial/SingleStartRating'
-import ProductStatements from '@/components/product/product-detail/ProductStatemeents'
 import { buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { Review } from '@/lib/generated/prisma'
-import { ProductDetails, ProductReview, RelatedProduct } from '@/lib/types/home'
+import { ProductDetails } from '@/lib/types/home'
 import { FC, useMemo } from 'react'
-import ReviewList from './ReviewList'
-// import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import RelatedProductCarousel from '@/components/product/related-products-carousel'
-import { Badge } from '@/components/ui/badge'
+
+import Countdown from '@/app/(home)/products/components/count-down'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import FAQItem from '../../faq/components/FAQItem'
-import Countdown from './count-down'
-import ProductProperties from './ProductProperties'
 
-type ProductPageProp = {
+type ProductInterceptingPageProp = {
   data: NonNullable<ProductDetails>
-  userId?: string | null
-  reviews: ProductReview[]
   productAverageRating: { rating: number; count: number } | null
-  userReview: Review | null
+
   selectedSizeId: string
   selectedColorId: string
-  relatedProducts: RelatedProduct[] | null
 }
-const ProductPage: FC<ProductPageProp> = ({
+const ProductInterceptingPage: FC<ProductInterceptingPageProp> = ({
   data,
-  userId,
-  reviews,
   productAverageRating,
-  userReview,
-  relatedProducts,
 
   selectedColorId,
   selectedSizeId,
 }) => {
   const {
-    description,
-    sku,
     images,
-    // variantImages,
-    // sizes,
-    // colors,
+
     variants,
 
     brand,
-    // subCategory,
     id,
     name,
     slug,
     // weight,
     shippingFeeMethod,
-    questions,
-    specs,
-    keywords,
     isSale,
     saleEndDate,
-    // rating,
-    // sales,
-    // views,
-    // isFeatured,
-    // createdAt,
-    // updatedAt,
-    // category,
-    // offerTag,
-    // freeShipping,
   } = data
 
   const currentVariant = variants.find(
@@ -269,91 +238,9 @@ const ProductPage: FC<ProductPageProp> = ({
         >
           سبد خرید
         </Link>
-        <Separator />
-        <article className="flex flex-col gap-6 items-start py-12">
-          <div className="flex flex-col gap-4 justify-around">
-            {/* <p className="text-sm">{name}</p> */}
-            {description && (
-              <div className="flex  gap-3">
-                <p className="font-semibold ">توضیحات:</p>
-                <p
-                  dangerouslySetInnerHTML={{ __html: description }}
-                  className="font-semibold  text-justify"
-                />
-              </div>
-            )}
-            {sku && (
-              <p dir="ltr" className="text-xs">
-                SKU:{sku}
-              </p>
-            )}
-
-            {!!keywords && (
-              <div className="flex gap-3">
-                <h1 className="font-semibold ">کلمات کلیدی:</h1>
-                {keywords.split(',').map((k, i) => (
-                  <Badge key={i} variant={'outline'}>
-                    #{k}
-                  </Badge>
-                ))}
-              </div>
-            )}
-          </div>
-          <Separator />
-          <div className="w-full h-full flex  flex-col gap-4  ">
-            <h1 className="font-semibold">ویژگی‌ها و ابعاد:</h1>
-
-            {currentVariant && currentVariant.size && (
-              <ProductProperties
-                variant={currentVariant}
-                weight={
-                  currentVariant?.weight ? currentVariant.weight : undefined
-                }
-                specs={
-                  !!specs.filter((s) => s.name.trim().length > 0).length
-                    ? specs
-                    : undefined
-                }
-              />
-            )}
-          </div>
-        </article>
-        <Separator />
-        <ProductStatements />
-        <Separator />
-        {!!questions.filter((q) => q.question.trim().length > 0).length && (
-          <div className="flex items-start w-full mx-auto max-w-2xl space-y-2">
-            {questions.map((faq, index) => (
-              <FAQItem
-                key={index}
-                {...faq}
-                index={index}
-                className="rounded-sm w-full"
-              />
-            ))}
-          </div>
-        )}
-        <Separator />
-        <ReviewList
-          reviews={reviews}
-          productId={id}
-          userId={userId}
-          productSlug={slug}
-          // numReviews={numReviews}
-          userReview={userReview}
-        />
-
-        <Separator />
       </div>
-      <Separator />
-      {!!relatedProducts?.length && (
-        <section className="  flex gap-6 flex-col justify-center items-center py-8">
-          <h2 className="font-bold text-2xl ">محصولات مرتبط</h2>
-          <RelatedProductCarousel items={relatedProducts} />
-        </section>
-      )}
     </section>
   )
 }
 
-export default ProductPage
+export default ProductInterceptingPage
