@@ -141,7 +141,7 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
                   >
                     <Image
                       fill
-                      className="object-cover rounded-md z-[0] opacity-70"
+                      className="object-cover rounded-full z-[0] opacity-70 "
                       alt={subcategory.name}
                       src={subcategory.images.map((img) => img.url)[0]}
                     />

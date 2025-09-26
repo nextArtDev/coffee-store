@@ -1,3 +1,4 @@
+import { currentUser } from '@/lib/auth'
 import { Prisma, Review } from '@/lib/generated/prisma'
 import prisma from '@/lib/prisma'
 import {
@@ -39,9 +40,15 @@ export async function getHomepageProducts(limit: number = 12) {
           discount: true,
           quantity: true,
         },
-        orderBy: {
-          price: 'asc',
+        where: {
+          quantity: {
+            gt: 0,
+          },
         },
+        orderBy: [
+          { quantity: 'desc' }, // Prioritize higher stock
+          { price: 'asc' }, // Then lowest price
+        ],
         take: 1,
       },
       category: {
@@ -60,7 +67,13 @@ export async function getHomepageProducts(limit: number = 12) {
       },
     },
     where: {
-      // Add any filtering conditions
+      variants: {
+        some: {
+          quantity: {
+            gt: 0,
+          },
+        },
+      },
     },
     orderBy: {
       createdAt: 'desc',
@@ -80,6 +93,7 @@ export async function getBestSellers(limit: number = 8) {
       sales: true,
       description: true,
       brand: true,
+
       images: {
         take: 1,
         select: {
@@ -106,10 +120,26 @@ export async function getBestSellers(limit: number = 8) {
           discount: true,
           quantity: true,
         },
-        orderBy: {
-          price: 'asc',
+        where: {
+          quantity: {
+            gt: 0,
+          },
         },
+        orderBy: [
+          { quantity: 'desc' }, // Prioritize higher stock
+          { price: 'asc' }, // Then lowest price
+        ],
+
         take: 1,
+      },
+    },
+    where: {
+      variants: {
+        some: {
+          quantity: {
+            gt: 0,
+          },
+        },
       },
     },
     orderBy: {
@@ -287,7 +317,7 @@ export async function searchProducts({
     pushToVariantAnd({ size: { name: { in: sizes } } })
   }
   if (colors && colors.length > 0) {
-    pushToVariantAnd({ color: { name: { in: colors } } })
+    pushToVariantAnd({ color: { hex: { in: colors } } })
   }
 
   if ((variantWhere.AND as unknown[]).length > 0) {
@@ -334,7 +364,10 @@ export async function searchProducts({
               size: true,
               color: true,
             },
-            orderBy: { price: 'asc' }, // Always show the cheapest variant first
+            orderBy: [
+              { quantity: 'desc' }, // Prioritize higher stock
+              { price: 'asc' }, // Then lowest price
+            ], // Always show the cheapest variant first
           },
         },
         orderBy,
@@ -449,9 +482,10 @@ export const getProductDetails = cache(
               },
             },
           },
-          orderBy: {
-            price: 'asc',
-          },
+          orderBy: [
+            { price: 'asc' }, // Then lowest price
+            { quantity: 'desc' }, // Prioritize higher stock
+          ],
         },
         specs: {
           select: {
@@ -577,6 +611,7 @@ export async function getRelatedProducts(
       },
     },
     take: limit,
+
     orderBy: {
       rating: 'desc',
     },
@@ -631,7 +666,7 @@ export async function getFiltersData(
         min: priceRange._min.price || 0,
         max: priceRange._max.price || 1000000,
       },
-      colors: colors.map((c) => c.name),
+      colors: colors.map((c) => c.hex),
       sizes: sizes.map((s) => s.name),
       brands: brands.map((b) => b.brand),
     }
@@ -861,6 +896,86 @@ export const getHomePageReviews = async (): Promise<
     take: 8,
   })
 }
+
+export async function userBookmarkedProducts({
+  page = 1,
+  limit = 50,
+}: {
+  page?: number
+  limit?: number
+}) {
+  const skip = (page - 1) * limit
+  const user = await currentUser()
+  if (!user) redirect('/sign-in')
+
+  try {
+    const [allWhishedProducts, total] = await prisma.$transaction([
+      prisma.wishlist.findMany({
+        where: {
+          userId: user.id,
+        },
+        include: {
+          product: {
+            include: {
+              images: { take: 1, orderBy: { created_at: 'asc' } },
+              variants: {
+                select: {
+                  price: true,
+                  discount: true,
+                  quantity: true,
+                  images: {
+                    take: 1,
+                    select: { url: true },
+                    orderBy: { created_at: 'asc' },
+                  },
+                  size: true,
+                  color: true,
+                },
+              },
+            },
+          },
+        },
+        skip: skip,
+        take: limit,
+        orderBy: {
+          updatedAt: 'desc',
+        },
+      }),
+      prisma.wishlist.count({
+        where: {
+          userId: user.id,
+        },
+      }),
+    ])
+
+    // Remove the double slicing - it's already handled by Prisma's skip/take
+    const products = allWhishedProducts.map((w) => w.product)
+
+    return {
+      products,
+      pagination: {
+        total,
+        pages: Math.ceil(total / limit),
+        current: page,
+        hasNext: page < Math.ceil(total / limit),
+        hasPrev: page > 1,
+      },
+    }
+  } catch (error) {
+    console.error('Error searching products:', error)
+    return {
+      products: [],
+      pagination: {
+        total: 0,
+        pages: 1,
+        current: 1,
+        hasNext: false,
+        hasPrev: false,
+      },
+    }
+  }
+}
+
 // export async function getBestSellers(limit: number = 8) {
 //   const bestSellersByQuantity = await prisma.orderItem.groupBy({
 //     by: ['productId'],

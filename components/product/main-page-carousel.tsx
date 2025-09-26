@@ -54,15 +54,15 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
           : []
       }
       dir="rtl"
-      className="w-full"
+      className="w-full aspect-square"
       ref={carouselRef}
     >
-      <CarouselContent className="-ml-1 md:-ml-2 xl:-ml-4 text-primary-foreground">
+      <CarouselContent className="-ml-1 md:-ml-2 xl:-ml-4 text-primary-foreground  ">
         {/* /* Negative margin to offset item padding   */}
         {items.map((item, i) => (
           <CarouselItem
             key={item.id} // Changed to item.id for unique keys (item.title might not be unique)
-            className="pl-1 basis-1/2 md:pl-2 md:basis-1/3 lg:basis-1/4 xl:pl-4 xl:basis-1/5" /* Responsive padding and basis */
+            className="pl-1   basis-1/2 md:pl-2 md:basis-1/3 lg:basis-1/4 xl:pl-4 xl:basis-1/5" /* Responsive padding and basis */
           >
             <FadeIn
               className="translate-y-5 "
@@ -73,7 +73,7 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                 className="flex flex-col border-none rounded-xl bg-transparent gap-4" /* Switched to flex-col for consistent height; moved gap here */
               >
                 {!!item.images && (
-                  <figure className="relative w-full aspect-square bg-[#eceae8] border-none rounded-xl">
+                  <figure className="relative w-full border-none rounded-xl">
                     {' '}
                     {/* Fixed aspect-square for uniform image height */}
                     <Image
@@ -84,12 +84,12 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
                       }
                       fill
                       alt={item.name!}
-                      className="object-cover mix-blend-darken rounded-xl" // Uncommented; remove if not needed
+                      className="object-cover  rounded-xl " // Uncommented; remove if not needed
                     />
-                    <ProgressiveBlur
+                    {/* <ProgressiveBlur
                       className="pointer-events-none absolute bottom-0 left-0 h-full w-full rounded-b-md"
                       blurIntensity={5}
-                    />
+                    /> */}
                     <GlassSurface
                       width={100}
                       height={100}
