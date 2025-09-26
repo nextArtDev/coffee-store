@@ -206,6 +206,7 @@ const GlassSurface: React.FC<GlassSurfaceProps> = ({
       return false
     }
 
+    if (!document) return false
     const div = document.createElement('div')
     div.style.backdropFilter = `url(#${filterId})`
     return div.style.backdropFilter !== ''

@@ -322,6 +322,7 @@ import ReactCrop, {
 } from 'react-image-crop'
 import { cn } from '@/lib/utils'
 
+// import 'react-image-crop/dist/ReactCrop.css'
 import 'react-image-crop/dist/ReactCrop.css'
 
 const centerAspectCrop = (
