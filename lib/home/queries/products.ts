@@ -65,6 +65,10 @@ export async function getHomepageProducts(limit: number = 12) {
           url: true,
         },
       },
+      accessorySpecs: true,
+      coffeeCharacteristics: true,
+      chocolateCharacteristics: true,
+      equipmentSpecs: true,
     },
     where: {
       variants: {

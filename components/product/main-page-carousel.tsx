@@ -14,9 +14,6 @@ import { useInView, AnimatePresence, motion } from 'framer-motion'
 import Autoplay from 'embla-carousel-autoplay'
 import { cn } from '@/lib/utils'
 import { TransitionLink } from '../home/shared/TransitionLink'
-import { ProgressiveBlur } from '../shared/progressive-blur'
-import BatteryLevel from '../shared/widget/widgest'
-import { BlurredCardWithClearCenter } from './BluredCard'
 import GlassSurface from '../shared/glass-surface/GlassSurface'
 import type { EmblaCarouselType } from 'embla-carousel'
 import DonutChart from '../shared/widget/donate-chart'
@@ -51,85 +48,85 @@ const calculateCirclePositions = ({
     const y = Math.sin(angle) * radius
     positions.push({ x, y })
   }
-  console.log({ itemCount })
-  console.log({ positions })
+  // console.log({ itemCount })
+  // console.log({ positions })
   return positions
 }
 
-const CircleButton = ({
-  item,
-  position,
-  index,
-  isOpen,
-  onAction,
-}: {
-  index: number
-  isOpen: boolean
-  item: { label: string; value: number }
-  isVisible: boolean
-  position: { x: number; y: number }
-  onAction?: (action: string, item: Partial<HomepageProduct>) => void
-}) => {
-  const { label, value } = item
+// const CircleButton = ({
+//   item,
+//   position,
+//   index,
+//   isOpen,
+//   onAction,
+// }: {
+//   index: number
+//   isOpen: boolean
+//   item: { label: string; value: number }
+//   isVisible: boolean
+//   position: { x: number; y: number }
+//   onAction?: (action: string, item: Partial<HomepageProduct>) => void
+// }) => {
+//   const { label, value } = item
 
-  return (
-    <motion.button
-      initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-      animate={{
-        opacity: 1,
-        scale: 1,
-        x: position.x,
-        y: position.y,
-      }}
-      exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-      transition={{ duration: 0.2, delay: index * 0.05 }}
-      // onClick={(e) => onAction(label.toLowerCase().replace(' ', ''), e)}
-      // className={`absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70px] h-[70px] backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:${color} transition-all duration-200 shadow-lg`}
-      className={`absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70px] h-[70px] backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white  transition-all duration-200 shadow-lg`}
-      title={label}
-    >
-      <DonutChart
-        progress={value || 50}
-        circleWidth={8}
-        progressWidth={8}
-        size={90}
-        gradientColors={['#2c1b06', '#804e05', '#ddb58f']}
-        className="p-0 relative flex items-center justify-center text-[#2c1b06]"
-        trackClassName="text-green-500/50 text-green-100/30"
-      >
-        <GlassSurface
-          width={70}
-          height={70}
-          borderRadius={999}
-          borderWidth={0.07}
-          brightness={50}
-          opacity={0.93}
-          blur={15}
-          displace={0}
-          backgroundOpacity={0.2}
-          saturation={2}
-          distortionScale={-180}
-          className="p-1 rounded-full aspect-square"
-        >
-          <span className="absolute flex flex-col gap-0.5 font-semibold text-xs">
-            <p className="text-[8px] opacity-80">{label}</p>
-            <p className="text-sm">{value}%</p>
-          </span>
-        </GlassSurface>
-      </DonutChart>
-    </motion.button>
-  )
-}
+//   return (
+//     <motion.button
+//       initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+//       animate={{
+//         opacity: 1,
+//         scale: 1,
+//         x: position.x,
+//         y: position.y,
+//       }}
+//       exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+//       transition={{ duration: 0.2, delay: index * 0.05 }}
+//       // onClick={(e) => onAction(label.toLowerCase().replace(' ', ''), e)}
+//       // className={`absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70px] h-[70px] backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:${color} transition-all duration-200 shadow-lg`}
+//       className={`absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70px] h-[70px] backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white  transition-all duration-200 shadow-lg`}
+//       title={label}
+//     >
+//       <DonutChart
+//         progress={value || 50}
+//         circleWidth={8}
+//         progressWidth={8}
+//         size={90}
+//         gradientColors={['#2c1b06', '#804e05', '#ddb58f']}
+//         className="p-0 relative flex items-center justify-center text-[#2c1b06]"
+//         trackClassName="text-green-500/50 text-green-100/30"
+//       >
+//         <GlassSurface
+//           width={70}
+//           height={70}
+//           borderRadius={999}
+//           borderWidth={0.07}
+//           brightness={50}
+//           opacity={0.93}
+//           blur={15}
+//           displace={0}
+//           backgroundOpacity={0.2}
+//           saturation={2}
+//           distortionScale={-180}
+//           className="p-1 rounded-full aspect-square"
+//         >
+//           <span className="absolute flex flex-col gap-0.5 font-semibold text-xs">
+//             <p className="text-[8px] opacity-80">{label}</p>
+//             <p className="text-sm">{value}%</p>
+//           </span>
+//         </GlassSurface>
+//       </DonutChart>
+//     </motion.button>
+//   )
+// }
 
 // Individual Slide Flower Menu Button
 const SlideFlowerButton = ({
   item,
   isVisible,
-  onAction,
-}: {
+}: // onAction,
+{
   item: Partial<HomepageProduct>
   isVisible: boolean
-  onAction?: (action: string, item: Partial<HomepageProduct>) => void
+  // onAction?: (action: string, item: Partial<HomepageProduct>) => void
 }) => {
   const [isOpen, setIsOpen] = useState(false)
   const menuItems = []
@@ -142,11 +139,12 @@ const SlideFlowerButton = ({
       { label: 'بادی', value: body }
     )
   } else if (item.chocolateCharacteristics) {
-    const { sweetness, bitterness, acidity, fruitiness } =
+    const { sweetness, bitterness, acidity, fruitiness, cocoaPercentage } =
       item.chocolateCharacteristics
     menuItems.push(
+      { label: 'کاکائو', value: Number(cocoaPercentage) / 10 },
       { label: 'اسیدیته', value: acidity },
-      { label: 'روشنایی', value: bitterness },
+      { label: 'تاریکی', value: bitterness },
       { label: 'شیرینی', value: sweetness },
       { label: 'میوه‌ای', value: fruitiness }
     )
@@ -165,17 +163,17 @@ const SlideFlowerButton = ({
     }
   }, [isVisible])
 
-  console.log({ item })
-  const handleAction = (action: string, event?: React.MouseEvent) => {
-    if (event) {
-      event.preventDefault()
-      event.stopPropagation()
-    }
-    if (onAction) {
-      onAction(action, item)
-    }
-    setIsOpen(false) // Close menu after action
-  }
+  // console.log({ item })
+  // const handleAction = (action: string, event?: React.MouseEvent) => {
+  //   if (event) {
+  //     event.preventDefault()
+  //     event.stopPropagation()
+  //   }
+  //   if (onAction) {
+  //     onAction(action, item)
+  //   }
+  //   setIsOpen(false) // Close menu after action
+  // }
   const positions = calculateCirclePositions({ itemCount: menuItems.length })
   const handleToggle = (event: React.MouseEvent) => {
     event.preventDefault()
@@ -185,12 +183,12 @@ const SlideFlowerButton = ({
 
   return (
     <AnimatePresence>
-      {isVisible && (
+      {isVisible && menuItems.length && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.3, ease: 'circIn' }}
           className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-20"
         >
           {/* Main Toggle Button */}
@@ -453,17 +451,17 @@ const CarouselItemComponent = ({
   item,
   index,
   isInViewport,
-  onAction,
-}: {
+}: // onAction,
+{
   item: Partial<HomepageProduct>
   index: number
   isInViewport: boolean
-  onAction: (action: string, item: Partial<HomepageProduct>) => void
+  // onAction: (action: string, item: Partial<HomepageProduct>) => void
 }) => {
   return (
     <CarouselItem
       key={item.id}
-      className="pl-1 basis-1/1 md:pl-2 md:basis-1/3 lg:basis-1/4 xl:pl-4 xl:basis-1/5"
+      className="pl-1 basis-1/1 md:pl-2 md:basis-1/2 lg:basis-1/3 xl:pl-4 xl:basis-1/4"
     >
       <FadeIn
         className="translate-y-5"
@@ -505,9 +503,9 @@ const CarouselItemComponent = ({
                 <SlideFlowerButton
                   item={item}
                   isVisible={isInViewport}
-                  onAction={onAction}
+                  // onAction={onAction}
                 />
-                <div className="absolute left-0 bottom-0 flex w-fit h-full items-center gap-2"></div>
+                <div className="absolute left-0 bottom-0 flex w-fit h-fit items-center gap-2"></div>
                 <article className="absolute h-1/2 w-full bottom-0 flex flex-col gap-1 justify-evenly py-3 px-2 text-pretty text-xs md:text-sm lg:text-base rounded-b-md">
                   <p className="font-semibold">{item.category!.name}</p>
                   <p className="font-bold">{item.name}</p>
@@ -549,6 +547,7 @@ const CarouselItemComponent = ({
 export default function MainPageCarousel({ items }: MainPageCarousel) {
   const carouselRef = useRef<HTMLDivElement>(null)
   const [emblaApi, setEmblaApi] = useState<EmblaCarouselType>()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0)
   const [slidesInView, setSlidesInView] = useState<number[]>([])
 
@@ -583,33 +582,33 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
   }, [emblaApi, onSelect, updateSlidesInView])
 
   // Handle flower menu actions
-  const handleFlowerAction = (
-    action: string,
-    item: Partial<HomepageProduct>
-  ) => {
-    switch (action) {
-      case 'addToCart':
-        console.log('Adding to cart:', item)
-        // Add your cart logic here
-        break
-      case 'addToFavorites':
-        console.log('Adding to favorites:', item)
-        // Add your favorites logic here
-        break
-      case 'quickView':
-        console.log('Quick view:', item)
-        // Add your quick view logic here
-        break
-      case 'share':
-        console.log('Sharing:', item)
-        // Add your share logic here
-        break
-      case 'compare':
-        console.log('Adding to compare:', item)
-        // Add your compare logic here
-        break
-    }
-  }
+  // const handleFlowerAction = (
+  //   action: string,
+  //   item: Partial<HomepageProduct>
+  // ) => {
+  //   switch (action) {
+  //     case 'addToCart':
+  //       console.log('Adding to cart:', item)
+  //       // Add your cart logic here
+  //       break
+  //     case 'addToFavorites':
+  //       console.log('Adding to favorites:', item)
+  //       // Add your favorites logic here
+  //       break
+  //     case 'quickView':
+  //       console.log('Quick view:', item)
+  //       // Add your quick view logic here
+  //       break
+  //     case 'share':
+  //       console.log('Sharing:', item)
+  //       // Add your share logic here
+  //       break
+  //     case 'compare':
+  //       console.log('Adding to compare:', item)
+  //       // Add your compare logic here
+  //       break
+  //   }
+  // }
 
   return (
     <Carousel
@@ -618,17 +617,17 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
         direction: 'rtl',
         loop: true,
       }}
-      // plugins={
-      //   isInView
-      //     ? [
-      //         Autoplay({
-      //           delay: 3000,
-      //         }),
-      //       ]
-      //     : []
-      // }
+      plugins={
+        isInView
+          ? [
+              Autoplay({
+                delay: 3000,
+              }),
+            ]
+          : []
+      }
       dir="rtl"
-      className="w-full aspect-square "
+      className="w-full "
       ref={carouselRef}
       setApi={onInit}
     >
@@ -639,7 +638,7 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
             item={item}
             index={i}
             isInViewport={slidesInView.includes(i)}
-            onAction={handleFlowerAction}
+            // onAction={handleFlowerAction}
           />
         ))}
       </CarouselContent>

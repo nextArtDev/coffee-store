@@ -655,7 +655,7 @@ export async function editProduct(
             },
           })
         }
-      } else if (category?.type === 'CHOCOLATE' && accessorySpecs) {
+      } else if (category?.type === 'CHOCOLATE') {
         if (chocolateCharacteristics) {
           await tx.chocolateCharacteristics.create({
             data: {
