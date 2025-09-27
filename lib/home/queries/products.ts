@@ -111,6 +111,10 @@ export async function getBestSellers(limit: number = 8) {
         },
         take: 1,
       },
+      accessorySpecs: true,
+      equipmentSpecs: true,
+      chocolateCharacteristics: true,
+      coffeeCharacteristics: true,
     },
     orderBy: {
       sales: 'desc',

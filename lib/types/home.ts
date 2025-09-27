@@ -1,5 +1,12 @@
 import { getCurrentUser } from '../auth-helpers'
-import { Prisma, SubCategory } from '../generated/prisma'
+import {
+  AccessorySpecs,
+  ChocolateCharacteristics,
+  CoffeeCharacteristics,
+  EquipmentSpecs,
+  Prisma,
+  SubCategory,
+} from '../generated/prisma'
 
 // Base types for common structures
 export type ProductImage = {
@@ -74,6 +81,10 @@ export type HomepageProduct = {
   variants: { price: number; discount: number; quantity: number }[]
   category: CategoryInfo
   subCategory: SubCategoryInfo
+  coffeeCharacteristics: CoffeeCharacteristics | null
+  accessorySpecs: AccessorySpecs | null
+  chocolateCharacteristics: ChocolateCharacteristics | null
+  equipmentSpecs: EquipmentSpecs | null
 }
 
 export type HomepageProductsResult = HomepageProduct[]

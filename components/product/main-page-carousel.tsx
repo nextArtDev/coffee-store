@@ -34,6 +34,93 @@ type MainPageCarousel = {
   items: Partial<HomepageProduct>[]
 }
 
+const calculateCirclePositions = ({
+  itemCount,
+  radius = 90,
+}: {
+  itemCount: number
+  radius?: number
+}) => {
+  const positions = []
+  const angleStep = (2 * Math.PI) / itemCount
+  const startAngle = -Math.PI / 2 // Start from top
+
+  for (let i = 0; i < itemCount; i++) {
+    const angle = startAngle + angleStep * i
+    const x = Math.cos(angle) * radius
+    const y = Math.sin(angle) * radius
+    positions.push({ x, y })
+  }
+  console.log({ itemCount })
+  console.log({ positions })
+  return positions
+}
+
+const CircleButton = ({
+  item,
+  position,
+  index,
+  isOpen,
+  onAction,
+}: {
+  index: number
+  isOpen: boolean
+  item: { label: string; value: number }
+  isVisible: boolean
+  position: { x: number; y: number }
+  onAction?: (action: string, item: Partial<HomepageProduct>) => void
+}) => {
+  const { label, value } = item
+
+  return (
+    <motion.button
+      initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+      animate={{
+        opacity: 1,
+        scale: 1,
+        x: position.x,
+        y: position.y,
+      }}
+      exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+      transition={{ duration: 0.2, delay: index * 0.05 }}
+      // onClick={(e) => onAction(label.toLowerCase().replace(' ', ''), e)}
+      // className={`absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70px] h-[70px] backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:${color} transition-all duration-200 shadow-lg`}
+      className={`absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70px] h-[70px] backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white  transition-all duration-200 shadow-lg`}
+      title={label}
+    >
+      <DonutChart
+        progress={value || 50}
+        circleWidth={8}
+        progressWidth={8}
+        size={90}
+        gradientColors={['#2c1b06', '#804e05', '#ddb58f']}
+        className="p-0 relative flex items-center justify-center text-[#2c1b06]"
+        trackClassName="text-green-500/50 text-green-100/30"
+      >
+        <GlassSurface
+          width={70}
+          height={70}
+          borderRadius={999}
+          borderWidth={0.07}
+          brightness={50}
+          opacity={0.93}
+          blur={15}
+          displace={0}
+          backgroundOpacity={0.2}
+          saturation={2}
+          distortionScale={-180}
+          className="p-1 rounded-full aspect-square"
+        >
+          <span className="absolute flex flex-col gap-0.5 font-semibold text-xs">
+            <p className="text-[8px] opacity-80">{label}</p>
+            <p className="text-sm">{value}%</p>
+          </span>
+        </GlassSurface>
+      </DonutChart>
+    </motion.button>
+  )
+}
+
 // Individual Slide Flower Menu Button
 const SlideFlowerButton = ({
   item,
@@ -45,7 +132,26 @@ const SlideFlowerButton = ({
   onAction?: (action: string, item: Partial<HomepageProduct>) => void
 }) => {
   const [isOpen, setIsOpen] = useState(false)
-
+  const menuItems = []
+  if (item.coffeeCharacteristics) {
+    const { acidity, bitterness, sweetness, body } = item.coffeeCharacteristics
+    menuItems.push(
+      { label: 'اسیدیته', value: acidity },
+      { label: 'روشنایی', value: bitterness },
+      { label: 'شیرینی', value: sweetness },
+      { label: 'بادی', value: body }
+    )
+  } else if (item.chocolateCharacteristics) {
+    const { sweetness, bitterness, acidity, fruitiness } =
+      item.chocolateCharacteristics
+    menuItems.push(
+      { label: 'اسیدیته', value: acidity },
+      { label: 'روشنایی', value: bitterness },
+      { label: 'شیرینی', value: sweetness },
+      { label: 'میوه‌ای', value: fruitiness }
+    )
+  }
+  // if(item.c)
   // Auto-open when slide comes into view, close when goes out of view
   React.useEffect(() => {
     if (isVisible) {
@@ -59,6 +165,7 @@ const SlideFlowerButton = ({
     }
   }, [isVisible])
 
+  console.log({ item })
   const handleAction = (action: string, event?: React.MouseEvent) => {
     if (event) {
       event.preventDefault()
@@ -69,7 +176,7 @@ const SlideFlowerButton = ({
     }
     setIsOpen(false) // Close menu after action
   }
-
+  const positions = calculateCirclePositions({ itemCount: menuItems.length })
   const handleToggle = (event: React.MouseEvent) => {
     event.preventDefault()
     event.stopPropagation()
@@ -114,114 +221,30 @@ const SlideFlowerButton = ({
 
             {/* Action Buttons */}
             <AnimatePresence>
-              {isOpen && (
-                <>
-                  {/* Add to Cart */}
+              {isOpen &&
+                menuItems.map((menuItem, index) => (
                   <motion.button
                     initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-                    animate={{ opacity: 1, scale: 1, x: -60, y: 0 }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                      x: positions[index].x,
+                      y: positions[index].y,
+                    }}
                     exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
                     transition={{ duration: 0.2, delay: 0.1 }}
-                    onClick={(e) => handleAction('addToCart', e)}
-                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 bg-green-500/80 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-green-500/90 transition-all duration-200 shadow-lg"
+                    // onClick={(e) => handleAction('addToCart', e)}
+                    key={menuItem.label}
+                    // item={menuItem}
+                    // position={positions[index]}
+                    // index={index}
+                    // isOpen={isOpen}
+                    // onAction={handleAction}
+                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70] h-[70]   backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white  bg-green-500/90 transition-all duration-200 shadow-lg"
                     title="Add to Cart"
                   >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4m2.6 8v5a1 1 0 001 1h8a1 1 0 001-1v-5M7 13L5.4 7H4"
-                      />
-                    </svg>
-                  </motion.button>
-
-                  {/* Add to Favorites */}
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-                    animate={{ opacity: 1, scale: 1, x: -42, y: -42 }}
-                    exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-                    transition={{ duration: 0.2, delay: 0.15 }}
-                    onClick={(e) => handleAction('addToFavorites', e)}
-                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 bg-red-500/80 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-red-500/90 transition-all duration-200 shadow-lg"
-                    title="Add to Favorites"
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                      />
-                    </svg>
-                  </motion.button>
-
-                  {/* Quick View */}
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-                    animate={{ opacity: 1, scale: 1, x: 0, y: -60 }}
-                    exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-                    transition={{ duration: 0.2, delay: 0.2 }}
-                    onClick={(e) => handleAction('quickView', e)}
-                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 bg-blue-500/80 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-blue-500/90 transition-all duration-200 shadow-lg"
-                    title="Quick View"
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                      />
-                    </svg>
-                  </motion.button>
-
-                  {/* Share */}
-                  <motion.button
-                    initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-                    animate={{ opacity: 1, scale: 1, x: 42, y: -42 }}
-                    exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-                    transition={{ duration: 0.2, delay: 0.25 }}
-                    onClick={(e) => handleAction('share', e)}
-                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 bg-purple-500/80 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-purple-500/90 transition-all duration-200 shadow-lg"
-                    title="Share"
-                  >
-                    {/* <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-                      />
-                    </svg> */}
                     <DonutChart
-                      progress={45}
+                      progress={Number(menuItem.value) * 10}
                       circleWidth={8}
                       progressWidth={8}
                       size={90}
@@ -245,39 +268,178 @@ const SlideFlowerButton = ({
                       >
                         {/* <item.icon className="absolute" size={24} /> */}
                         <span className="absolute flex flex-col gap-0.25 font-semibold">
+                          <p>{menuItem.label}</p>
+                          <p>{Number(menuItem.value) * 10}%</p>
+                        </span>
+                      </GlassSurface>
+                    </DonutChart>
+                  </motion.button>
+                ))}
+
+              {/* Add to Favorites */}
+              {/* <motion.button
+                    initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+                    animate={{ opacity: 1, scale: 1, x: -82, y: -42 }}
+                    exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+                    transition={{ duration: 0.2, delay: 0.15 }}
+                    onClick={(e) => handleAction('addToFavorites', e)}
+                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70] h-[70]   backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-red-500/90 transition-all duration-200 shadow-lg"
+                    title="Add to Favorites"
+                  >
+                    <DonutChart
+                      progress={45}
+                      circleWidth={8}
+                      progressWidth={8}
+                      size={90}
+                      gradientColors={['#2c1b06', '#804e05', '#ddb58f']}
+                      className="p-0 relative flex items-center justify-center text-[#2c1b06]"
+                      trackClassName="text-green-500/50 text-green-100/30"
+                    >
+                      <GlassSurface
+                        width={70}
+                        height={70}
+                        borderRadius={999}
+                        borderWidth={0.07}
+                        brightness={50}
+                        opacity={0.93}
+                        blur={15}
+                        displace={0}
+                        backgroundOpacity={0.2}
+                        saturation={2}
+                        distortionScale={-180}
+                        className="p-1 rounded-full aspect-square"
+                      > 
+                        <span className="absolute flex flex-col gap-0.25 font-semibold">
                           <p>Free</p>
                           24%
                         </span>
                       </GlassSurface>
                     </DonutChart>
-                  </motion.button>
+                  </motion.button> */}
 
-                  {/* Compare */}
-                  <motion.button
+              {/* Quick View */}
+              {/* <motion.button
                     initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-                    animate={{ opacity: 1, scale: 1, x: 60, y: 0 }}
+                    animate={{ opacity: 1, scale: 1, x: 0, y: -90 }}
+                    exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+                    transition={{ duration: 0.2, delay: 0.2 }}
+                    onClick={(e) => handleAction('quickView', e)}
+                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70] h-[70]   backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-blue-500/90 transition-all duration-200 shadow-lg"
+                    title="Quick View"
+                  >
+                    <DonutChart
+                      progress={45}
+                      circleWidth={8}
+                      progressWidth={8}
+                      size={90}
+                      gradientColors={['#2c1b06', '#804e05', '#ddb58f']}
+                      className="p-0 relative flex items-center justify-center text-[#2c1b06]"
+                      trackClassName="text-green-500/50 text-green-100/30"
+                    >
+                      <GlassSurface
+                        width={70}
+                        height={70}
+                        borderRadius={999}
+                        borderWidth={0.07}
+                        brightness={50}
+                        opacity={0.93}
+                        blur={15}
+                        displace={0}
+                        backgroundOpacity={0.2}
+                        saturation={2}
+                        distortionScale={-180}
+                        className="p-1 rounded-full aspect-square"
+                      > 
+                        <span className="absolute flex flex-col gap-0.25 font-semibold">
+                          <p>Free</p>
+                          24%
+                        </span>
+                      </GlassSurface>
+                    </DonutChart>
+                  </motion.button> */}
+
+              {/* Share */}
+              {/* <motion.button
+                    initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+                    animate={{ opacity: 1, scale: 1, x: 82, y: -42 }}
+                    exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+                    transition={{ duration: 0.2, delay: 0.25 }}
+                    onClick={(e) => handleAction('share', e)}
+                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70] h-[70]   backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-purple-500/90 transition-all duration-200 shadow-lg"
+                    title="Share"
+                  >
+                    <DonutChart
+                      progress={45}
+                      circleWidth={8}
+                      progressWidth={8}
+                      size={90}
+                      gradientColors={['#2c1b06', '#804e05', '#ddb58f']}
+                      className="p-0 relative flex items-center justify-center text-[#2c1b06]"
+                      trackClassName="text-green-500/50 text-green-100/30"
+                    >
+                      <GlassSurface
+                        width={70}
+                        height={70}
+                        borderRadius={999}
+                        borderWidth={0.07}
+                        brightness={50}
+                        opacity={0.93}
+                        blur={15}
+                        displace={0}
+                        backgroundOpacity={0.2}
+                        saturation={2}
+                        distortionScale={-180}
+                        className="p-1 rounded-full aspect-square"
+                      > 
+                        <span className="absolute flex flex-col gap-0.25 font-semibold">
+                          <p>Free</p>
+                          24%
+                        </span>
+                      </GlassSurface>
+                    </DonutChart>
+                  </motion.button> */}
+
+              {/* Compare */}
+              {/* <motion.button
+                    initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
+                    animate={{ opacity: 1, scale: 1, x: 60, y: 50 }}
                     exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
                     transition={{ duration: 0.2, delay: 0.3 }}
                     onClick={(e) => handleAction('compare', e)}
-                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 bg-orange-500/80 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-orange-500/90 transition-all duration-200 shadow-lg"
+                    className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70] h-[70]   backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:bg-orange-500/90 transition-all duration-200 shadow-lg"
                     title="Compare"
                   >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                    <DonutChart
+                      progress={75}
+                      circleWidth={8}
+                      progressWidth={8}
+                      size={90}
+                      gradientColors={['#2c1b06', '#804e05', '#ddb58f']}
+                      className="p-0 relative flex items-center justify-center text-[#2c1b06]"
+                      trackClassName="text-green-500/50 text-green-100/30"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                      />
-                    </svg>
-                  </motion.button>
-                </>
-              )}
+                      <GlassSurface
+                        width={70}
+                        height={70}
+                        borderRadius={999}
+                        borderWidth={0.07}
+                        brightness={50}
+                        opacity={0.93}
+                        blur={15}
+                        displace={0}
+                        backgroundOpacity={0.2}
+                        saturation={2}
+                        distortionScale={-180}
+                        className="p-1 rounded-full aspect-square"
+                      >
+                  
+                        <span className="absolute flex flex-col gap-0.25 font-semibold">
+                          <p>Free</p>
+                          45%
+                        </span>
+                      </GlassSurface>
+                    </DonutChart>
+                  </motion.button> */}
             </AnimatePresence>
           </div>
         </motion.div>
@@ -301,7 +463,7 @@ const CarouselItemComponent = ({
   return (
     <CarouselItem
       key={item.id}
-      className="pl-1 basis-1/2 md:pl-2 md:basis-1/3 lg:basis-1/4 xl:pl-4 xl:basis-1/5"
+      className="pl-1 basis-1/1 md:pl-2 md:basis-1/3 lg:basis-1/4 xl:pl-4 xl:basis-1/5"
     >
       <FadeIn
         className="translate-y-5"
@@ -313,7 +475,7 @@ const CarouselItemComponent = ({
             className="flex flex-col border-none rounded-xl bg-transparent gap-4"
           >
             {!!item.images && (
-              <figure className="relative w-full border-none rounded-xl">
+              <figure className="relative w-full border-none rounded-xl h-[450px] ">
                 <Image
                   unoptimized
                   src={
@@ -326,7 +488,7 @@ const CarouselItemComponent = ({
                 />
                 <GlassSurface
                   width={100}
-                  height={100}
+                  height={40}
                   borderRadius={999}
                   borderWidth={0.07}
                   brightness={50}
@@ -336,19 +498,15 @@ const CarouselItemComponent = ({
                   backgroundOpacity={0}
                   saturation={1}
                   distortionScale={-180}
-                  className="p-1 rounded-full aspect-square"
+                  className="p-1 w-full  rounded-full aspect-square"
                 >
                   {item.name!}
                 </GlassSurface>
-                <BlurredCardWithClearCenter
-                  clearRadius={120}
-                  blurIntensity={500}
-                  className="z-10"
-                >
-                  <div className="relative w-full h-full">
-                    <BatteryLevel />
-                  </div>
-                </BlurredCardWithClearCenter>
+                <SlideFlowerButton
+                  item={item}
+                  isVisible={isInViewport}
+                  onAction={onAction}
+                />
                 <div className="absolute left-0 bottom-0 flex w-fit h-full items-center gap-2"></div>
                 <article className="absolute h-1/2 w-full bottom-0 flex flex-col gap-1 justify-evenly py-3 px-2 text-pretty text-xs md:text-sm lg:text-base rounded-b-md">
                   <p className="font-semibold">{item.category!.name}</p>
@@ -382,11 +540,6 @@ const CarouselItemComponent = ({
           </TransitionLink>
 
           {/* Individual Flower Menu for this slide */}
-          <SlideFlowerButton
-            item={item}
-            isVisible={isInViewport}
-            onAction={onAction}
-          />
         </div>
       </FadeIn>
     </CarouselItem>
@@ -465,21 +618,21 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
         direction: 'rtl',
         loop: true,
       }}
-      plugins={
-        isInView
-          ? [
-              Autoplay({
-                delay: 3000,
-              }),
-            ]
-          : []
-      }
+      // plugins={
+      //   isInView
+      //     ? [
+      //         Autoplay({
+      //           delay: 3000,
+      //         }),
+      //       ]
+      //     : []
+      // }
       dir="rtl"
-      className="w-full aspect-square"
+      className="w-full aspect-square "
       ref={carouselRef}
       setApi={onInit}
     >
-      <CarouselContent className="-ml-1 md:-ml-2 xl:-ml-4 text-primary-foreground">
+      <CarouselContent className=" -ml-1 md:-ml-2 xl:-ml-4 text-primary-foreground">
         {items.map((item, i) => (
           <CarouselItemComponent
             key={item.id}
