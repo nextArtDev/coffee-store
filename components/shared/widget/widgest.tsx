@@ -38,7 +38,7 @@ export default function BatteryLevel() {
             progressWidth={8}
             size={90}
             gradientColors={['#2c1b06', '#804e05', '#ddb58f']}
-            className="p-0 relative flex items-center justify-center text-[#2c1b06]"
+            className="opacity-0 p-0 relative flex items-center justify-center text-[#2c1b06]"
             trackClassName="text-green-500/50 text-green-100/30"
           >
             <GlassSurface

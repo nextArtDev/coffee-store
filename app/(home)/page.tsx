@@ -340,7 +340,7 @@ export default async function Home() {
         <GooeyCarousel categories={categories} />
       </div>
       {!!bestSellers && (
-        <section className="w-full h-full flex flex-col gap-8 py-8 px-3 ">
+        <section className="relative w-full h-full flex flex-col gap-8 py-8 px-3 ">
           <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
             پرفروش‌ترینها
           </h2>
