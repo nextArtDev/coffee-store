@@ -17,6 +17,7 @@ import { TransitionLink } from '../home/shared/TransitionLink'
 import GlassSurface from '../shared/glass-surface/GlassSurface'
 import type { EmblaCarouselType } from 'embla-carousel'
 import DonutChart from '../shared/widget/donate-chart'
+import { StarRating } from '../home/testemonial/StarRating'
 
 export type item = {
   id: string
@@ -458,6 +459,13 @@ const CarouselItemComponent = ({
   isInViewport: boolean
   // onAction: (action: string, item: Partial<HomepageProduct>) => void
 }) => {
+  const avgRating = !!item.reviews?.length
+    ? (
+        item.reviews?.reduce((sum, review) => sum + review.rating, 0) /
+        item.reviews?.length
+      ).toFixed(1)
+    : null
+
   return (
     <CarouselItem
       key={item.id}
@@ -509,6 +517,12 @@ const CarouselItemComponent = ({
                 <article className="absolute h-1/2 w-full bottom-0 flex flex-col gap-1 justify-evenly py-3 px-2 text-pretty text-xs md:text-sm lg:text-base rounded-b-md">
                   <p className="font-semibold">{item.category!.name}</p>
                   <p className="font-bold">{item.name}</p>
+                  <div className="flex gap-0.5 items-center">
+                    {avgRating && (
+                      <StarRating disabled value={Number(avgRating)} />
+                    )}
+                    {Number(avgRating)} از {item.reviews?.length} نظر
+                  </div>
                   {!!item.variants && (
                     <>
                       {item.variants.map((variant, i) => (
@@ -545,6 +559,13 @@ const CarouselItemComponent = ({
 }
 
 export default function MainPageCarousel({ items }: MainPageCarousel) {
+  // console.log(items.map((pr) => pr.reviews?.map((rv) => rv.rating)))
+  // const avgRating = !!reviews?.length
+  //   ? (
+  //       reviews?.reduce((sum, review) => sum + review.rating, 0) /
+  //       reviews?.length
+  //     ).toFixed(1)
+  //   : null
   const carouselRef = useRef<HTMLDivElement>(null)
   const [emblaApi, setEmblaApi] = useState<EmblaCarouselType>()
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

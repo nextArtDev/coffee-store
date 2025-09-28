@@ -1,5 +1,6 @@
 import DiscoverMoreCarousel from '@/components/home/discover-more/DiscoverMoreCarousel'
 import Hero from '@/components/home/hero/hero'
+import DualOrbitCarousel from '@/components/home/orbit-carousel'
 import GooeyCarousel from '@/components/home/orbit-carousel/tabs-carousel'
 import Commitments from '@/components/home/shared/Commitments'
 import StoreStatement from '@/components/home/shared/StoreStatement'
@@ -335,8 +336,8 @@ export default async function Home() {
       <div className="py-16">
         <StoreStatement />
       </div>
-      <div className="py-16 w-full min-h-dvh">
-        {/* <DualOrbitCarousel /> */}
+      <div className="py-8 w-full min-h-dvh">
+        {/* <DualOrbitCarousel categories={categories} /> */}
         <GooeyCarousel categories={categories} />
       </div>
       {!!bestSellers && (

@@ -85,6 +85,7 @@ export type HomepageProduct = {
   accessorySpecs: AccessorySpecs | null
   chocolateCharacteristics: ChocolateCharacteristics | null
   equipmentSpecs: EquipmentSpecs | null
+  reviews: { rating: number }[]
 }
 
 export type HomepageProductsResult = HomepageProduct[]

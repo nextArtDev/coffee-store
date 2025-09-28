@@ -39,7 +39,7 @@ export default async function Layout({
   return (
     <section dir="rtl" className={`w-full h-full ${farsiFont.className}`}>
       <SidebarProvider>
-        <AppSidebar />
+        <AppSidebar user={user} />
         <main className="w-full h-full">
           <SidebarInset>
             <header className="w-full px-2 flex h-16 shrink-0 items-center gap-2 border-b">

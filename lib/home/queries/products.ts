@@ -69,6 +69,7 @@ export async function getHomepageProducts(limit: number = 12) {
       coffeeCharacteristics: true,
       chocolateCharacteristics: true,
       equipmentSpecs: true,
+      reviews: { select: { rating: true } },
     },
     where: {
       variants: {
@@ -140,6 +141,12 @@ export async function getBestSellers(limit: number = 8) {
       equipmentSpecs: true,
       chocolateCharacteristics: true,
       coffeeCharacteristics: true,
+      reviews: {
+        select: { rating: true },
+        where: {
+          isPending: false,
+        },
+      },
     },
     where: {
       variants: {

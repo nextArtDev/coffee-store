@@ -4,6 +4,8 @@ import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import { CategoryWithStats } from '@/lib/types/home'
 import { Loader } from '@/components/shared/loader'
+import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
+import { TransitionLink } from '../shared/TransitionLink'
 
 // Mock Components
 const useDetectBrowser = () => 'Chrome'
@@ -15,7 +17,7 @@ const GooeySvgFilter = ({ id, strength }: { id: string; strength: number }) => (
   <svg className="absolute w-0 h-0">
     <defs>
       <filter id={id}>
-        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+        <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
         <feColorMatrix
           in="blur"
           mode="matrix"
@@ -99,7 +101,7 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
         >
           <div className="flex w-full">
             {categories?.map((_, index) => (
-              <div key={index} className="relative flex-1 h-8 md:h-12">
+              <div key={index} className="relative flex-1 h-12 md:h-16">
                 {activeTab === index && (
                   <motion.div
                     layoutId="active-tab"
@@ -124,7 +126,7 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
               variants={listContainerVariants}
             >
               <motion.ul
-                className="relative space-y-2 flex justify-evenly items-center flex-wrap gap-0.5  py-10 min-h-[70dvh]"
+                className="relative space-y-2 flex justify-evenly items-center flex-wrap gap-0.5  py-10 min-h-[50dvh]"
                 variants={listContainerVariants}
               >
                 <Image
@@ -136,20 +138,40 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
                 {categories[activeTab]?.subCategories?.map((subcategory) => (
                   <motion.li
                     key={subcategory.id}
-                    className=" relative w-[25%] aspect-square grid grid-rows-1 place-content-center place-items-center rounded-md text-black dark:text-white text-xs sm:text-sm"
+                    className=" relative w-[25%] aspect-square grid grid-rows-1 place-content-center place-items-center rounded-md text-black dark:text-white text-xs sm:text-sm md:text-md cursor-pointer"
                     variants={listItemVariants}
                   >
                     <Image
                       fill
-                      className="object-cover rounded-full z-[0] opacity-70 "
+                      className="object-cover rounded-full z-[0] opacity-50 "
                       alt={subcategory.name}
                       src={subcategory.images.map((img) => img.url)[0]}
                     />
-                    <div className="z-[1] absolute inset-0 flex items-center justify-center p-2">
+                    <TransitionLink
+                      href={`/sub-categories/${subcategory.url}`}
+                      className="z-[1] absolute inset-0 flex items-center justify-center "
+                    >
                       {/* SOLUTION 1: Solid background instead of semi-transparent */}
-                      <span className="text-center font-bold bg-white/55 text-black border border-gray-200 rounded-md aspect-square flex items-center justify-center p-2 leading-tight  shadow-sm">
+                      {/* <span className="text-center font-bold bg-white/55 text-black border border-gray-200 rounded-md aspect-square flex items-center justify-center p-2 leading-tight  shadow-sm">
                         {subcategory.name}
-                      </span>
+                      </span> */}
+                      <GlassSurface
+                        width={'100%'}
+                        height={'100%'}
+                        borderRadius={999}
+                        borderWidth={0.07}
+                        brightness={50}
+                        opacity={0.93}
+                        blur={15}
+                        displace={0}
+                        backgroundOpacity={0.2}
+                        saturation={2}
+                        distortionScale={-180}
+                        className="p-1 rounded-full aspect-square font-bold text-center"
+                      >
+                        {' '}
+                        {subcategory.name}
+                      </GlassSurface>
 
                       {/* SOLUTION 2: Remove backdrop-blur entirely */}
                       {/* <span className="text-center bg-white text-black border border-gray-300 rounded-full aspect-square flex items-center justify-center p-2 leading-tight font-medium">
@@ -160,7 +182,7 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
                       {/* <span className="text-center bg-gray-800/90 text-white border border-gray-600 rounded-full aspect-square flex items-center justify-center p-2 leading-tight font-medium">
                         {subcategory.name}
                       </span> */}
-                    </div>
+                    </TransitionLink>
                   </motion.li>
                 ))}
               </motion.ul>
@@ -173,7 +195,7 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
             <button
               key={index}
               onClick={() => setActiveTab(index)}
-              className="flex-1 h-8 md:h-12"
+              className="flex-1 h-12 md:h-16"
             >
               <span
                 className={`
