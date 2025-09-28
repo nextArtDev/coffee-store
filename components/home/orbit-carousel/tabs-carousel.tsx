@@ -156,18 +156,19 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
                         {subcategory.name}
                       </span> */}
                       <GlassSurface
+                        // key={'carousel'}
                         width={'100%'}
                         height={'100%'}
                         borderRadius={999}
                         borderWidth={0.07}
                         brightness={50}
                         opacity={0.93}
-                        blur={15}
+                        blur={2}
                         displace={0}
-                        backgroundOpacity={0.2}
-                        saturation={2}
+                        backgroundOpacity={0.8}
+                        saturation={0.5}
                         distortionScale={-180}
-                        className="p-1 rounded-full aspect-square font-bold text-center"
+                        className="p-1 rounded-full aspect-square font-bold text-center  "
                       >
                         {' '}
                         {subcategory.name}

@@ -497,6 +497,7 @@ export const getProductDetails = cache(
               },
             },
           },
+
           orderBy: [
             { price: 'asc' }, // Then lowest price
             { quantity: 'desc' }, // Prioritize higher stock
@@ -514,6 +515,10 @@ export const getProductDetails = cache(
             answer: true,
           },
         },
+        chocolateCharacteristics: true,
+        accessorySpecs: true,
+        coffeeCharacteristics: true,
+        equipmentSpecs: true,
         reviews: {
           where: {
             isPending: false,

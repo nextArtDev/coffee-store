@@ -16,15 +16,19 @@ interface StarWrapperProps {
   wrapperProps?: React.HTMLAttributes<HTMLDivElement>
   iconProps?: LucideProps
   showcase?: boolean
+  allowHalfStars?: boolean
+  precision?: number
 }
 
 function StarRating({
   numStars = 5,
   icon,
   setValue,
-  value,
-  disabled,
-  showcase,
+  value = 0,
+  disabled = false,
+  showcase = false,
+  allowHalfStars = false,
+  precision = 0.5,
   iconProps = {},
   wrapperProps = {},
 }: StarWrapperProps) {
@@ -32,33 +36,178 @@ function StarRating({
   const { className: iconClassName, ...restIconProps } = iconProps
   const IconComponent = icon
 
+  const handleStarClick = (
+    starIndex: number,
+    event: React.MouseEvent<HTMLDivElement>
+  ) => {
+    if (showcase || disabled || !setValue) return
+
+    if (allowHalfStars) {
+      const rect = event.currentTarget.getBoundingClientRect()
+      const clickX = event.clientX - rect.left
+      const starWidth = rect.width
+      const isLeftHalf = clickX < starWidth / 2
+
+      const newValue = starIndex + (isLeftHalf ? 0.5 : 1)
+      setValue(Math.round(newValue / precision) * precision)
+    } else {
+      setValue(starIndex + 1)
+    }
+  }
+
+  const getStarFill = (starIndex: number): 'full' | 'half' | 'empty' => {
+    const starValue = starIndex + 1
+
+    if (value >= starValue) {
+      return 'full'
+    } else if (allowHalfStars && value >= starValue - 0.5) {
+      return 'half'
+    } else {
+      return 'empty'
+    }
+  }
+
   return (
     <div
+      dir="ltr"
       className={cn('flex items-center gap-1', wrapperClassName)}
       {...restWrapperProps}
     >
       {Array.from({ length: numStars }, (_, i) => {
-        const isRated = i < value!
-        const styledIconProps: LucideProps = {
-          onClick: () => !showcase && !disabled && setValue!(i + 1),
-          className: cn(
-            'fill-[#45f88a] stroke-[#45f88a] size-6',
-            {
-              'opacity-70 pointer-events-none ': disabled,
-              'transition-transform duration-300 hover:scale-110 cursor-pointer ':
-                !disabled && !showcase,
-              '!fill-transparent !stroke-muted/30': !isRated,
-            },
-            iconClassName
-          ),
-          ...restIconProps,
-        }
+        const fillType = getStarFill(i)
+        const isInteractive = !disabled && !showcase
+
         return (
-          <div key={i}>
-            {IconComponent ? (
-              <IconComponent {...styledIconProps} />
+          <div
+            key={i}
+            className={cn('relative', {
+              'cursor-pointer': isInteractive,
+            })}
+            onClick={(e) => handleStarClick(i, e)}
+          >
+            {fillType === 'empty' ? (
+              // Empty star
+              IconComponent ? (
+                <IconComponent
+                  className={cn(
+                    'fill-transparent stroke-muted/30 size-6',
+                    {
+                      'opacity-70': disabled,
+                      'transition-transform duration-300 hover:scale-110':
+                        isInteractive,
+                    },
+                    iconClassName
+                  )}
+                  {...restIconProps}
+                />
+              ) : (
+                <StarIcon
+                  className={cn(
+                    'fill-transparent stroke-muted/30 size-6',
+                    {
+                      'opacity-70': disabled,
+                      'transition-transform duration-300 hover:scale-110':
+                        isInteractive,
+                    },
+                    iconClassName
+                  )}
+                  {...restIconProps}
+                />
+              )
+            ) : fillType === 'full' ? (
+              // Full star
+              IconComponent ? (
+                <IconComponent
+                  className={cn(
+                    'fill-[#45f88a] stroke-[#45f88a] size-6',
+                    {
+                      'opacity-70': disabled,
+                      'transition-transform duration-300 hover:scale-110':
+                        isInteractive,
+                    },
+                    iconClassName
+                  )}
+                  {...restIconProps}
+                />
+              ) : (
+                <StarIcon
+                  className={cn(
+                    'fill-[#45f88a] stroke-[#45f88a] size-6',
+                    {
+                      'opacity-70': disabled,
+                      'transition-transform duration-300 hover:scale-110':
+                        isInteractive,
+                    },
+                    iconClassName
+                  )}
+                  {...restIconProps}
+                />
+              )
             ) : (
-              <StarIcon {...styledIconProps} />
+              // Half star - use CSS mask for precise half fill
+              <div className="relative">
+                {/* Background empty star */}
+                {IconComponent ? (
+                  <IconComponent
+                    className={cn(
+                      'fill-transparent stroke-muted/30 size-6',
+                      {
+                        'opacity-70': disabled,
+                        'transition-transform duration-300 hover:scale-110':
+                          isInteractive,
+                      },
+                      iconClassName
+                    )}
+                    {...restIconProps}
+                  />
+                ) : (
+                  <StarIcon
+                    className={cn(
+                      'fill-transparent stroke-muted/30 size-6',
+                      {
+                        'opacity-70': disabled,
+                        'transition-transform duration-300 hover:scale-110':
+                          isInteractive,
+                      },
+                      iconClassName
+                    )}
+                    {...restIconProps}
+                  />
+                )}
+
+                {/* Half-filled overlay */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    clipPath: 'polygon(0 0, 50% 0, 50% 100%, 0 100%)',
+                    overflow: 'hidden',
+                  }}
+                >
+                  {IconComponent ? (
+                    <IconComponent
+                      className={cn(
+                        'fill-[#45f88a] stroke-[#45f88a] size-6',
+                        {
+                          'opacity-70': disabled,
+                        },
+                        iconClassName
+                      )}
+                      {...restIconProps}
+                    />
+                  ) : (
+                    <StarIcon
+                      className={cn(
+                        'fill-[#45f88a] stroke-[#45f88a] size-6',
+                        {
+                          'opacity-70': disabled,
+                        },
+                        iconClassName
+                      )}
+                      {...restIconProps}
+                    />
+                  )}
+                </div>
+              </div>
             )}
           </div>
         )
@@ -68,6 +217,7 @@ function StarRating({
 }
 
 export { StarRating }
+export type { StarWrapperProps }
 
 // import * as React from 'react'
 // import { Heart } from 'lucide-react'

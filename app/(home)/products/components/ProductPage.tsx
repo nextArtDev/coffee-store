@@ -1,7 +1,7 @@
 import ProductDetailCarousel from '@/components/product/product-detail-carousel'
 import AddToCardBtn from '@/components/product/product-detail/AddToCardBtn'
 
-import { SingleStarRating } from '@/components/home/testemonial/SingleStartRating'
+// import { SingleStarRating } from '@/components/home/testemonial/SingleStartRating'
 import ProductStatements from '@/components/product/product-detail/ProductStatemeents'
 import { buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -17,6 +17,8 @@ import Link from 'next/link'
 import FAQItem from '../../faq/components/FAQItem'
 import Countdown from './count-down'
 import ProductProperties from './ProductProperties'
+import { StarRating } from '@/components/home/testemonial/StarRating'
+import SliderFlowerButton from '@/components/product/SliderFlowerButton'
 
 type ProductPageProp = {
   data: NonNullable<ProductDetails>
@@ -110,11 +112,16 @@ const ProductPage: FC<ProductPageProp> = ({
           <div className="flex gap-2">
             {productAverageRating && (
               <>
-                <SingleStarRating rating={productAverageRating.rating} />
+                {/* <SingleStarRating rating={productAverageRating.rating} /> */}
                 {productAverageRating.rating}
                 <p>{' از'}</p>
                 {productAverageRating.count}
                 <p>{' نفر'}</p>
+                <StarRating
+                  allowHalfStars
+                  disabled
+                  value={productAverageRating.rating}
+                />
               </>
             )}
           </div>
@@ -123,7 +130,11 @@ const ProductPage: FC<ProductPageProp> = ({
             {/* medium handbag with double flap in grained leather */}
             {name}
           </p>
-
+          <Separator />
+          <article className="relative w-full h-[50vh]  ">
+            <SliderFlowerButton item={data} isVisible={true} />
+            <p></p>
+          </article>
           <Separator />
           <article className="flex items-center justify-evenly">
             {/* === COLOR SELECTION === */}

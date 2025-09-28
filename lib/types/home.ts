@@ -300,6 +300,10 @@ export type ProductDetails = {
   subCategory: SubCategoryInfo
   offerTag: OfferTag | null
   freeShipping: FreeShipping | null
+  chocolateCharacteristics: ChocolateCharacteristics | null
+  accessorySpecs: AccessorySpecs | null
+  coffeeCharacteristics: CoffeeCharacteristics | null
+  equipmentSpecs: EquipmentSpecs | null
 } | null // null if product not found
 
 // 7. Related Products Type
