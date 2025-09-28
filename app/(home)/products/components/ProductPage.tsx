@@ -18,7 +18,8 @@ import FAQItem from '../../faq/components/FAQItem'
 import Countdown from './count-down'
 import ProductProperties from './ProductProperties'
 import { StarRating } from '@/components/home/testemonial/StarRating'
-import SliderFlowerButton from '@/components/product/SliderFlowerButton'
+// import SliderFlowerButton from '@/components/product/SliderFlowerButton'
+import EnhancedProductSpecs from './EnhancedProductSpecs'
 
 type ProductPageProp = {
   data: NonNullable<ProductDetails>
@@ -62,6 +63,10 @@ const ProductPage: FC<ProductPageProp> = ({
     keywords,
     isSale,
     saleEndDate,
+    accessorySpecs,
+    coffeeCharacteristics,
+    chocolateCharacteristics,
+    equipmentSpecs,
     // rating,
     // sales,
     // views,
@@ -130,10 +135,23 @@ const ProductPage: FC<ProductPageProp> = ({
             {/* medium handbag with double flap in grained leather */}
             {name}
           </p>
-          <Separator />
-          <article className="relative w-full h-[50vh]  ">
+          {/* <Separator />
             <SliderFlowerButton item={data} isVisible={true} />
             <p></p>
+            */}
+          <article className="relative w-full h-full  ">
+            {currentVariant && (
+              <EnhancedProductSpecs
+                variant={currentVariant}
+                specs={specs}
+                coffeeCharacteristics={
+                  coffeeCharacteristics ? coffeeCharacteristics : undefined
+                }
+                chocolateCharacteristics={chocolateCharacteristics}
+                equipmentSpecs={equipmentSpecs}
+                accessorySpecs={accessorySpecs}
+              />
+            )}
           </article>
           <Separator />
           <article className="flex items-center justify-evenly">

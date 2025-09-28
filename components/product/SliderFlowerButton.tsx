@@ -14,7 +14,6 @@ const SliderFlowerButton: FC<SliderFlowerButtonProps> = ({
   item,
   isVisible,
 }) => {
-  console.log({ item })
   const [isOpen, setIsOpen] = useState(false)
   const menuItems = []
   if (item.coffeeCharacteristics) {
