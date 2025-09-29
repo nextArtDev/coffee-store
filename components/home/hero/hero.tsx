@@ -8,7 +8,7 @@ import { FadeIn } from '@/components/shared/fade-in'
 import { RevealText } from '@/components/shared/reveal-text'
 import { SubCategoryForHomePage } from '@/lib/types/home'
 import { TransitionLink } from '../shared/TransitionLink'
-import FixedMotionImage from './fixed-motion-image'
+import { FixedMotionImage } from './fixed-motion-image'
 
 const Hero = ({
   subCategories,
@@ -23,7 +23,13 @@ const Hero = ({
         vars={{ scale: 1, opacity: 0.5 }}
         className=" absolute inset-0   min-h-svh origin-top lg:h-svh motion-safe:scale-125 motion-reduce:opacity-50 "
       >
-        <FixedMotionImage imageUrl={heroImage.src}>
+        <FixedMotionImage
+          imageUrl={heroImage.src}
+          imageAlt="Coffee Store"
+          priority={true}
+          quality={95}
+          overlayClassNames="bg-gradient-to-b from-black/20 via-black/40 to-black/60"
+        >
           {/* <Image
             unoptimized
             src={heroImage}

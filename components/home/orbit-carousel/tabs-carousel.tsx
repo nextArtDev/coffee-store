@@ -134,6 +134,7 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
                   className="object-cover rounded-md opacity-60"
                   alt={categories[activeTab]?.name}
                   src={categories[activeTab]?.images.map((img) => img.url)[0]}
+                  loading="lazy"
                 />
                 {categories[activeTab]?.subCategories?.map((subcategory) => (
                   <motion.li
@@ -146,6 +147,7 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
                       className="object-cover rounded-full z-[0] opacity-50 "
                       alt={subcategory.name}
                       src={subcategory.images.map((img) => img.url)[0]}
+                      loading="lazy"
                     />
                     <TransitionLink
                       href={`/sub-categories/${subcategory.url}`}

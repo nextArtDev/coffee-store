@@ -32,74 +32,6 @@ type MainPageCarousel = {
   items: Partial<HomepageProduct>[]
 }
 
-// const CircleButton = ({
-//   item,
-//   position,
-//   index,
-//   isOpen,
-//   onAction,
-// }: {
-//   index: number
-//   isOpen: boolean
-//   item: { label: string; value: number }
-//   isVisible: boolean
-//   position: { x: number; y: number }
-//   onAction?: (action: string, item: Partial<HomepageProduct>) => void
-// }) => {
-//   const { label, value } = item
-
-//   return (
-//     <motion.button
-//       initial={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-//       animate={{
-//         opacity: 1,
-//         scale: 1,
-//         x: position.x,
-//         y: position.y,
-//       }}
-//       exit={{ opacity: 0, scale: 0.5, x: 0, y: 0 }}
-//       transition={{ duration: 0.2, delay: index * 0.05 }}
-//       // onClick={(e) => onAction(label.toLowerCase().replace(' ', ''), e)}
-//       // className={`absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70px] h-[70px] backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white hover:${color} transition-all duration-200 shadow-lg`}
-//       className={`absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[70px] h-[70px] backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white  transition-all duration-200 shadow-lg`}
-//       title={label}
-//     >
-//       <DonutChart
-//         progress={value || 50}
-//         circleWidth={8}
-//         progressWidth={8}
-//         size={90}
-//         gradientColors={['#2c1b06', '#804e05', '#ddb58f']}
-//         className="p-0 relative flex items-center justify-center text-[#2c1b06]"
-//         trackClassName="text-green-500/50 text-green-100/30"
-//       >
-//         <GlassSurface
-//           width={70}
-//           height={70}
-//           borderRadius={999}
-//           borderWidth={0.07}
-//           brightness={50}
-//           opacity={0.93}
-//           blur={15}
-//           displace={0}
-//           backgroundOpacity={0.2}
-//           saturation={2}
-//           distortionScale={-180}
-//           className="p-1 rounded-full aspect-square"
-//         >
-//           <span className="absolute flex flex-col gap-0.5 font-semibold text-xs">
-//             <p className="text-[8px] opacity-80">{label}</p>
-//             <p className="text-sm">{value}%</p>
-//           </span>
-//         </GlassSurface>
-//       </DonutChart>
-//     </motion.button>
-//   )
-// }
-
-// Individual Slide Flower Menu Button
-
-// Individual Carousel Item Component
 const CarouselItemComponent = ({
   item,
   index,
@@ -143,6 +75,11 @@ const CarouselItemComponent = ({
                   fill
                   alt={item.name!}
                   className="object-cover rounded-xl"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                  priority={index < 4} // Prioritize first 4 images (visible on load)
+                  quality={85} // Slightly reduced quality for faster loading
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                 />
                 <GlassSurface
                   width={100}
@@ -251,35 +188,6 @@ export default function MainPageCarousel({ items }: MainPageCarousel) {
     emblaApi.on('slidesInView', updateSlidesInView)
     emblaApi.on('select', updateSlidesInView)
   }, [emblaApi, onSelect, updateSlidesInView])
-
-  // Handle flower menu actions
-  // const handleFlowerAction = (
-  //   action: string,
-  //   item: Partial<HomepageProduct>
-  // ) => {
-  //   switch (action) {
-  //     case 'addToCart':
-  //       console.log('Adding to cart:', item)
-  //       // Add your cart logic here
-  //       break
-  //     case 'addToFavorites':
-  //       console.log('Adding to favorites:', item)
-  //       // Add your favorites logic here
-  //       break
-  //     case 'quickView':
-  //       console.log('Quick view:', item)
-  //       // Add your quick view logic here
-  //       break
-  //     case 'share':
-  //       console.log('Sharing:', item)
-  //       // Add your share logic here
-  //       break
-  //     case 'compare':
-  //       console.log('Adding to compare:', item)
-  //       // Add your compare logic here
-  //       break
-  //   }
-  // }
 
   return (
     <Carousel
