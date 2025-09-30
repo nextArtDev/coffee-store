@@ -4,7 +4,7 @@ import { motion, Variants } from 'framer-motion'
 import Image from 'next/image'
 import { CategoryWithStats } from '@/lib/types/home'
 import { Loader } from '@/components/shared/loader'
-import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
+// import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
 import { TransitionLink } from '../shared/TransitionLink'
 
 // Mock Components

@@ -260,6 +260,10 @@ input[type='tel'],
   animation: spinning 5s linear infinite;
 }
 
+.shine {
+  animation: shine 2s linear infinite;
+}
+
 @keyframes spinning {
   to {
     transform: rotate(360deg);
@@ -289,6 +293,15 @@ input[type='tel'],
     transform: translateY(-20px) scale(0.98);
   }
 }
+@keyframes shine {
+  from {
+    background-position: 100%;
+  }
+
+  to {
+    background-position: -100%;
+  }
+}
 
 ::view-transition-old(root) {
   animation: 0.5s cubic-bezier(0.33, 1, 0.68, 1) both fade-out;
@@ -304,5 +317,44 @@ input[type='tel'],
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation-duration: 0.001s;
+  }
+}
+
+@layer utilities {
+  .lustre-text {
+    @apply inline-block font-extrabold text-transparent bg-clip-text bg-[length:200%_auto] bg-[position:0%_center];
+  }
+
+  .lustre-light {
+    background-image: linear-gradient(
+      90deg,
+      /* oklch(32.991% 0.04496 23.893 / 0.062) 0%,
+      oklch(32.991% 0.04496 23.893 / 0.301) 30%,
+      oklch(32.991% 0.04496 23.893 / 0.705) 45%,
+      #ffffff 50%,
+      oklch(32.991% 0.04496 23.893 / 0.705) 55%,
+      oklch(32.991% 0.04496 23.893 / 0.301) 70%,
+      oklch(32.991% 0.04496 23.893 / 0.062) 100% */
+        rgba(0, 0, 0, 0.05) 0%,
+      rgba(0, 0, 0, 0.3) 30%,
+      rgba(0, 0, 0, 0.7) 45%,
+      #ffffff 50%,
+      rgba(0, 0, 0, 0.7) 55%,
+      rgba(0, 0, 0, 0.3) 70%,
+      rgba(0, 0, 0, 0.05) 100%
+    );
+  }
+
+  .lustre-dark {
+    background-image: linear-gradient(
+      90deg,
+      oklch(32.991% 0.04496 23.893 / 0.062) 0%,
+      oklch(32.991% 0.04496 23.893 / 0.301) 30%,
+      oklch(32.991% 0.04496 23.893 / 0.705) 45%,
+      #ffffff 50%,
+      oklch(32.991% 0.04496 23.893 / 0.705) 55%,
+      oklch(32.991% 0.04496 23.893 / 0.301) 70%,
+      oklch(32.991% 0.04496 23.893 / 0.062) 100%
+    );
   }
 }

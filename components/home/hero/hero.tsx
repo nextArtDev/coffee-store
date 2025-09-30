@@ -9,6 +9,7 @@ import { RevealText } from '@/components/shared/reveal-text'
 import { SubCategoryForHomePage } from '@/lib/types/home'
 import { TransitionLink } from '../shared/TransitionLink'
 import { FixedMotionImage } from './fixed-motion-image'
+import LustreText from '../shared/lustre-text'
 
 const Hero = ({
   subCategories,
@@ -42,13 +43,17 @@ const Hero = ({
         </FixedMotionImage>
       </FadeIn>
       <div className="relative flex h-screen flex-col justify-center items-center">
-        <RevealText
+        {/* <RevealText
           // text="Effortless Elegance"
           text="فروشگاه قهوه"
           id="hero-heading"
           className="font-display max-w-xl text-6xl leading-none text-neutral-50 md:text-7xl lg:text-8xl"
           staggerAmount={0.2}
           duration={1.7}
+        /> */}
+        <LustreText
+          text="فروشگاه قهوه"
+          className="font-display max-w-xl text-6xl leading-none text-neutral-50 md:text-7xl lg:text-8xl"
         />
         <FadeIn
           // important factor to go up or down: translate-y-8

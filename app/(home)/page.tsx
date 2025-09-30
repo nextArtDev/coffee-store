@@ -1,6 +1,6 @@
 import DiscoverMoreCarousel from '@/components/home/discover-more/DiscoverMoreCarousel'
 import Hero from '@/components/home/hero/hero'
-import DualOrbitCarousel from '@/components/home/orbit-carousel'
+// import DualOrbitCarousel from '@/components/home/orbit-carousel'
 import GooeyCarousel from '@/components/home/orbit-carousel/tabs-carousel'
 import Commitments from '@/components/home/shared/Commitments'
 import StoreStatement from '@/components/home/shared/StoreStatement'
@@ -290,100 +290,115 @@ export default async function Home() {
   }
   return (
     <div className="relative w-full h-full items-center justify-items-center min-h-screen mx-auto">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationData),
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(websiteData),
-        }}
-      />
-      {reviewsData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(reviewsData),
-          }}
+      <div className="min-h-screen w-full relative">
+        <div
+          className="absolute inset-0 z-0"
+          //     style={{
+          //       background: `
+          //   radial-gradient(ellipse 80% 60% at 70% 20%, oklch(0.3299 0.045 23.9357), transparent 68%),
+          //   radial-gradient(ellipse 70% 60% at 20% 80%,oklch(0.4539 0.0568 55.6365), transparent 68%),
+          //   radial-gradient(ellipse 60% 50% at 60% 65%, oklch(0.7529 0.0629 72.3107), transparent 68%),
+          //   radial-gradient(ellipse 65% 40% at 50% 60%, oklch(0.1891 0.0154 25.858), transparent 68%),
+          //   linear-gradient(180deg, #f7eaff 0%, #fde2ea 100%)
+          // `,
+          //     }}
         />
-      )}
-      {bestSellersData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(bestSellersData),
-          }}
-        />
-      )}
-      {newArrivalsData && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(newArrivalsData),
-          }}
-        />
-      )}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbData),
-        }}
-      />
-      <Hero subCategories={subCategories} />
-      <div className="py-16">
-        <StoreStatement />
-      </div>
-      <div className="py-8 w-full min-h-dvh">
-        {/* <DualOrbitCarousel categories={categories} /> */}
-        <GooeyCarousel categories={categories} />
-      </div>
-      {!!bestSellers && (
-        <section className="relative w-full h-full flex flex-col gap-8 py-8 px-3 ">
-          <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
-            پرفروش‌ترینها
-          </h2>
-          <MainPageCarousel items={bestSellers} />
-        </section>
-      )}
-      <section className="w-full h-full flex flex-col gap-8 py-8 px-3 ">
-        <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
-          جدیدترینها
-        </h2>
-        <MainPageCarousel items={products} />
-      </section>
-      <section className="py-12">
-        <WorkVideo />
-      </section>
-      <section className="flex flex-col items-center gap-6 ">
-        <h2 className="text-xl md:text-3xl font-bold uppercase text-center  py-8">
-          تعهدات ما
-        </h2>
-        <Commitments />
-      </section>
-      <section className="flex flex-col w-full h-full gap-6  text-center py-12 ">
-        <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8  ">
-          بیشتر{' '}
-        </h2>
-        <DiscoverMoreCarousel subCategories={subCategories} />
-      </section>
 
-      {!!reviews && (
-        <TestimonialCarousel
-          testimonials={reviews?.map((review) => {
-            const { title, description, user, createdAt, rating } = review
-            return {
-              title,
-              description,
-              user: user.name!,
-              createdAt,
-              rating,
-            }
-          })}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationData),
+          }}
         />
-      )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(websiteData),
+          }}
+        />
+        {reviewsData && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(reviewsData),
+            }}
+          />
+        )}
+        {bestSellersData && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(bestSellersData),
+            }}
+          />
+        )}
+        {newArrivalsData && (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(newArrivalsData),
+            }}
+          />
+        )}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbData),
+          }}
+        />
+        <Hero subCategories={subCategories} />
+        <div className="py-16">
+          <StoreStatement />
+        </div>
+        <div className="py-8 w-full min-h-dvh">
+          {/* <DualOrbitCarousel categories={categories} /> */}
+          <GooeyCarousel categories={categories} />
+        </div>
+        {!!bestSellers && (
+          <section className="relative w-full h-full flex flex-col gap-8 py-8 px-3 ">
+            <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
+              پرفروش‌ترینها
+            </h2>
+            <MainPageCarousel items={bestSellers} />
+          </section>
+        )}
+        <section className="w-full h-full flex flex-col gap-8 py-8 px-3 ">
+          <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
+            جدیدترینها
+          </h2>
+          <MainPageCarousel items={products} />
+        </section>
+        <section className="py-12">
+          <WorkVideo />
+        </section>
+        <section className="flex flex-col items-center gap-6 ">
+          <h2 className="text-xl md:text-3xl font-bold uppercase text-center  py-8">
+            تعهدات ما
+          </h2>
+          <Commitments />
+        </section>
+        <section className="flex flex-col w-full h-full gap-6  text-center py-12 ">
+          <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8  ">
+            بیشتر{' '}
+          </h2>
+          <DiscoverMoreCarousel subCategories={subCategories} />
+        </section>
+
+        {!!reviews && (
+          <TestimonialCarousel
+            testimonials={reviews?.map((review) => {
+              const { title, description, user, createdAt, rating } = review
+              return {
+                title,
+                description,
+                user: user.name!,
+                createdAt,
+                rating,
+              }
+            })}
+          />
+        )}
+      </div>
     </div>
   )
 }
