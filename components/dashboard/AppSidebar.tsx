@@ -5,9 +5,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -191,52 +189,48 @@ export default function AppSidebar({
       <SidebarHeader>{/* <SearchForm /> */}</SidebarHeader>
       <SidebarContent className=" font-bold">
         {/* We create a SidebarGroup for each parent. */}
-        {routes.map((item) => (
-          <SidebarGroup key={item.label}>
-            <SidebarGroupLabel>{item.label}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu className="items-start mx-auto py-4 ">
-                {routes.map((item) => (
-                  <SidebarMenuItem
-                    onClick={toggleSidebar}
-                    className={`py-2 w-full ${
-                      item.active ? 'text-muted-foreground bg-muted' : ''
-                    }`}
-                    key={item.href}
+
+        <SidebarGroupContent>
+          <SidebarMenu className="items-start mx-auto py-4 ">
+            {routes.map((item) => (
+              <SidebarMenuItem
+                onClick={toggleSidebar}
+                className={`py-2 w-full ${
+                  item.active ? 'text-muted-foreground bg-muted' : ''
+                }`}
+                key={item.href}
+              >
+                <SidebarMenuButton asChild>
+                  <Link
+                    href={item.href}
+                    className={cn(' w-full flex items-center  gap-2.5 ')}
                   >
-                    <SidebarMenuButton asChild>
-                      <Link
-                        href={item.href}
-                        className={cn(' w-full flex items-center  gap-2.5 ')}
-                      >
-                        <item.icon />
-                        <span>{item.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-            <Separator />
-            <SidebarFooter className="py-4 pr-4 text-center">
-              <div className="flex flex-col gap-y-1">
-                {user?.name}
-                <span className="text-muted-foreground">
-                  {/* {user?.emailAddresses[0].emailAddress} */}
-                  {user?.phoneNumber}
-                </span>
-                <span className="">
-                  <Badge
-                    variant="secondary"
-                    className="capitalize  dark:bg-pink-700/30 dark:text-pink-700  bg-indigo-700/30 text-indigo-700 "
-                  >
-                    {user?.role?.toString()?.toLocaleLowerCase()} Dashboard
-                  </Badge>
-                </span>
-              </div>
-            </SidebarFooter>
-          </SidebarGroup>
-        ))}
+                    <item.icon />
+                    <span>{item.label}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+        <Separator />
+        <SidebarFooter className="py-4 pr-4 text-center">
+          <div className="flex flex-col gap-y-1">
+            {user?.name}
+            <span className="text-muted-foreground">
+              {/* {user?.emailAddresses[0].emailAddress} */}
+              {user?.phoneNumber}
+            </span>
+            <span className="">
+              <Badge
+                variant="secondary"
+                className="capitalize  dark:bg-pink-700/30 dark:text-pink-700  bg-indigo-700/30 text-indigo-700 "
+              >
+                {user?.role?.toString()?.toLocaleLowerCase()} Dashboard
+              </Badge>
+            </span>
+          </div>
+        </SidebarFooter>
       </SidebarContent>
       <SidebarRail />
     </Sidebar>

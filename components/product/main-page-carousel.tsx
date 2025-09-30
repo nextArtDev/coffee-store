@@ -16,8 +16,8 @@ import { cn } from '@/lib/utils'
 import { TransitionLink } from '../home/shared/TransitionLink'
 import GlassSurface from '../shared/glass-surface/GlassSurface'
 import type { EmblaCarouselType } from 'embla-carousel'
-import { StarRating } from '../home/testemonial/StarRating'
 import SliderFlowerButton from './SliderFlowerButton'
+import { SingleStarRating } from '../home/testemonial/SingleStartRating'
 
 export type item = {
   id: string
@@ -59,31 +59,16 @@ const CarouselItemComponent = ({
         className="translate-y-5"
         vars={{ delay: 0.2 * index, duration: 0.3, ease: 'sine.inOut' }}
       >
-        <div className="relative">
-          <TransitionLink
-            href={`/products/${item.slug}`}
-            className="flex flex-col border-none rounded-xl bg-transparent gap-4"
-          >
-            {!!item.images && (
-              <figure className="relative w-full border-none rounded-xl h-[450px] ">
-                <Image
-                  unoptimized
-                  src={
-                    item.images.map((img) => img.url)[0] ||
-                    '/images/fallback-image.webp'
-                  }
-                  fill
-                  alt={item.name!}
-                  className="object-cover rounded-xl"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                  priority={index < 4} // Prioritize first 4 images (visible on load)
-                  quality={85} // Slightly reduced quality for faster loading
-                  placeholder="blur"
-                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                />
+        <div className="relative border px-2 rounded-md bg-muted/30 hover:bg-muted/50 transition-colors duration-300 ease-in-out shadow-sm hover:shadow-md">
+          {!!item.images && (
+            <TransitionLink
+              href={`/products/${item.slug}`}
+              className="flex flex-col items-center justify-center border-none rounded-xl bg-transparent gap-4"
+            >
+              <div className="absolute w-fit h-fit top-[10%] right-6 z-[1]  ">
                 <GlassSurface
-                  width={100}
-                  height={40}
+                  // width={'100%'}
+                  // height={'auto'}
                   borderRadius={999}
                   borderWidth={0.8}
                   brightness={50}
@@ -93,36 +78,42 @@ const CarouselItemComponent = ({
                   backgroundOpacity={0}
                   saturation={1}
                   distortionScale={-180}
-                  // key={'characteristics'}
-                  className="p-1 w-full  rounded-full aspect-square text-white"
+                  key={'characteristics'}
+                  className="!px-2 !py-1 !w-fit !h-fit !bg-muted/10  rounded-full  text-black  "
                 >
-                  {item.name!}
+                  <div className="flex flex-col text-center gap-1">
+                    <p className="font-semibold text-muted-foreground text-xs md:text-sm lg:text-base">
+                      {item.category!.name}
+                    </p>
+                    <p className="font-bold">{item.name!}</p>
+                  </div>
                 </GlassSurface>
-                <SliderFlowerButton
-                  item={item}
-                  isVisible={isInViewport}
-                  // onAction={onAction}
-                />
-                <div className="absolute left-0 bottom-0 flex w-fit h-fit items-center gap-2"></div>
-                <article className="absolute h-1/2 w-full bottom-0 flex flex-col gap-1 justify-evenly py-3 px-2 text-pretty text-xs md:text-sm lg:text-base rounded-b-md">
-                  <p className="font-semibold">{item.category!.name}</p>
-                  <p className="font-bold">{item.name}</p>
-                  {avgRating && (
-                    <div className="flex gap-0.5 items-center">
-                      <StarRating
-                        disabled
-                        allowHalfStars={true}
-                        value={Number(avgRating)}
-                      />
-                      {Number(avgRating)} از {item.reviews?.length} نظر
-                    </div>
-                  )}
+              </div>
+              <div className="absolute w-fit h-fit bottom-[10%] left-6  z-[1] ">
+                <GlassSurface
+                  // width={'100%'}
+                  // height={'100%'}
+                  borderRadius={999}
+                  borderWidth={0.8}
+                  brightness={50}
+                  opacity={0.93}
+                  blur={11}
+                  displace={1}
+                  backgroundOpacity={0}
+                  saturation={1}
+                  distortionScale={-180}
+                  key={'characteristics'}
+                  className="!px-1 !py-1 !w-fit !h-fit !bg-accent  rounded-full  text-primary/20  "
+                >
                   {!!item.variants && (
                     <>
                       {item.variants.map((variant, i) => (
-                        <div key={i} className="flex items-center gap-1">
+                        <div
+                          key={i}
+                          className="flex flex-col-reverse items-center gap-1"
+                        >
                           {!!variant.discount && (
-                            <p className="text-red-500">
+                            <p className="text-background">
                               {variant.price -
                                 variant.price * (variant.discount / 100)}{' '}
                               تومان
@@ -140,10 +131,47 @@ const CarouselItemComponent = ({
                       ))}
                     </>
                   )}
-                </article>
+                </GlassSurface>
+              </div>
+              <article className="absolute w-fit h-fit top-[15%] left-4  ">
+                {/* <p className="font-bold">{item.name}</p> */}
+                {avgRating && (
+                  <div className="flex gap-0.5 items-center text-accent">
+                    <SingleStarRating
+                      // disabled
+                      // allowHalfStars={true}
+                      rating={Number(avgRating)}
+                    />
+                    {Number(avgRating)} از {item.reviews?.length} نظر
+                  </div>
+                )}
+              </article>
+              <figure className="relative w-full border-none rounded-xl h-[450px] ">
+                <Image
+                  unoptimized
+                  src={
+                    item.images.map((img) => img.url)[0] ||
+                    '/images/fallback-image.webp'
+                  }
+                  fill
+                  alt={item.name!}
+                  className="object-contain rounded-xl scale-65 hover:scale-75 transition-transform duration-500 ease-in-out"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                  priority={index < 4} // Prioritize first 4 images (visible on load)
+                  quality={85} // Slightly reduced quality for faster loading
+                  placeholder="blur"
+                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
+                />
               </figure>
-            )}
-          </TransitionLink>
+
+              <SliderFlowerButton
+                item={item}
+                isVisible={isInViewport}
+                // onAction={onAction}
+              />
+              {/* <div className="absolute left-0 bottom-0 flex w-fit h-fit items-center justify-center gap-4"></div> */}
+            </TransitionLink>
+          )}
 
           {/* Individual Flower Menu for this slide */}
         </div>

@@ -154,10 +154,10 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
                       className="z-[1] absolute inset-0 flex items-center justify-center "
                     >
                       {/* SOLUTION 1: Solid background instead of semi-transparent */}
-                      {/* <span className="text-center font-bold bg-white/55 text-black border border-gray-200 rounded-md aspect-square flex items-center justify-center p-2 leading-tight  shadow-sm">
+                      <span className="text-center text-xl font-bold bg-white/20 text-white border border-gray-200 rounded-full aspect-square flex items-center justify-center p-2 leading-tight w-full h-full shadow-sm">
                         {subcategory.name}
-                      </span> */}
-                      <GlassSurface
+                      </span>
+                      {/* <GlassSurface
                         // key={'carousel'}
                         width={'100%'}
                         height={'100%'}
@@ -174,7 +174,7 @@ const GooeyCarousel: FC<GooeyCarouselProps> = ({ categories }) => {
                       >
                         {' '}
                         {subcategory.name}
-                      </GlassSurface>
+                      </GlassSurface> */}
 
                       {/* SOLUTION 2: Remove backdrop-blur entirely */}
                       {/* <span className="text-center bg-white text-black border border-gray-300 rounded-full aspect-square flex items-center justify-center p-2 leading-tight font-medium">

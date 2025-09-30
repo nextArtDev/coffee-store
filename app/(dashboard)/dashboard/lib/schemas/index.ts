@@ -98,17 +98,18 @@ const imageSchema = z
 // })
 export const SubCategoryFormSchema = z.object({
   name: z.string().min(2, {
-    message: 'Sub Category name must be at least 2 characters long.',
+    message: 'نام زیردسته‌ نمی‌تواند کمتر از 2 حرف باشد.',
   }),
   images: imageSchema,
 
   url: z
     .string()
-    .min(2, { message: 'Sub Category url must be at least 2 characters long.' })
-    .max(50, { message: 'Sub Category url cannot exceed 50 characters.' })
+    .min(2, { message: 'url باید حداقل از 2 حرف تشکیل شده باشد.' })
+    .max(50, { message: 'url نمی‌تواند بیش از 50 حرف باشد.' })
     .regex(/^(?!.*(?:[-_ ]){2,})[a-zA-Z0-9\s'&-‌\u0600-\u06FF]+$/, {
       message:
-        'Only letters, numbers, hyphen, and underscore are allowed in the sub category url, and consecutive occurrences of hyphens, underscores, or spaces are not permitted.',
+        // 'Only letters, numbers, hyphen, and underscore are allowed in the sub category url, and consecutive occurrences of hyphens, underscores, or spaces are not permitted.',
+        'تنها حروف، اعداد، اندرلاین و دش می‌توانند در url باشند.',
     }),
   featured: z.union([z.boolean().default(false)]).optional(),
   categoryId: z.string(),

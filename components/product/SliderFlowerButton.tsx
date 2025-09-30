@@ -140,7 +140,7 @@ const SliderFlowerButton: FC<SliderFlowerButtonProps> = ({
                       <GlassSurface
                         width={70}
                         height={70}
-                        // key={'name'}
+                        key={menuItem.label}
                         borderRadius={999}
                         borderWidth={0.07}
                         brightness={50}
@@ -150,10 +150,10 @@ const SliderFlowerButton: FC<SliderFlowerButtonProps> = ({
                         backgroundOpacity={0.2}
                         saturation={2}
                         distortionScale={-180}
-                        className="p-1 rounded-full aspect-square"
+                        className="p-1 rounded-full aspect-square text-foreground"
                       >
                         {/* <item.icon className="absolute" size={24} /> */}
-                        <span className="absolute flex flex-col gap-0.25 font-semibold text-white">
+                        <span className="absolute flex flex-col gap-0.25 font-semibold  ">
                           <p>{menuItem.label}</p>
                           <p>{Number(menuItem.value) * 10}%</p>
                         </span>
