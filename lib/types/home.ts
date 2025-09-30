@@ -157,6 +157,50 @@ export interface SearchFilters {
   page?: number
   colors?: string[]
   sizes?: string[]
+  productType?: 'coffee' | 'chocolate' | 'general'
+
+  // Coffee-specific filters
+  coffeeFilters?: {
+    roastLevels?: string[]
+    processingMethods?: string[]
+    origins?: string[]
+    minCaffeine?: number
+    maxCaffeine?: number
+    minAcidity?: number
+    maxAcidity?: number
+    minBitterness?: number
+    maxBitterness?: number
+    minSweetness?: number
+    maxSweetness?: number
+    minBody?: number
+    maxBody?: number
+    flavorNotes?: string[]
+    brewingMethods?: string[]
+    grindSizes?: string[]
+  }
+
+  // Chocolate-specific filters
+  chocolateFilters?: {
+    chocolateTypes?: string[]
+    minCocoaPercentage?: number
+    maxCocoaPercentage?: number
+    origins?: string[]
+    textures?: string[]
+    minSweetness?: number
+    maxSweetness?: number
+    minBitterness?: number
+    maxBitterness?: number
+    minAcidity?: number
+    maxAcidity?: number
+    minFruitiness?: number
+    maxFruitiness?: number
+    organic?: boolean
+    fairTrade?: boolean
+    singleOrigin?: boolean
+    vegan?: boolean
+    glutenFree?: boolean
+    flavorNotes?: string[]
+  }
 }
 
 export interface SortOption {

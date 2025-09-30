@@ -5,7 +5,7 @@ import heroImage from '../../../public/images/hero-image.webp'
 // import heroImage from '../../../public/images/bg.jpg'
 
 import { FadeIn } from '@/components/shared/fade-in'
-import { RevealText } from '@/components/shared/reveal-text'
+// import { RevealText } from '@/components/shared/reveal-text'
 import { SubCategoryForHomePage } from '@/lib/types/home'
 import { TransitionLink } from '../shared/TransitionLink'
 import { FixedMotionImage } from './fixed-motion-image'

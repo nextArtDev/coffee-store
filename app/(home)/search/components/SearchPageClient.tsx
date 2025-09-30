@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Filter } from 'lucide-react'
@@ -18,11 +17,50 @@ import SearchHeader from './SearchHeader'
 import SortMenu from './SortMenu'
 import ProductGrid from './ProductGrid'
 import Pagination from './Pagination'
-// import Pagination from './Pagination'
+
+// Add these new types for coffee/chocolate filter data
+interface CoffeeFiltersData {
+  roastLevels: string[]
+  processingMethods: string[]
+  origins: string[]
+  grindSizes: string[]
+  caffeineRange: { min: number; max: number }
+  tasteRanges: {
+    acidity: { min: number; max: number }
+    bitterness: { min: number; max: number }
+    sweetness: { min: number; max: number }
+    body: { min: number; max: number }
+  }
+  flavorNotes: string[]
+  brewingMethods: string[]
+}
+
+interface ChocolateFiltersData {
+  chocolateTypes: string[]
+  origins: string[]
+  textures: string[]
+  cocoaRange: { min: number; max: number }
+  tasteRanges: {
+    sweetness: { min: number; max: number }
+    bitterness: { min: number; max: number }
+    acidity: { min: number; max: number }
+    fruitiness: { min: number; max: number }
+  }
+  availableCertifications: {
+    organic: boolean
+    fairTrade: boolean
+    singleOrigin: boolean
+    vegan: boolean
+    glutenFree: boolean
+  }
+  flavorNotes: string[]
+}
 
 interface SearchPageClientProps {
   initialResults: SearchProductsResult
   filtersData: FiltersData
+  coffeeFiltersData?: CoffeeFiltersData | null
+  chocolateFiltersData?: ChocolateFiltersData | null
   categories: CategoryData[]
   initialFilters: SearchFilters
 }
@@ -39,32 +77,29 @@ const sortOptions: SortOption[] = [
 export default function SearchPageClient({
   initialResults,
   filtersData,
+  coffeeFiltersData,
+  chocolateFiltersData,
   categories,
+  initialFilters,
 }: SearchPageClientProps) {
   const { currentFilters, updateFilters, clearFilters } = useSearchFilters()
   const [results, setResults] = useState(initialResults)
   const [loading, setLoading] = useState(false)
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
-  // Update results when filters change (you might want to implement client-side filtering
-  // or refetch from server depending on your needs)
   useEffect(() => {
-    // You can implement client-side filtering here or trigger a server refetch
-    // For now, we'll keep the initial results
     setResults(initialResults)
   }, [currentFilters, initialResults])
 
   const handleSortChange = (sortBy: SearchFilters['sortBy']) => {
     setLoading(true)
     updateFilters({ sortBy })
-    // Simulate loading delay - in real app, this would be handled by the server refetch
     setTimeout(() => setLoading(false), 500)
   }
 
   const handlePageChange = (page: number) => {
     setLoading(true)
     updateFilters({ page })
-    // Scroll to top when page changes
     window.scrollTo({ top: 0, behavior: 'smooth' })
     setTimeout(() => setLoading(false), 500)
   }
@@ -72,6 +107,8 @@ export default function SearchPageClient({
   const sidebarContent = (
     <SearchSidebar
       filtersData={filtersData}
+      coffeeFiltersData={coffeeFiltersData}
+      chocolateFiltersData={chocolateFiltersData}
       categories={categories}
       currentFilters={currentFilters}
       onFiltersChange={updateFilters}
@@ -80,23 +117,20 @@ export default function SearchPageClient({
 
   return (
     <div className="min-h-screen pt-16 overflow-x-hidden">
-      <div className="  mx-auto px-4 py-6">
+      <div className="mx-auto px-4 py-6">
         {/* Page Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
             {currentFilters.search
               ? `نتایج جستجو برای "${currentFilters.search}"`
-              : '  محصولات'}
+              : 'محصولات'}
           </h1>
-          {/* <p className="text-muted-foreground">
-            بهترین محصولات را با فیلترهای پیشرفته پیدا کنید
-          </p> */}
         </div>
 
         {/* Search Results Header */}
         <SearchHeader
           filters={currentFilters}
-          totalResults={results.pagination.total}
+          totalResults={2}
           onClearFilters={clearFilters}
         />
 
@@ -123,9 +157,9 @@ export default function SearchPageClient({
           <div className="flex-1 min-w-0">
             {/* Sort Menu */}
             <div className="flex justify-between items-center mb-6">
-              <div className="text-sm text-muted-foreground">
+              {/* <div className="text-sm text-muted-foreground">
                 {results.pagination.current}/{results.pagination.pages}
-              </div>
+              </div> */}
               <SortMenu
                 options={sortOptions}
                 selectedSort={currentFilters.sortBy}
@@ -137,17 +171,17 @@ export default function SearchPageClient({
             <ProductGrid products={results.products} loading={loading} />
 
             {/* Pagination */}
-            {results.pagination.pages > 1 && (
+            {/* {results.pagination.pages > 1 && (
               <div className="mt-12">
                 <Pagination
                   pagination={results.pagination}
                   onPageChange={handlePageChange}
                 />
               </div>
-            )}
+            )} */}
 
-            {/* Load More Button for Mobile (Alternative to Pagination) */}
-            {results.pagination.hasNext && (
+            {/* Load More Button for Mobile */}
+            {/* {results.pagination.hasNext && (
               <div className="mt-8 text-center lg:hidden">
                 <Button
                   variant="outline"
@@ -160,7 +194,7 @@ export default function SearchPageClient({
                   {loading ? 'در حال بارگذاری...' : 'مشاهده بیشتر'}
                 </Button>
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

@@ -41,18 +41,6 @@ export default function PriceFilter({
     // setManualMax('')
   }
 
-  // const handleManualChange = () => {
-  //   const min = manualMin ? parseInt(manualMin) : filtersData.priceRange.min
-  //   const max = manualMax ? parseInt(manualMax) : filtersData.priceRange.max
-
-  //   if (
-  //     min <= max &&
-  //     min >= filtersData.priceRange.min &&
-  //     max <= filtersData.priceRange.max
-  //   ) {
-  //     setLocalMin(min)
-  //     setLocalMax(max)
-  //   }
   // }
 
   const handleApplyPrice = () => {
@@ -99,39 +87,6 @@ export default function PriceFilter({
           <span>{localMax.toLocaleString()} تومان</span>
         </div>
 
-        {/* Manual Input */}
-        {/* <div className="grid grid-cols-2 gap-2">
-          <div>
-            <Label htmlFor="min-price" className="text-xs">
-              حداقل
-            </Label>
-            <NumberInput
-              id="min-price"
-              // type="number"
-              placeholder="حداقل قیمت"
-              value={manualMin}
-              onChange={(e) => setManualMin(e.target.value)}
-              onBlur={handleManualChange}
-              className="text-sm"
-            />
-          </div>
-          <div>
-            <Label htmlFor="max-price" className="text-xs">
-              حداکثر
-            </Label>
-            <NumberInput
-              id="max-price"
-              // type="number"
-              placeholder="حداکثر قیمت"
-              value={manualMax}
-              onChange={(e) => setManualMax(e.target.value)}
-              onBlur={handleManualChange}
-              className="text-sm"
-            />
-          </div>
-        </div> */}
-
-        {/* Action Buttons */}
         {isChanged && (
           <div className="flex gap-2">
             <Button

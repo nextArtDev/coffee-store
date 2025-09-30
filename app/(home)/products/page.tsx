@@ -23,6 +23,36 @@ interface SearchPageProps {
     page?: string
     colors?: string | string[]
     sizes?: string | string[]
+    productType?: 'coffee' | 'chocolate' | 'general'
+    // Coffee filters
+    roastLevels?: string | string[]
+    processingMethods?: string | string[]
+    coffeeOrigins?: string | string[]
+    minCaffeine?: string
+    maxCaffeine?: string
+    minAcidity?: string
+    maxAcidity?: string
+    minBitterness?: string
+    maxBitterness?: string
+    minSweetness?: string
+    maxSweetness?: string
+    minBody?: string
+    maxBody?: string
+    flavorNotes?: string | string[]
+    brewingMethods?: string | string[]
+    grindSizes?: string | string[]
+    // Chocolate filters
+    chocolateTypes?: string | string[]
+    minCocoaPercentage?: string
+    maxCocoaPercentage?: string
+    chocolateOrigins?: string | string[]
+    textures?: string | string[]
+    organic?: string
+    fairTrade?: string
+    singleOrigin?: string
+    vegan?: string
+    glutenFree?: string
+    chocolateFlavorNotes?: string | string[]
   }>
 }
 
@@ -39,6 +69,7 @@ export async function generateMetadata({
   const params = await searchParams
   return generateSearchMetadata(params)
 }
+
 async function SearchPageContent({ searchParams }: SearchPageProps) {
   const params = await searchParams
   const filters = parseSearchParams(params)
@@ -102,7 +133,16 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
           }}
         />
         <SearchPageClient
-          initialResults={searchResults}
+          initialResults={{
+            products: searchResults.products,
+            pagination: {
+              total: searchResults.totalCount,
+              pages: searchResults.totalPages || 1,
+              current: searchResults.currentPage || 1,
+              hasNext: true,
+              hasPrev: true,
+            },
+          }}
           filtersData={filtersData}
           categories={categoriesData.categories}
           initialFilters={filters}
