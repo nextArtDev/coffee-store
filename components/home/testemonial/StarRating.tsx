@@ -119,7 +119,7 @@ function StarRating({
               IconComponent ? (
                 <IconComponent
                   className={cn(
-                    'fill-[#45f88a] stroke-[#45f88a] size-6',
+                    'fill-accent stroke-accent size-6',
                     {
                       'opacity-70': disabled,
                       'transition-transform duration-300 hover:scale-110':
@@ -132,7 +132,7 @@ function StarRating({
               ) : (
                 <StarIcon
                   className={cn(
-                    'fill-[#45f88a] stroke-[#45f88a] size-6',
+                    'fill-accent stroke-accent size-6',
                     {
                       'opacity-70': disabled,
                       'transition-transform duration-300 hover:scale-110':
@@ -186,7 +186,7 @@ function StarRating({
                   {IconComponent ? (
                     <IconComponent
                       className={cn(
-                        'fill-[#45f88a] stroke-[#45f88a] size-6',
+                        'fill-accent stroke-accent size-6',
                         {
                           'opacity-70': disabled,
                         },
@@ -197,7 +197,7 @@ function StarRating({
                   ) : (
                     <StarIcon
                       className={cn(
-                        'fill-[#45f88a] stroke-[#45f88a] size-6',
+                        'fill-primary stroke-primary size-6',
                         {
                           'opacity-70': disabled,
                         },

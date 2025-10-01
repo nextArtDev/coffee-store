@@ -3,8 +3,9 @@
 import { AnimatePresence, motion, stagger } from 'framer-motion'
 import { Dot } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { SingleStarRating } from './SingleStartRating'
 import { formatTimeToNow } from '@/lib/utils'
+import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
+import { StarRating } from './StarRating'
 
 // const testimonials = [
 //   {
@@ -59,7 +60,7 @@ const TestimonialCarousel = ({ testimonials }: TestimonialCarouselProps) => {
           (prevTestimonial) => (prevTestimonial + 1) % testimonials.length
         )
       }
-    }, 9000) // Change Time here
+    }, 4500) // Change Time here
 
     return () => {
       clearInterval(intervalId)
@@ -78,12 +79,28 @@ const TestimonialCarousel = ({ testimonials }: TestimonialCarouselProps) => {
   }
   const dotVariants = {
     active: { scale: 0.8, backgroundColor: '#202221' },
-    inactive: { scale: 0.4, backgroundColor: '#8d8f8985' },
+    inactive: { scale: 0.7, backgroundColor: '#8d8f8985' },
   }
 
   return (
     <section className="w-full mx-auto py-12 md:py-24 max-w-2xl">
-      <article className="relative overflow-hidden  px-8 py-10  w-[90vw] max-w-[90vh]  ">
+      {/* <article className="relative overflow-hidden  px-8 py-10  w-[90vw] max-w-[90vh]  ">
+       */}
+      <GlassSurface
+        width={'100%'}
+        height={'100%'}
+        borderRadius={999}
+        borderWidth={0.8}
+        brightness={50}
+        opacity={0.93}
+        blur={11}
+        displace={1}
+        backgroundOpacity={0}
+        saturation={1}
+        distortionScale={-180}
+        key={'characteristics'}
+        className="relative overflow-hidden !rounded-md py-4 !w-[90vw] max-w-lg mx-auto"
+      >
         <AnimatePresence mode="popLayout">
           <motion.div
             key={currentTestimonial}
@@ -91,7 +108,7 @@ const TestimonialCarousel = ({ testimonials }: TestimonialCarouselProps) => {
             animate="animate"
             exit="exit"
             variants={variants}
-            className=" flex w-full flex-col items-center justify-center"
+            className=" flex w-full flex-col items-center ga-3 justify-center"
             transition={{
               // type: 'spring',
               // stiffness: 200,
@@ -107,19 +124,19 @@ const TestimonialCarousel = ({ testimonials }: TestimonialCarouselProps) => {
               variants={variants}
               className="pb-4 flex gap-2 "
             >
-              {/* <StarRating value={rating} disabled /> */}
-              <SingleStarRating rating={rating} />
-              <span className="font-semibold">{rating}</span>/5
+              <StarRating value={rating} disabled allowHalfStars />
+              {/* <SingleStarRating rating={rating} /> */}
+              {/* <span className="font-semibold">{rating}</span>/5 */}
             </motion.div>
             <motion.p
               variants={variants}
-              className="m-0 text-center  text-sm md:text-base font-semibold tracking-tight line-clamp-1 md:line-clamp-2"
+              className="m-0 text-center text-primary text-sm md:text-base font-semibold tracking-tight line-clamp-1 md:line-clamp-2"
             >
               {title}
             </motion.p>
             <motion.p
               variants={variants}
-              className="m-0 text-center  text-sm md:text-base font-medium tracking-tight line-clamp-7 md:line-clamp-5"
+              className="m-0 text-center  text-sm md:text-base font-medium tracking-tight line-clamp-7 md:line-clamp-5  py-6 px-2 text-muted-foreground"
             >
               &quot;{description}&quot;
             </motion.p>
@@ -143,19 +160,19 @@ const TestimonialCarousel = ({ testimonials }: TestimonialCarouselProps) => {
               </div>
             </motion.div>
           </motion.div>
-          <div className="mt-8 flex justify-center">
-            {testimonials?.map((_, index) => (
-              <motion.div
-                key={index}
-                className="mx-0.5 h-2  w-2  cursor-pointer "
-                variants={dotVariants}
-                animate={index === currentTestimonial ? 'active' : 'inactive'}
-                onClick={() => setCurrentTestimonial(index)}
-              />
-            ))}
-          </div>
         </AnimatePresence>
-      </article>
+      </GlassSurface>
+      <div className="mt-8 flex justify-center">
+        {testimonials?.map((_, index) => (
+          <motion.div
+            key={index}
+            className="mx-0.5 h-3  w-3  cursor-pointer rounded-full"
+            variants={dotVariants}
+            animate={index === currentTestimonial ? 'active' : 'inactive'}
+            onClick={() => setCurrentTestimonial(index)}
+          />
+        ))}
+      </div>
     </section>
   )
 }
