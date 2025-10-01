@@ -3,6 +3,7 @@ import Hero from '@/components/home/hero/hero'
 // import DualOrbitCarousel from '@/components/home/orbit-carousel'
 import GooeyCarousel from '@/components/home/orbit-carousel/tabs-carousel'
 import Commitments from '@/components/home/shared/Commitments'
+import Iridescence from '@/components/home/shared/Iridescence'
 import StoreStatement from '@/components/home/shared/StoreStatement'
 import WorkVideo from '@/components/home/shared/WorkVideo'
 import TestimonialCarousel from '@/components/home/testemonial/Testemonial'
@@ -16,6 +17,7 @@ import {
   getSubCategories,
 } from '@/lib/home/queries/products'
 import { Metadata } from 'next'
+import { Suspense } from 'react'
 
 export async function generateMetadata(): Promise<Metadata> {
   // Fetch data for dynamic meta information
@@ -303,7 +305,16 @@ export default async function Home() {
           // `,
           //     }}
         />
-
+        <div className="absolute inset-0 z-0">
+          <Suspense fallback={null}>
+            <Iridescence
+              color={[0.3, 0.1, 0]}
+              mouseReact={false}
+              amplitude={0.1}
+              speed={0.4}
+            />
+          </Suspense>
+        </div>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

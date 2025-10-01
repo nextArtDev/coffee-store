@@ -1,7 +1,7 @@
 import React from 'react'
 import { Bounded } from '@/components/shared/Bounded'
 // import Image from 'next/image'
-import heroImage from '../../../public/images/hero-image.webp'
+import heroImage from '../../../public/images/beans.png'
 // import heroImage from '../../../public/images/bg.jpg'
 
 import { FadeIn } from '@/components/shared/fade-in'
@@ -18,7 +18,7 @@ const Hero = ({
 }) => {
   return (
     <Bounded
-      className={`relative w-full h-full  overflow-hidden bg-foreground dark:bg-background backdrop-blur-lg text-background  text-center`}
+      className={`relative w-full h-full  overflow-hidden  backdrop-blur-lg text-background  text-center`}
     >
       <FadeIn
         vars={{ scale: 1, opacity: 0.5 }}
@@ -29,7 +29,8 @@ const Hero = ({
           imageAlt="Coffee Store"
           priority={true}
           quality={95}
-          overlayClassNames="bg-gradient-to-b from-black/20 via-black/40 to-black/60"
+          // overlayClassNames="bg-gradient-to-b from-black/20 via-black/40 to-black/60"
+          overlayClassNames="bg-transparent"
         >
           {/* <Image
             unoptimized
