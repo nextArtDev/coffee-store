@@ -258,7 +258,9 @@ export interface SearchPagination {
 
 export interface SearchProductsResult {
   products: SearchProduct[]
-  pagination: SearchPagination
+  totalCount: number
+  totalPages: number
+  currentPage: number
 }
 
 // 6. Product Details Types

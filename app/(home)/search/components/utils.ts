@@ -155,10 +155,13 @@ export function parseSearchParams(
 }
 
 // Helper to build URL from filters (useful for client-side navigation)
-export function createSearchUrl(filters: SearchFilters): string {
+export function createSearchUrl(
+  currentFilters: SearchFilters,
+  updates: Partial<SearchFilters>
+): string {
   const params = new URLSearchParams()
+  const filters = { ...currentFilters, ...updates }
 
-  // Basic filters
   if (filters.search) params.set('q', filters.search)
   if (filters.categoryId) params.set('categoryId', filters.categoryId)
   if (filters.subCategoryId) params.set('subCategoryId', filters.subCategoryId)
@@ -175,8 +178,8 @@ export function createSearchUrl(filters: SearchFilters): string {
   filters.colors?.forEach((color) => params.append('colors', color))
   filters.sizes?.forEach((size) => params.append('sizes', size))
 
-  // Coffee filters
-  if (filters.coffeeFilters) {
+  // Coffee filters - only add if productType is coffee
+  if (filters.productType === 'coffee' && filters.coffeeFilters) {
     const cf = filters.coffeeFilters
     cf.roastLevels?.forEach((level) => params.append('roastLevels', level))
     cf.processingMethods?.forEach((method) =>
@@ -208,8 +211,8 @@ export function createSearchUrl(filters: SearchFilters): string {
     cf.grindSizes?.forEach((size) => params.append('grindSizes', size))
   }
 
-  // Chocolate filters
-  if (filters.chocolateFilters) {
+  // Chocolate filters - only add if productType is chocolate
+  if (filters.productType === 'chocolate' && filters.chocolateFilters) {
     const chf = filters.chocolateFilters
     chf.chocolateTypes?.forEach((type) => params.append('chocolateTypes', type))
     if (chf.minCocoaPercentage !== undefined)
@@ -247,7 +250,7 @@ export function createSearchUrl(filters: SearchFilters): string {
     )
   }
 
-  return params.toString()
+  return `/products?${params.toString()}`
 }
 
 // Helper to check if any filters are active

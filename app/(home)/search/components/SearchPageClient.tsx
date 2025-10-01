@@ -104,6 +104,15 @@ export default function SearchPageClient({
     setTimeout(() => setLoading(false), 500)
   }
 
+  // Create pagination object from your results structure
+  const pagination = {
+    total: results.totalCount,
+    pages: results.totalPages,
+    current: results.currentPage,
+    hasNext: results.currentPage < results.totalPages,
+    hasPrev: results.currentPage > 1,
+  }
+
   const sidebarContent = (
     <SearchSidebar
       filtersData={filtersData}
@@ -130,7 +139,7 @@ export default function SearchPageClient({
         {/* Search Results Header */}
         <SearchHeader
           filters={currentFilters}
-          totalResults={2}
+          totalResults={pagination.total}
           onClearFilters={clearFilters}
         />
 
@@ -157,9 +166,9 @@ export default function SearchPageClient({
           <div className="flex-1 min-w-0">
             {/* Sort Menu */}
             <div className="flex justify-between items-center mb-6">
-              {/* <div className="text-sm text-muted-foreground">
-                {results.pagination.current}/{results.pagination.pages}
-              </div> */}
+              <div className="text-sm text-muted-foreground">
+                صفحه {pagination.current} از {pagination.pages}
+              </div>
               <SortMenu
                 options={sortOptions}
                 selectedSort={currentFilters.sortBy}
@@ -171,30 +180,28 @@ export default function SearchPageClient({
             <ProductGrid products={results.products} loading={loading} />
 
             {/* Pagination */}
-            {/* {results.pagination.pages > 1 && (
+            {pagination.pages > 1 && (
               <div className="mt-12">
                 <Pagination
-                  pagination={results.pagination}
+                  pagination={pagination}
                   onPageChange={handlePageChange}
                 />
               </div>
-            )} */}
+            )}
 
             {/* Load More Button for Mobile */}
-            {/* {results.pagination.hasNext && (
+            {pagination.hasNext && (
               <div className="mt-8 text-center lg:hidden">
                 <Button
                   variant="outline"
-                  onClick={() =>
-                    handlePageChange(results.pagination.current + 1)
-                  }
+                  onClick={() => handlePageChange(pagination.current + 1)}
                   disabled={loading}
                   className="w-full"
                 >
                   {loading ? 'در حال بارگذاری...' : 'مشاهده بیشتر'}
                 </Button>
               </div>
-            )} */}
+            )}
           </div>
         </div>
       </div>

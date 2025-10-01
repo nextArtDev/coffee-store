@@ -133,19 +133,13 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
           }}
         />
         <SearchPageClient
-          initialResults={{
-            products: searchResults.products,
-            pagination: {
-              total: searchResults.totalCount,
-              pages: searchResults.totalPages || 1,
-              current: searchResults.currentPage || 1,
-              hasNext: true,
-              hasPrev: true,
-            },
-          }}
+          initialResults={searchResults}
+          coffeeFiltersData={filtersData.coffeeFiltersData}
+          chocolateFiltersData={filtersData.chocolateFiltersData}
           filtersData={filtersData}
           categories={categoriesData.categories}
           initialFilters={filters}
+          // productType={productType}
         />
       </>
     )

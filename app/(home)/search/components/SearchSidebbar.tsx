@@ -1,17 +1,18 @@
 'use client'
 
+import { CategoryData, FiltersData, SearchFilters } from '@/lib/types/home'
+import { Candy, Coffee, Package } from 'lucide-react'
+import { useEffect, useState } from 'react'
+// import SearchSidebar from './SearchSidebbar'
+import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CategoryData, FiltersData, SearchFilters } from '@/lib/types/home'
+import AttributeFilter from './filters/AtributeFilter'
 import CategoryFilter from './filters/CategoryFilter'
 import PriceFilter from './filters/PriceFilter'
-import AttributeFilter from './filters/AtributeFilter'
-import { Coffee, Candy, Package } from 'lucide-react'
-import { useState } from 'react'
 import CoffeeFilter from './filters/CoffeeFilteres'
-import ChocolateFilter from './filters/ChocolateFilters'
 
-// Coffee filters data type
+// Add these new types for coffee/chocolate filter data
 interface CoffeeFiltersData {
   roastLevels: string[]
   processingMethods: string[]
@@ -28,7 +29,6 @@ interface CoffeeFiltersData {
   brewingMethods: string[]
 }
 
-// Chocolate filters data type
 interface ChocolateFiltersData {
   chocolateTypes: string[]
   origins: string[]
@@ -67,10 +67,18 @@ export default function SearchSidebar({
   currentFilters,
   onFiltersChange,
 }: SearchSidebarProps) {
-  // Determine active tab based on current filters or default to 'general'
   const [activeTab, setActiveTab] = useState<
     'general' | 'coffee' | 'chocolate'
   >(currentFilters.productType || 'general')
+
+  // DEBUG: Log what data we're receiving
+  useEffect(() => {
+    console.log('🔍 SearchSidebar Debug:')
+    console.log('coffeeFiltersData:', coffeeFiltersData)
+    console.log('chocolateFiltersData:', chocolateFiltersData)
+    console.log('Has coffee data?', !!coffeeFiltersData)
+    console.log('Has chocolate data?', !!chocolateFiltersData)
+  }, [coffeeFiltersData, chocolateFiltersData])
 
   const handleTabChange = (value: string) => {
     const newTab = value as 'general' | 'coffee' | 'chocolate'
@@ -81,32 +89,46 @@ export default function SearchSidebar({
     })
   }
 
-  const handleCoffeeFiltersChange = (
-    coffeeFilters: SearchFilters['coffeeFilters']
-  ) => {
-    onFiltersChange({
-      coffeeFilters,
-      productType: 'coffee',
-      page: 1,
-    })
-  }
-
-  const handleChocolateFiltersChange = (
-    chocolateFilters: SearchFilters['chocolateFilters']
-  ) => {
-    onFiltersChange({
-      chocolateFilters,
-      productType: 'chocolate',
-      page: 1,
-    })
-  }
+  // Show debug info at the top
+  const showDebugInfo = process.env.NODE_ENV === 'development'
 
   return (
     <div className="w-full lg:w-80">
       <ScrollArea className="h-[calc(100vh-10px)]">
         <div className="space-y-6 p-1">
-          {/* Product Type Tabs - Only show if coffee or chocolate data available */}
-          {(coffeeFiltersData || chocolateFiltersData) && (
+          {/* DEBUG INFO - Remove in production */}
+          {showDebugInfo && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded p-3 text-xs">
+              <p className="font-bold mb-2">🐛 Debug Info:</p>
+              <div className="space-y-1">
+                <p>
+                  Coffee Data:{' '}
+                  {coffeeFiltersData ? '✅ Available' : '❌ Missing'}
+                </p>
+                <p>
+                  Chocolate Data:{' '}
+                  {chocolateFiltersData ? '✅ Available' : '❌ Missing'}
+                </p>
+                <p>
+                  Current Product Type: {currentFilters.productType || 'none'}
+                </p>
+                {coffeeFiltersData && (
+                  <p>
+                    Coffee Origins: {coffeeFiltersData.origins?.length || 0}
+                  </p>
+                )}
+                {chocolateFiltersData && (
+                  <p>
+                    Chocolate Types:{' '}
+                    {chocolateFiltersData.chocolateTypes?.length || 0}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Show tabs only if we have special filter data */}
+          {coffeeFiltersData || chocolateFiltersData ? (
             <Tabs value={activeTab} onValueChange={handleTabChange}>
               <TabsList className="grid w-full grid-cols-3 mb-4">
                 <TabsTrigger value="general" className="text-xs">
@@ -168,15 +190,17 @@ export default function SearchSidebar({
               {/* Coffee Filters Tab */}
               {coffeeFiltersData && (
                 <TabsContent value="coffee" className="space-y-6">
-                  {/* Still show basic filters */}
-                  <CategoryFilter
-                    categories={categories}
-                    selectedCategory={currentFilters.categoryId}
-                    onCategoryChange={(categoryId) =>
-                      onFiltersChange({ categoryId, page: 1 })
+                  <CoffeeFilter
+                    filtersData={coffeeFiltersData}
+                    selectedFilters={currentFilters.coffeeFilters || {}}
+                    onFiltersChange={(coffeeFilters) =>
+                      onFiltersChange({
+                        coffeeFilters,
+                        productType: 'coffee',
+                        page: 1,
+                      })
                     }
                   />
-
                   <PriceFilter
                     filtersData={filtersData}
                     selectedMinPrice={currentFilters.minPrice}
@@ -186,19 +210,46 @@ export default function SearchSidebar({
                     }
                   />
 
-                  {/* Coffee-specific filters */}
-                  <CoffeeFilter
+                  {/* TEMPORARY: Show coffee data */}
+                  <div className="bg-amber-50 border border-amber-200 rounded p-4">
+                    <p className="font-semibold mb-2">
+                      ☕ Coffee Filters Available:
+                    </p>
+                    <div className="space-y-2 text-sm">
+                      <p>
+                        Roast Levels: {coffeeFiltersData.roastLevels.length}
+                      </p>
+                      <div className="flex flex-wrap gap-1">
+                        {coffeeFiltersData.roastLevels.map((level) => (
+                          <Badge key={level} variant="outline">
+                            {level}
+                          </Badge>
+                        ))}
+                      </div>
+                      <p>Origins: {coffeeFiltersData.origins.length}</p>
+                      <p>
+                        Flavor Notes: {coffeeFiltersData.flavorNotes.length}
+                      </p>
+                    </div>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Import CoffeeFilter component to see full filters
+                    </p>
+                  </div>
+
+                  {/* Uncomment when CoffeeFilter component is ready */}
+                  {/* <CoffeeFilter
                     filtersData={coffeeFiltersData}
                     selectedFilters={currentFilters.coffeeFilters || {}}
-                    onFiltersChange={handleCoffeeFiltersChange}
-                  />
+                    onFiltersChange={(coffeeFilters) => 
+                      onFiltersChange({ coffeeFilters, productType: 'coffee', page: 1 })
+                    }
+                  /> */}
                 </TabsContent>
               )}
 
               {/* Chocolate Filters Tab */}
               {chocolateFiltersData && (
                 <TabsContent value="chocolate" className="space-y-6">
-                  {/* Still show basic filters */}
                   <CategoryFilter
                     categories={categories}
                     selectedCategory={currentFilters.categoryId}
@@ -216,20 +267,55 @@ export default function SearchSidebar({
                     }
                   />
 
-                  {/* Chocolate-specific filters */}
-                  <ChocolateFilter
+                  {/* TEMPORARY: Show chocolate data */}
+                  <div className="bg-amber-900/10 border border-amber-900/20 rounded p-4">
+                    <p className="font-semibold mb-2">
+                      🍫 Chocolate Filters Available:
+                    </p>
+                    <div className="space-y-2 text-sm">
+                      <p>Types: {chocolateFiltersData.chocolateTypes.length}</p>
+                      <div className="flex flex-wrap gap-1">
+                        {chocolateFiltersData.chocolateTypes.map((type) => (
+                          <Badge key={type} variant="outline">
+                            {type}
+                          </Badge>
+                        ))}
+                      </div>
+                      <p>Origins: {chocolateFiltersData.origins.length}</p>
+                      <p>
+                        Flavor Notes: {chocolateFiltersData.flavorNotes.length}
+                      </p>
+                      <p>
+                        Cocoa Range: {chocolateFiltersData.cocoaRange.min}% -{' '}
+                        {chocolateFiltersData.cocoaRange.max}%
+                      </p>
+                    </div>
+                    <p className="mt-2 text-xs text-muted-foreground">
+                      Import ChocolateFilter component to see full filters
+                    </p>
+                  </div>
+
+                  {/* Uncomment when ChocolateFilter component is ready */}
+                  {/* <ChocolateFilter
                     filtersData={chocolateFiltersData}
                     selectedFilters={currentFilters.chocolateFilters || {}}
-                    onFiltersChange={handleChocolateFiltersChange}
-                  />
+                    onFiltersChange={(chocolateFilters) =>
+                      onFiltersChange({ chocolateFilters, productType: 'chocolate', page: 1 })
+                    }
+                  /> */}
                 </TabsContent>
               )}
             </Tabs>
-          )}
-
-          {/* If no coffee/chocolate data, show only general filters */}
-          {!coffeeFiltersData && !chocolateFiltersData && (
+          ) : (
+            // No special filters - show only general
             <>
+              {showDebugInfo && (
+                <div className="bg-red-50 border border-red-200 rounded p-3 text-xs text-red-800">
+                  ⚠️ No coffee or chocolate filter data available. Check if data
+                  is being fetched in server component.
+                </div>
+              )}
+
               <CategoryFilter
                 categories={categories}
                 selectedCategory={currentFilters.categoryId}

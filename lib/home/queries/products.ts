@@ -648,39 +648,189 @@ export async function getFiltersData(
   if (subCategoryId) where.subCategoryId = subCategoryId
 
   try {
-    const [priceRange, colors, sizes, brands] = await Promise.all([
-      // Get price range
-      prisma.productVariant.aggregate({
-        where: { product: where },
-        _min: { price: true },
-        _max: { price: true },
-      }),
-      // Get available colors
-      prisma.color.findMany({
-        where: {
-          variants: { some: { product: where } },
-        },
-        select: { name: true, hex: true },
-        distinct: ['name'],
-      }),
-      // Get available sizes
-      prisma.size.findMany({
-        where: {
-          variants: { some: { product: where, quantity: { gt: 0 } } },
-        },
-        select: { name: true },
-        distinct: ['name'],
-      }),
-      // Get brands
-      prisma.product.findMany({
-        where,
-        select: {
-          brand: true,
-        },
-        distinct: ['brand'],
-      }),
-    ])
+    const [priceRange, colors, sizes, brands, coffeeData, chocolateData] =
+      await Promise.all([
+        // Get price range
+        prisma.productVariant.aggregate({
+          where: { product: where },
+          _min: { price: true },
+          _max: { price: true },
+        }),
+        // Get available colors
+        prisma.color.findMany({
+          where: {
+            variants: { some: { product: where } },
+          },
+          select: { name: true, hex: true },
+          distinct: ['name'],
+        }),
+        // Get available sizes
+        prisma.size.findMany({
+          where: {
+            variants: { some: { product: where, quantity: { gt: 0 } } },
+          },
+          select: { name: true },
+          distinct: ['name'],
+        }),
+        // Get brands
+        prisma.product.findMany({
+          where,
+          select: {
+            brand: true,
+          },
+          distinct: ['brand'],
+        }),
+        prisma.coffeeCharacteristics.findMany({
+          where: { product: where },
+          select: {
+            roastLevel: true,
+            processingMethod: true,
+            origin: true,
+            grindSize: true,
+            caffeineContent: true,
+            acidity: true,
+            bitterness: true,
+            sweetness: true,
+            body: true,
+            flavorNotes: true,
+            brewingMethods: true,
+          },
+        }),
 
+        // Chocolate filters data
+        prisma.chocolateCharacteristics.findMany({
+          where: { product: where },
+          select: {
+            chocolateType: true,
+            origin: true,
+            texture: true,
+            cocoaPercentage: true,
+            sweetness: true,
+            bitterness: true,
+            acidity: true,
+            fruitiness: true,
+            flavorNotes: true,
+            organic: true,
+            fairTrade: true,
+            singleOrigin: true,
+            vegan: true,
+            glutenFree: true,
+          },
+        }),
+      ])
+    const coffeeFiltersData =
+      coffeeData.length > 0
+        ? {
+            roastLevels: [
+              ...new Set(coffeeData.map((c) => c.roastLevel).filter(Boolean)),
+            ],
+            processingMethods: [
+              ...new Set(
+                coffeeData.map((c) => c.processingMethod).filter(Boolean)
+              ),
+            ],
+            origins: [
+              ...new Set(coffeeData.map((c) => c.origin).filter(Boolean)),
+            ],
+            grindSizes: [
+              ...new Set(coffeeData.map((c) => c.grindSize).filter(Boolean)),
+            ],
+            caffeineRange: {
+              min: Math.min(...coffeeData.map((c) => c.caffeineContent || 0)),
+              max: Math.max(...coffeeData.map((c) => c.caffeineContent || 200)),
+            },
+            tasteRanges: {
+              acidity: {
+                min: Math.min(...coffeeData.map((c) => c.acidity || 1)),
+                max: Math.max(...coffeeData.map((c) => c.acidity || 10)),
+              },
+              bitterness: {
+                min: Math.min(...coffeeData.map((c) => c.bitterness || 1)),
+                max: Math.max(...coffeeData.map((c) => c.bitterness || 10)),
+              },
+              sweetness: {
+                min: Math.min(...coffeeData.map((c) => c.sweetness || 1)),
+                max: Math.max(...coffeeData.map((c) => c.sweetness || 10)),
+              },
+              body: {
+                min: Math.min(...coffeeData.map((c) => c.body || 1)),
+                max: Math.max(...coffeeData.map((c) => c.body || 10)),
+              },
+            },
+            flavorNotes: [
+              ...new Set(
+                coffeeData.flatMap((c) =>
+                  c.flavorNotes ? JSON.parse(c.flavorNotes) : []
+                )
+              ),
+            ],
+            brewingMethods: [
+              ...new Set(
+                coffeeData.flatMap((c) =>
+                  c.brewingMethods ? JSON.parse(c.brewingMethods) : []
+                )
+              ),
+            ],
+          }
+        : null
+
+    // Process chocolate data
+    const chocolateFiltersData =
+      chocolateData.length > 0
+        ? {
+            chocolateTypes: [
+              ...new Set(
+                chocolateData.map((c) => c.chocolateType).filter(Boolean)
+              ),
+            ],
+            origins: [
+              ...new Set(chocolateData.map((c) => c.origin).filter(Boolean)),
+            ],
+            textures: [
+              ...new Set(chocolateData.map((c) => c.texture).filter(Boolean)),
+            ],
+            cocoaRange: {
+              min: Math.min(
+                ...chocolateData.map((c) => c.cocoaPercentage || 0)
+              ),
+              max: Math.max(
+                ...chocolateData.map((c) => c.cocoaPercentage || 100)
+              ),
+            },
+            tasteRanges: {
+              sweetness: {
+                min: Math.min(...chocolateData.map((c) => c.sweetness || 1)),
+                max: Math.max(...chocolateData.map((c) => c.sweetness || 10)),
+              },
+              bitterness: {
+                min: Math.min(...chocolateData.map((c) => c.bitterness || 1)),
+                max: Math.max(...chocolateData.map((c) => c.bitterness || 10)),
+              },
+              acidity: {
+                min: Math.min(...chocolateData.map((c) => c.acidity || 1)),
+                max: Math.max(...chocolateData.map((c) => c.acidity || 10)),
+              },
+              fruitiness: {
+                min: Math.min(...chocolateData.map((c) => c.fruitiness || 1)),
+                max: Math.max(...chocolateData.map((c) => c.fruitiness || 10)),
+              },
+            },
+            availableCertifications: {
+              organic: chocolateData.some((c) => c.organic),
+              fairTrade: chocolateData.some((c) => c.fairTrade),
+              singleOrigin: chocolateData.some((c) => c.singleOrigin),
+              vegan: chocolateData.some((c) => c.vegan),
+              glutenFree: chocolateData.some((c) => c.glutenFree),
+            },
+            flavorNotes: [
+              ...new Set(
+                chocolateData.flatMap((c) =>
+                  c.flavorNotes ? JSON.parse(c.flavorNotes) : []
+                )
+              ),
+            ],
+          }
+        : null
     return {
       priceRange: {
         min: priceRange._min.price || 0,
@@ -689,6 +839,8 @@ export async function getFiltersData(
       colors: colors.map((c) => c.hex),
       sizes: sizes.map((s) => s.name),
       brands: brands.map((b) => b.brand),
+      coffeeFiltersData,
+      chocolateFiltersData,
     }
   } catch (error) {
     console.error('Error fetching filters data:', error)
@@ -697,6 +849,8 @@ export async function getFiltersData(
       colors: [],
       sizes: [],
       brands: [],
+      coffeeFiltersData: null,
+      chocolateFiltersData: null,
     }
   }
 }
@@ -950,10 +1104,9 @@ export async function searchProducts(filters: SearchFilters) {
   const skip = (page - 1) * limit
 
   try {
-    // Build base product where clause
     const productWhere: Prisma.ProductWhereInput = {}
 
-    // Basic filters
+    // Basic search
     if (filters.q) {
       productWhere.OR = [
         { name: { contains: filters.q } },
@@ -963,6 +1116,7 @@ export async function searchProducts(filters: SearchFilters) {
       ]
     }
 
+    // Category filters
     if (filters.categoryId) {
       productWhere.categoryId = filters.categoryId
     }
@@ -971,7 +1125,7 @@ export async function searchProducts(filters: SearchFilters) {
       productWhere.subCategoryId = filters.subCategoryId
     }
 
-    // Price filter
+    // Price filter - must have at least one variant in range
     if (filters.minPrice !== undefined || filters.maxPrice !== undefined) {
       productWhere.variants = {
         some: {
@@ -983,214 +1137,277 @@ export async function searchProducts(filters: SearchFilters) {
       }
     }
 
-    // Color and Size filters
+    // Color and Size filters - combine with existing variant filters
+    const variantConditions: Prisma.ProductVariantWhereInput[] = []
+
     if (filters.colors && filters.colors.length > 0) {
-      productWhere.variants = {
-        ...productWhere.variants,
-        some: {
-          ...((
-            productWhere.variants as { some?: Prisma.ProductVariantWhereInput }
-          )?.some || {}),
-          color: {
-            hex: { in: filters.colors },
-          },
-        },
-      }
+      variantConditions.push({
+        color: { hex: { in: filters.colors } },
+      })
     }
 
     if (filters.sizes && filters.sizes.length > 0) {
+      variantConditions.push({
+        size: { name: { in: filters.sizes } },
+      })
+    }
+
+    // If we have variant conditions, combine them
+    if (variantConditions.length > 0) {
+      const baseVariantFilter = productWhere.variants || {}
       productWhere.variants = {
-        ...productWhere.variants,
         some: {
-          ...((
-            productWhere.variants as { some?: Prisma.ProductVariantWhereInput }
-          )?.some || {}),
-          size: {
-            name: { in: filters.sizes },
-          },
+          ...((baseVariantFilter as any)?.some || {}),
+          AND: variantConditions,
         },
       }
     }
 
-    // Product type specific filters
+    // ===== COFFEE FILTERS =====
     if (filters.productType === 'coffee' && filters.coffeeFilters) {
       const coffeeWhere: Prisma.CoffeeCharacteristicsWhereInput = {}
+      const coffeeAndConditions: Prisma.CoffeeCharacteristicsWhereInput[] = []
 
-      if (
-        filters.coffeeFilters.roastLevels &&
-        filters.coffeeFilters.roastLevels.length > 0
-      ) {
+      // Enum filters (roast level, processing method, grind size)
+      if (filters.coffeeFilters.roastLevels?.length) {
         coffeeWhere.roastLevel = {
           in: filters.coffeeFilters.roastLevels as any[],
         }
       }
 
-      if (
-        filters.coffeeFilters.processingMethods &&
-        filters.coffeeFilters.processingMethods.length > 0
-      ) {
+      if (filters.coffeeFilters.processingMethods?.length) {
         coffeeWhere.processingMethod = {
           in: filters.coffeeFilters.processingMethods as any[],
         }
       }
 
-      if (
-        filters.coffeeFilters.origins &&
-        filters.coffeeFilters.origins.length > 0
-      ) {
-        coffeeWhere.origin = { in: filters.coffeeFilters.origins }
-      }
-
-      if (
-        filters.coffeeFilters.grindSizes &&
-        filters.coffeeFilters.grindSizes.length > 0
-      ) {
+      if (filters.coffeeFilters.grindSizes?.length) {
         coffeeWhere.grindSize = {
           in: filters.coffeeFilters.grindSizes as any[],
         }
       }
 
+      // Origin filter
+      if (filters.coffeeFilters.origins?.length) {
+        coffeeWhere.origin = { in: filters.coffeeFilters.origins }
+      }
+
+      // Caffeine content range
       if (
         filters.coffeeFilters.minCaffeine !== undefined ||
         filters.coffeeFilters.maxCaffeine !== undefined
       ) {
-        coffeeWhere.caffeineContent = {}
-        if (filters.coffeeFilters.minCaffeine !== undefined) {
-          coffeeWhere.caffeineContent.gte = filters.coffeeFilters.minCaffeine
-        }
-        if (filters.coffeeFilters.maxCaffeine !== undefined) {
-          coffeeWhere.caffeineContent.lte = filters.coffeeFilters.maxCaffeine
+        coffeeWhere.caffeineContent = {
+          ...(filters.coffeeFilters.minCaffeine !== undefined && {
+            gte: filters.coffeeFilters.minCaffeine,
+          }),
+          ...(filters.coffeeFilters.maxCaffeine !== undefined && {
+            lte: filters.coffeeFilters.maxCaffeine,
+          }),
         }
       }
 
-      // Taste profile filters
-      const tasteFilters: Prisma.CoffeeCharacteristicsWhereInput[] = []
-
+      // Taste profile ranges - each as separate AND condition
       if (
         filters.coffeeFilters.minAcidity !== undefined ||
         filters.coffeeFilters.maxAcidity !== undefined
       ) {
-        const acidityFilter: any = {}
-        if (filters.coffeeFilters.minAcidity !== undefined)
-          acidityFilter.gte = filters.coffeeFilters.minAcidity
-        if (filters.coffeeFilters.maxAcidity !== undefined)
-          acidityFilter.lte = filters.coffeeFilters.maxAcidity
-        tasteFilters.push({ acidity: acidityFilter })
+        coffeeAndConditions.push({
+          acidity: {
+            ...(filters.coffeeFilters.minAcidity !== undefined && {
+              gte: filters.coffeeFilters.minAcidity,
+            }),
+            ...(filters.coffeeFilters.maxAcidity !== undefined && {
+              lte: filters.coffeeFilters.maxAcidity,
+            }),
+          },
+        })
       }
 
       if (
         filters.coffeeFilters.minBitterness !== undefined ||
         filters.coffeeFilters.maxBitterness !== undefined
       ) {
-        const bitternessFilter: any = {}
-        if (filters.coffeeFilters.minBitterness !== undefined)
-          bitternessFilter.gte = filters.coffeeFilters.minBitterness
-        if (filters.coffeeFilters.maxBitterness !== undefined)
-          bitternessFilter.lte = filters.coffeeFilters.maxBitterness
-        tasteFilters.push({ bitterness: bitternessFilter })
+        coffeeAndConditions.push({
+          bitterness: {
+            ...(filters.coffeeFilters.minBitterness !== undefined && {
+              gte: filters.coffeeFilters.minBitterness,
+            }),
+            ...(filters.coffeeFilters.maxBitterness !== undefined && {
+              lte: filters.coffeeFilters.maxBitterness,
+            }),
+          },
+        })
       }
 
       if (
         filters.coffeeFilters.minSweetness !== undefined ||
         filters.coffeeFilters.maxSweetness !== undefined
       ) {
-        const sweetnessFilter: any = {}
-        if (filters.coffeeFilters.minSweetness !== undefined)
-          sweetnessFilter.gte = filters.coffeeFilters.minSweetness
-        if (filters.coffeeFilters.maxSweetness !== undefined)
-          sweetnessFilter.lte = filters.coffeeFilters.maxSweetness
-        tasteFilters.push({ sweetness: sweetnessFilter })
+        coffeeAndConditions.push({
+          sweetness: {
+            ...(filters.coffeeFilters.minSweetness !== undefined && {
+              gte: filters.coffeeFilters.minSweetness,
+            }),
+            ...(filters.coffeeFilters.maxSweetness !== undefined && {
+              lte: filters.coffeeFilters.maxSweetness,
+            }),
+          },
+        })
       }
 
       if (
         filters.coffeeFilters.minBody !== undefined ||
         filters.coffeeFilters.maxBody !== undefined
       ) {
-        const bodyFilter: any = {}
-        if (filters.coffeeFilters.minBody !== undefined)
-          bodyFilter.gte = filters.coffeeFilters.minBody
-        if (filters.coffeeFilters.maxBody !== undefined)
-          bodyFilter.lte = filters.coffeeFilters.maxBody
-        tasteFilters.push({ body: bodyFilter })
+        coffeeAndConditions.push({
+          body: {
+            ...(filters.coffeeFilters.minBody !== undefined && {
+              gte: filters.coffeeFilters.minBody,
+            }),
+            ...(filters.coffeeFilters.maxBody !== undefined && {
+              lte: filters.coffeeFilters.maxBody,
+            }),
+          },
+        })
       }
 
-      if (tasteFilters.length > 0) {
-        coffeeWhere.AND = tasteFilters
+      // Apply AND conditions
+      if (coffeeAndConditions.length > 0) {
+        coffeeWhere.AND = coffeeAndConditions
       }
 
-      // Flavor notes and brewing methods (OR conditions)
-      const orConditions: Prisma.CoffeeCharacteristicsWhereInput[] = []
+      // Flavor notes and brewing methods (OR conditions for contains)
+      const coffeeOrConditions: Prisma.CoffeeCharacteristicsWhereInput[] = []
 
-      if (
-        filters.coffeeFilters.flavorNotes &&
-        filters.coffeeFilters.flavorNotes.length > 0
-      ) {
+      if (filters.coffeeFilters.flavorNotes?.length) {
         filters.coffeeFilters.flavorNotes.forEach((note) => {
-          orConditions.push({ flavorNotes: { contains: note } })
+          coffeeOrConditions.push({ flavorNotes: { contains: note } })
         })
       }
 
-      if (
-        filters.coffeeFilters.brewingMethods &&
-        filters.coffeeFilters.brewingMethods.length > 0
-      ) {
+      if (filters.coffeeFilters.brewingMethods?.length) {
         filters.coffeeFilters.brewingMethods.forEach((method) => {
-          orConditions.push({ brewingMethods: { contains: method } })
+          coffeeOrConditions.push({ brewingMethods: { contains: method } })
         })
       }
 
-      if (orConditions.length > 0) {
-        coffeeWhere.OR = orConditions
+      if (coffeeOrConditions.length > 0) {
+        coffeeWhere.OR = coffeeOrConditions
       }
 
       productWhere.coffeeCharacteristics = coffeeWhere
     }
 
+    // ===== CHOCOLATE FILTERS =====
     if (filters.productType === 'chocolate' && filters.chocolateFilters) {
       const chocolateWhere: Prisma.ChocolateCharacteristicsWhereInput = {}
-      const tasteFilters: Prisma.ChocolateCharacteristicsWhereInput[] = []
+      const chocolateAndConditions: Prisma.ChocolateCharacteristicsWhereInput[] =
+        []
 
+      // Type and texture filters
+      if (filters.chocolateFilters.chocolateTypes?.length) {
+        chocolateWhere.chocolateType = {
+          in: filters.chocolateFilters.chocolateTypes as any[],
+        }
+      }
+
+      if (filters.chocolateFilters.textures?.length) {
+        chocolateWhere.texture = {
+          in: filters.chocolateFilters.textures as any[],
+        }
+      }
+
+      // Origin filter
+      if (filters.chocolateFilters.origins?.length) {
+        chocolateWhere.origin = { in: filters.chocolateFilters.origins }
+      }
+
+      // Cocoa percentage range
+      if (
+        filters.chocolateFilters.minCocoaPercentage !== undefined ||
+        filters.chocolateFilters.maxCocoaPercentage !== undefined
+      ) {
+        chocolateWhere.cocoaPercentage = {
+          ...(filters.chocolateFilters.minCocoaPercentage !== undefined && {
+            gte: filters.chocolateFilters.minCocoaPercentage,
+          }),
+          ...(filters.chocolateFilters.maxCocoaPercentage !== undefined && {
+            lte: filters.chocolateFilters.maxCocoaPercentage,
+          }),
+        }
+      }
+
+      // Taste profile ranges
       if (
         filters.chocolateFilters.minBitterness !== undefined ||
         filters.chocolateFilters.maxBitterness !== undefined
       ) {
-        const bitternessFilter: any = {}
-        if (filters.chocolateFilters.minBitterness !== undefined)
-          bitternessFilter.gte = filters.chocolateFilters.minBitterness
-        if (filters.chocolateFilters.maxBitterness !== undefined)
-          bitternessFilter.lte = filters.chocolateFilters.maxBitterness
-        tasteFilters.push({ bitterness: bitternessFilter })
+        chocolateAndConditions.push({
+          bitterness: {
+            ...(filters.chocolateFilters.minBitterness !== undefined && {
+              gte: filters.chocolateFilters.minBitterness,
+            }),
+            ...(filters.chocolateFilters.maxBitterness !== undefined && {
+              lte: filters.chocolateFilters.maxBitterness,
+            }),
+          },
+        })
       }
 
       if (
         filters.chocolateFilters.minAcidity !== undefined ||
         filters.chocolateFilters.maxAcidity !== undefined
       ) {
-        const acidityFilter: any = {}
-        if (filters.chocolateFilters.minAcidity !== undefined)
-          acidityFilter.gte = filters.chocolateFilters.minAcidity
-        if (filters.chocolateFilters.maxAcidity !== undefined)
-          acidityFilter.lte = filters.chocolateFilters.maxAcidity
-        tasteFilters.push({ acidity: acidityFilter })
+        chocolateAndConditions.push({
+          acidity: {
+            ...(filters.chocolateFilters.minAcidity !== undefined && {
+              gte: filters.chocolateFilters.minAcidity,
+            }),
+            ...(filters.chocolateFilters.maxAcidity !== undefined && {
+              lte: filters.chocolateFilters.maxAcidity,
+            }),
+          },
+        })
       }
 
       if (
         filters.chocolateFilters.minFruitiness !== undefined ||
         filters.chocolateFilters.maxFruitiness !== undefined
       ) {
-        const fruitinessFilter: any = {}
-        if (filters.chocolateFilters.minFruitiness !== undefined)
-          fruitinessFilter.gte = filters.chocolateFilters.minFruitiness
-        if (filters.chocolateFilters.maxFruitiness !== undefined)
-          fruitinessFilter.lte = filters.chocolateFilters.maxFruitiness
-        tasteFilters.push({ fruitiness: fruitinessFilter })
+        chocolateAndConditions.push({
+          fruitiness: {
+            ...(filters.chocolateFilters.minFruitiness !== undefined && {
+              gte: filters.chocolateFilters.minFruitiness,
+            }),
+            ...(filters.chocolateFilters.maxFruitiness !== undefined && {
+              lte: filters.chocolateFilters.maxFruitiness,
+            }),
+          },
+        })
       }
 
-      if (tasteFilters.length > 0) {
-        chocolateWhere.AND = tasteFilters
+      if (
+        filters.chocolateFilters.minSweetness !== undefined ||
+        filters.chocolateFilters.maxSweetness !== undefined
+      ) {
+        chocolateAndConditions.push({
+          sweetness: {
+            ...(filters.chocolateFilters.minSweetness !== undefined && {
+              gte: filters.chocolateFilters.minSweetness,
+            }),
+            ...(filters.chocolateFilters.maxSweetness !== undefined && {
+              lte: filters.chocolateFilters.maxSweetness,
+            }),
+          },
+        })
       }
 
-      // Certifications
+      if (chocolateAndConditions.length > 0) {
+        chocolateWhere.AND = chocolateAndConditions
+      }
+
+      // Certifications (boolean filters)
       if (filters.chocolateFilters.organic !== undefined) {
         chocolateWhere.organic = filters.chocolateFilters.organic
       }
@@ -1207,11 +1424,8 @@ export async function searchProducts(filters: SearchFilters) {
         chocolateWhere.glutenFree = filters.chocolateFilters.glutenFree
       }
 
-      // Flavor notes
-      if (
-        filters.chocolateFilters.flavorNotes &&
-        filters.chocolateFilters.flavorNotes.length > 0
-      ) {
+      // Flavor notes (OR conditions)
+      if (filters.chocolateFilters.flavorNotes?.length) {
         chocolateWhere.OR = filters.chocolateFilters.flavorNotes.map(
           (note) => ({
             flavorNotes: { contains: note },
@@ -1222,17 +1436,11 @@ export async function searchProducts(filters: SearchFilters) {
       productWhere.chocolateCharacteristics = chocolateWhere
     }
 
-    // Sorting
+    // ===== SORTING =====
     let orderBy: Prisma.ProductOrderByWithRelationInput = { createdAt: 'desc' }
 
     if (filters.sortBy) {
       switch (filters.sortBy) {
-        case 'price-asc':
-          orderBy = { variants: { _count: 'asc' } } // Will need custom logic for min price
-          break
-        case 'price-desc':
-          orderBy = { variants: { _count: 'desc' } } // Will need custom logic for max price
-          break
         case 'rating':
           orderBy = { rating: 'desc' }
           break
@@ -1242,12 +1450,20 @@ export async function searchProducts(filters: SearchFilters) {
         case 'newest':
           orderBy = { createdAt: 'desc' }
           break
+        case 'oldest':
+          orderBy = { createdAt: 'asc' }
+          break
+        // Price sorting handled after fetch
+        case 'price-asc':
+        case 'price-desc':
+          orderBy = { createdAt: 'desc' }
+          break
         default:
           orderBy = { createdAt: 'desc' }
       }
     }
 
-    // Fetch products
+    // ===== FETCH PRODUCTS =====
     const [products, totalCount] = await Promise.all([
       prisma.product.findMany({
         where: productWhere,
@@ -1259,9 +1475,7 @@ export async function searchProducts(filters: SearchFilters) {
               color: true,
               images: true,
             },
-            where: {
-              quantity: { gt: 0 },
-            },
+            where: { quantity: { gt: 0 } },
           },
           category: true,
           subCategory: true,
@@ -1269,7 +1483,6 @@ export async function searchProducts(filters: SearchFilters) {
           chocolateCharacteristics: true,
           equipmentSpecs: true,
           accessorySpecs: true,
-          // brand: true,
           offerTag: true,
         },
         orderBy,
@@ -1278,6 +1491,25 @@ export async function searchProducts(filters: SearchFilters) {
       }),
       prisma.product.count({ where: productWhere }),
     ])
+
+    // ===== HANDLE PRICE SORTING =====
+    if (filters.sortBy === 'price-asc' || filters.sortBy === 'price-desc') {
+      products.sort((a, b) => {
+        const getMinPrice = (product: (typeof products)[0]) => {
+          if (product.variants.length === 0) return Infinity
+          return Math.min(
+            ...product.variants.map((v) => v.price * (1 - v.discount / 100))
+          )
+        }
+
+        const aPrice = getMinPrice(a)
+        const bPrice = getMinPrice(b)
+
+        return filters.sortBy === 'price-asc'
+          ? aPrice - bPrice
+          : bPrice - aPrice
+      })
+    }
 
     return {
       products,
@@ -1405,5 +1637,375 @@ export async function searchProductsSortedByPrice(
       totalPages: 0,
       currentPage: page,
     }
+  }
+}
+
+function parseFlavorNotes(value: string | null): string[] {
+  if (!value) return []
+
+  // Try parsing as JSON first
+  try {
+    const parsed = JSON.parse(value)
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    // If JSON parsing fails, treat as comma-separated string
+    return value
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0)
+  }
+}
+
+// Get available coffee filter options
+export async function getCoffeeFiltersData(categoryId?: string) {
+  try {
+    const where: Prisma.ProductWhereInput = {
+      coffeeCharacteristics: { isNot: null },
+    }
+    if (categoryId) where.categoryId = categoryId
+
+    const [
+      roastLevels,
+      processingMethods,
+      origins,
+      grindSizes,
+      caffeineRange,
+      tasteRanges,
+      allCoffeeProducts,
+    ] = await Promise.all([
+      prisma.coffeeCharacteristics.findMany({
+        where: { product: where },
+        select: { roastLevel: true },
+        distinct: ['roastLevel'],
+      }),
+      prisma.coffeeCharacteristics.findMany({
+        where: { product: where },
+        select: { processingMethod: true },
+        distinct: ['processingMethod'],
+      }),
+      prisma.coffeeCharacteristics.findMany({
+        where: { product: where, origin: { not: null } },
+        select: { origin: true },
+        distinct: ['origin'],
+      }),
+      prisma.coffeeCharacteristics.findMany({
+        where: { product: where },
+        select: { grindSize: true },
+        distinct: ['grindSize'],
+      }),
+      prisma.coffeeCharacteristics.aggregate({
+        where: { product: where },
+        _min: { caffeineContent: true },
+        _max: { caffeineContent: true },
+      }),
+      prisma.coffeeCharacteristics.aggregate({
+        where: { product: where },
+        _min: {
+          acidity: true,
+          bitterness: true,
+          sweetness: true,
+          body: true,
+        },
+        _max: {
+          acidity: true,
+          bitterness: true,
+          sweetness: true,
+          body: true,
+        },
+      }),
+      prisma.coffeeCharacteristics.findMany({
+        where: { product: where },
+        select: {
+          flavorNotes: true,
+          brewingMethods: true,
+        },
+      }),
+    ])
+
+    // Extract unique flavor notes - FIXED VERSION
+    const flavorNotesSet = new Set<string>()
+    const brewingMethodsSet = new Set<string>()
+
+    allCoffeeProducts.forEach((product) => {
+      // Use helper function instead of direct JSON.parse
+      if (product.flavorNotes) {
+        const notes = parseFlavorNotes(product.flavorNotes)
+        notes.forEach((note) => flavorNotesSet.add(note))
+      }
+
+      if (product.brewingMethods) {
+        const methods = parseFlavorNotes(product.brewingMethods)
+        methods.forEach((method) => brewingMethodsSet.add(method))
+      }
+    })
+
+    return {
+      roastLevels: roastLevels
+        .map((r) => r.roastLevel)
+        .filter((r): r is NonNullable<typeof r> => r !== null),
+      processingMethods: processingMethods
+        .map((p) => p.processingMethod)
+        .filter((p): p is NonNullable<typeof p> => p !== null),
+      origins: origins
+        .map((o) => o.origin)
+        .filter((o): o is NonNullable<typeof o> => o !== null),
+      grindSizes: grindSizes
+        .map((g) => g.grindSize)
+        .filter((g): g is NonNullable<typeof g> => g !== null),
+      caffeineRange: {
+        min: caffeineRange._min.caffeineContent || 0,
+        max: caffeineRange._max.caffeineContent || 400,
+      },
+      tasteRanges: {
+        acidity: {
+          min: tasteRanges._min.acidity || 1,
+          max: tasteRanges._max.acidity || 10,
+        },
+        bitterness: {
+          min: tasteRanges._min.bitterness || 1,
+          max: tasteRanges._max.bitterness || 10,
+        },
+        sweetness: {
+          min: tasteRanges._min.sweetness || 1,
+          max: tasteRanges._max.sweetness || 10,
+        },
+        body: {
+          min: tasteRanges._min.body || 1,
+          max: tasteRanges._max.body || 10,
+        },
+      },
+      flavorNotes: Array.from(flavorNotesSet),
+      brewingMethods: Array.from(brewingMethodsSet),
+    }
+  } catch (error) {
+    console.error('Error fetching coffee filters data:', error)
+    return {
+      roastLevels: [],
+      processingMethods: [],
+      origins: [],
+      grindSizes: [],
+      caffeineRange: { min: 0, max: 400 },
+      tasteRanges: {
+        acidity: { min: 1, max: 10 },
+        bitterness: { min: 1, max: 10 },
+        sweetness: { min: 1, max: 10 },
+        body: { min: 1, max: 10 },
+      },
+      flavorNotes: [],
+      brewingMethods: [],
+    }
+  }
+}
+
+// Get available chocolate filter options
+export async function getChocolateFiltersData(categoryId?: string) {
+  try {
+    const where: Prisma.ProductWhereInput = {
+      chocolateCharacteristics: { isNot: null },
+    }
+    if (categoryId) where.categoryId = categoryId
+
+    const [
+      chocolateTypes,
+      origins,
+      textures,
+      cocoaRange,
+      tasteRanges,
+      certifications,
+      allChocolateProducts,
+    ] = await Promise.all([
+      prisma.chocolateCharacteristics.findMany({
+        where: { product: where },
+        select: { chocolateType: true },
+        distinct: ['chocolateType'],
+      }),
+      prisma.chocolateCharacteristics.findMany({
+        where: { product: where, origin: { not: null } },
+        select: { origin: true },
+        distinct: ['origin'],
+      }),
+      prisma.chocolateCharacteristics.findMany({
+        where: { product: where },
+        select: { texture: true },
+        distinct: ['texture'],
+      }),
+      prisma.chocolateCharacteristics.aggregate({
+        where: { product: where },
+        _min: { cocoaPercentage: true },
+        _max: { cocoaPercentage: true },
+      }),
+      prisma.chocolateCharacteristics.aggregate({
+        where: { product: where },
+        _min: {
+          sweetness: true,
+          bitterness: true,
+          acidity: true,
+          fruitiness: true,
+        },
+        _max: {
+          sweetness: true,
+          bitterness: true,
+          acidity: true,
+          fruitiness: true,
+        },
+      }),
+      prisma.chocolateCharacteristics.findMany({
+        where: { product: where },
+        select: {
+          organic: true,
+          fairTrade: true,
+          singleOrigin: true,
+          vegan: true,
+          glutenFree: true,
+        },
+      }),
+      prisma.chocolateCharacteristics.findMany({
+        where: { product: where },
+        select: {
+          flavorNotes: true,
+        },
+      }),
+    ])
+
+    // Extract unique flavor notes - FIXED VERSION
+    const flavorNotesSet = new Set<string>()
+    allChocolateProducts.forEach((product) => {
+      if (product.flavorNotes) {
+        const notes = parseFlavorNotes(product.flavorNotes)
+        notes.forEach((note) => flavorNotesSet.add(note))
+      }
+    })
+
+    const availableCertifications = {
+      organic: certifications.some((c) => c.organic === true),
+      fairTrade: certifications.some((c) => c.fairTrade === true),
+      singleOrigin: certifications.some((c) => c.singleOrigin === true),
+      vegan: certifications.some((c) => c.vegan === true),
+      glutenFree: certifications.some((c) => c.glutenFree === true),
+    }
+
+    return {
+      chocolateTypes: chocolateTypes
+        .map((c) => c.chocolateType)
+        .filter((c): c is NonNullable<typeof c> => c !== null),
+      origins: origins
+        .map((o) => o.origin)
+        .filter((o): o is NonNullable<typeof o> => o !== null),
+      textures: textures
+        .map((t) => t.texture)
+        .filter((t): t is NonNullable<typeof t> => t !== null),
+      cocoaRange: {
+        min: cocoaRange._min.cocoaPercentage || 0,
+        max: cocoaRange._max.cocoaPercentage || 100,
+      },
+      tasteRanges: {
+        sweetness: {
+          min: tasteRanges._min.sweetness || 1,
+          max: tasteRanges._max.sweetness || 10,
+        },
+        bitterness: {
+          min: tasteRanges._min.bitterness || 1,
+          max: tasteRanges._max.bitterness || 10,
+        },
+        acidity: {
+          min: tasteRanges._min.acidity || 1,
+          max: tasteRanges._max.acidity || 10,
+        },
+        fruitiness: {
+          min: tasteRanges._min.fruitiness || 1,
+          max: tasteRanges._max.fruitiness || 10,
+        },
+      },
+      availableCertifications,
+      flavorNotes: Array.from(flavorNotesSet),
+    }
+  } catch (error) {
+    console.error('Error fetching chocolate filters data:', error)
+    return {
+      chocolateTypes: [],
+      origins: [],
+      textures: [],
+      cocoaRange: { min: 0, max: 100 },
+      tasteRanges: {
+        sweetness: { min: 1, max: 10 },
+        bitterness: { min: 1, max: 10 },
+        acidity: { min: 1, max: 10 },
+        fruitiness: { min: 1, max: 10 },
+      },
+      availableCertifications: {
+        organic: false,
+        fairTrade: false,
+        singleOrigin: false,
+        vegan: false,
+        glutenFree: false,
+      },
+      flavorNotes: [],
+    }
+  }
+}
+
+// BONUS: Database migration helper to fix existing data
+export async function fixFlavorNotesFormat() {
+  try {
+    // Fix Coffee flavor notes
+    const coffeeProducts = await prisma.coffeeCharacteristics.findMany({
+      where: {
+        OR: [
+          { flavorNotes: { not: { startsWith: '[' } } },
+          { brewingMethods: { not: { startsWith: '[' } } },
+        ],
+      },
+    })
+
+    for (const coffee of coffeeProducts) {
+      const updates: any = {}
+
+      if (coffee.flavorNotes && !coffee.flavorNotes.startsWith('[')) {
+        const notes = coffee.flavorNotes.split(',').map((n) => n.trim())
+        updates.flavorNotes = JSON.stringify(notes)
+      }
+
+      if (coffee.brewingMethods && !coffee.brewingMethods.startsWith('[')) {
+        const methods = coffee.brewingMethods.split(',').map((m) => m.trim())
+        updates.brewingMethods = JSON.stringify(methods)
+      }
+
+      if (Object.keys(updates).length > 0) {
+        await prisma.coffeeCharacteristics.update({
+          where: { id: coffee.id },
+          data: updates,
+        })
+      }
+    }
+
+    // Fix Chocolate flavor notes
+    const chocolateProducts = await prisma.chocolateCharacteristics.findMany({
+      where: {
+        flavorNotes: { not: { startsWith: '[' } },
+      },
+    })
+
+    for (const chocolate of chocolateProducts) {
+      if (chocolate.flavorNotes && !chocolate.flavorNotes.startsWith('[')) {
+        const notes = chocolate.flavorNotes.split(',').map((n) => n.trim())
+        await prisma.chocolateCharacteristics.update({
+          where: { id: chocolate.id },
+          data: {
+            flavorNotes: JSON.stringify(notes),
+          },
+        })
+      }
+    }
+
+    console.log(
+      `✅ Fixed ${coffeeProducts.length} coffee and ${chocolateProducts.length} chocolate products`
+    )
+    return {
+      success: true,
+      fixed: coffeeProducts.length + chocolateProducts.length,
+    }
+  } catch (error) {
+    console.error('Error fixing flavor notes:', error)
+    return { success: false, error }
   }
 }
