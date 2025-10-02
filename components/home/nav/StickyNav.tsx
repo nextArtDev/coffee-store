@@ -1,5 +1,6 @@
 'use client'
 
+import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
 import { useMotionValueEvent, motion, useScroll } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import { useState, useRef } from 'react'
@@ -47,13 +48,26 @@ const StickyNav: FC<StickyNavProps> = ({
       transition={{ duration: 0.2 }}
       //   className=" fixed top-0 z-10 flex w-full justify-center pt-3"
       className={`fixed ${
-        isTop ? 'top-0 pt-3' : '-bottom-0 -pb-0'
+        isTop ? 'top-0' : '-bottom-0 -pb-0'
       } z-10 flex w-full justify-center `}
     >
       <nav
-        className={`min-w-[180px]  flex justify-between gap-3 rounded-3xl bg-black/10 backdrop-blur-sm border rounded-b-none p-2.5 *:rounded-xl *:border *:border-gray-200 *:border-b-none *:px-7 *:py-1.5 *:transition-colors *:duration-300 hover:*:bg-gray-200 focus-visible:*:bg-gray-200 ${className} `}
+        className={` rounded-xl p-2 *:rounded-xl   *:transition-colors *:duration-300  ${className} `}
       >
-        {children}
+        <GlassSurface
+          borderWidth={0.8}
+          brightness={10}
+          opacity={0.5}
+          blur={5}
+          displace={0.1}
+          backgroundOpacity={0.2}
+          saturation={0.4}
+          distortionScale={-180}
+          key={'navbar'}
+          className="!w-full !overflow-visible z-20 !text-white"
+        >
+          {children}
+        </GlassSurface>
       </nav>
     </motion.div>
   )

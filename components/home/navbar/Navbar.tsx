@@ -3,6 +3,7 @@ import React from 'react'
 import MainNav from './MainNav'
 import { NavigationData } from '@/lib/types/home'
 import { getCurrentUser } from '@/lib/auth-helpers'
+import StickyNav from '../nav/StickyNav'
 
 const Navbar = async () => {
   const allCategories = await getCategoriesWithStats()
@@ -27,7 +28,9 @@ const Navbar = async () => {
   //   console.log(navigation)
   return (
     <div>
-      <MainNav navigation={navigation} session={session} />
+      <StickyNav isTop>
+        <MainNav navigation={navigation} session={session} />
+      </StickyNav>
     </div>
   )
 }

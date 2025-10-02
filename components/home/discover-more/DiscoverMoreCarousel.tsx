@@ -13,6 +13,7 @@ import { SubCategoryForHomePage } from '@/lib/types/home'
 import { FadeIn } from '@/components/shared/fade-in'
 import { useInView } from 'framer-motion'
 import { TransitionLink } from '../shared/TransitionLink'
+import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
 
 export default function DiscoverMoreCarousel({
   subCategories,
@@ -47,14 +48,24 @@ export default function DiscoverMoreCarousel({
           {subCategories.map((item, i) => (
             <CarouselItem
               key={item.id}
-              className="pr-1 basis-1/2 md:basis-1/3 xl:basis-1/4 w-full mx-auto" // Removed mx-auto to avoid centering issues
+              className="pr-1 basis-4/5 md:basis-2/3 xl:basis-1/4 w-full mx-auto" // Removed mx-auto to avoid centering issues
             >
               <FadeIn
                 vars={{ delay: 0.2 * i, duration: 0.5, ease: 'sine.inOut' }}
               >
-                <div className="w-full aspect-square bg-transparent">
-                  {/* Enforces square shape */}
-                  <figure className="relative w-full h-full bg-[#eceae8] border-none rounded-none">
+                <GlassSurface
+                  borderWidth={0.8}
+                  brightness={50}
+                  opacity={0.93}
+                  blur={11}
+                  displace={1}
+                  backgroundOpacity={0}
+                  saturation={1}
+                  distortionScale={-180}
+                  key={'characteristics'}
+                  className="!p-1 min-w-xs !h-full aspect-square"
+                >
+                  <figure className="relative w-full h-full  border-none rounded-none">
                     <Image
                       unoptimized
                       src={
@@ -63,24 +74,36 @@ export default function DiscoverMoreCarousel({
                       }
                       fill
                       alt={item.name}
-                      className="object-cover " // Uncommented; remove if not needed
+                      className="object-cover rounded-xl" // Uncommented; remove if not needed
                       loading="lazy"
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                       quality={85} // Slightly reduced quality for faster loading
                       placeholder="blur"
                       blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
                     />
-                    <article className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-secondary/5 to-secondary/20 px-2 py-3 text-center text-2xl font-semibold text-background">
-                      {item.name}
-                      <TransitionLink
-                        href={`/sub-categories/${item.url}`}
-                        className="bg-gradient-to-b from-secondary/5 to-secondary/30 border rounded-none px-1.5 py-1 text-center text-base  backdrop-blur-[2px]"
+                    <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+                      <GlassSurface
+                        borderWidth={0.8}
+                        brightness={50}
+                        opacity={0.93}
+                        blur={11}
+                        displace={1}
+                        backgroundOpacity={0}
+                        saturation={1}
+                        distortionScale={-180}
+                        key={'characteristics'}
+                        className="!absolute !w-fit !h-fit z-10 flex flex-col items-center justify-center gap-3 bg-gradient-to-b from-secondary/5 to-secondary/20 px-2 py-3 text-center text-2xl font-semibold text-secondary hover:scale-105 transition-transform duration-300 ease-in-out rounded-lg"
                       >
-                        دیدن {item.name}
-                      </TransitionLink>
-                    </article>
+                        <TransitionLink
+                          href={`/sub-categories/${item.url}`}
+                          className="mix-blend-darken "
+                        >
+                          دیدن {item.name}
+                        </TransitionLink>
+                      </GlassSurface>
+                    </div>
                   </figure>
-                </div>
+                </GlassSurface>
               </FadeIn>
             </CarouselItem>
           ))}

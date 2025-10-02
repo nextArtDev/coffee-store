@@ -10,7 +10,7 @@ import MobileNav from './MobileNav'
 import UserSession from './UserSession'
 import SearchBar from './SearchBar'
 import Logo from './Logo'
-import TopBanner from './TopBanner'
+// import TopBanner from './TopBanner'
 import { TransitionLink } from '../shared/TransitionLink'
 
 export const ListItem = React.forwardRef<
@@ -26,7 +26,7 @@ export const ListItem = React.forwardRef<
         ref={ref}
         href={href}
         className={cn(
-          'group block select-none space-y-2 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+          'group  block select-none space-y-2 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
           className
         )}
         {...props}
@@ -58,21 +58,21 @@ export default function MainNav({
   }, [])
 
   return (
-    <div className="bg-background">
+    <div className="">
       <header className="relative">
         <nav aria-label="Main navigation">
-          <TopBanner />
+          {/* <TopBanner /> */}
 
           <div className="">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
-                <div className="flex flex-1 items-center lg:hidden">
+                <div className="flex flex-1 min-w-[30vw] mx-auto items-center lg:hidden">
                   <MobileNav navigation={navigation} session={session} />
                 </div>
 
-                <div className="lg:hidden">
+                {/* <div className="lg:hidden h-8 overflow-hidden  text-white">
                   <Logo />
-                </div>
+                </div> */}
 
                 <div className="flex flex-1 items-center justify-end lg:justify-start">
                   <div className="flex lg:flex-row-reverse items-center space-x-4">
