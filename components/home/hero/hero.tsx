@@ -29,7 +29,7 @@ const Hero = ({
           imageUrl={heroImage.src}
           imageAlt="Coffee Store"
           priority={true}
-          quality={95}
+          // quality={100}
           // overlayClassNames="bg-gradient-to-b from-black/20 via-black/40 to-black/60"
           overlayClassNames="!bg-transparent"
         >

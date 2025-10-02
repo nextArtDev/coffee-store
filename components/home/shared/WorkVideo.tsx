@@ -1,12 +1,15 @@
 'use client'
 import React from 'react'
 import FixedVideoPlay from './FixedVideoPlay'
+import heroImage from '../../../public/images/hero-image.webp'
 import { RevealText } from '@/components/shared/reveal-text'
 import { FadeIn } from '@/components/shared/fade-in'
 import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
 import { motion, Variants } from 'framer-motion'
 import { CategoryWithStats } from '@/lib/types/home'
 import { TransitionLink } from './TransitionLink'
+import { FixedMotionImage } from '../hero/fixed-motion-image'
+import Image from 'next/image'
 const WorkVideo = ({ categories }: { categories: CategoryWithStats[] }) => {
   const listContainerVariants: Variants = {
     hidden: { opacity: 0 },
@@ -55,30 +58,43 @@ const WorkVideo = ({ categories }: { categories: CategoryWithStats[] }) => {
           </p>
         </FadeIn>
       </div>
-      <div className="relative w-full h-full">
-        <GlassSurface
-          // key={'carousel'}
-          width={'100%'}
-          height={'100%'}
-          // borderRadius={999}
-          borderWidth={0.07}
-          brightness={50}
-          opacity={0.5}
-          blur={1}
-          displace={10}
-          backgroundOpacity={0}
-          saturation={1}
-          distortionScale={-180}
-          key={'vids'}
-          className="p-2 !rounded-xl  "
-        >
-          <FixedVideoPlay
+      <div className="relative w-full aspect-video max-h-[600px] max-w-5xl mx-auto px-4">
+        {/* <FixedVideoPlay
             className="relative bg-transparent w-full  rounded-xl overflow-hidden"
             videoUrl="/videos/vid1.webm"
           >
             <span></span>
-          </FixedVideoPlay>
-        </GlassSurface>
+          </FixedVideoPlay> */}
+        {/* <FixedMotionImage
+            imageUrl={heroImage.src}
+            imageAlt="Coffee Store"
+            // priority={true}
+            // quality={95}
+            // overlayClassNames="bg-gradient-to-b from-black/20 via-black/40 to-black/60"
+            overlayClassNames="!bg-transparent absolute inset-0 w-full h-full"
+          >
+            {''}
+          </FixedMotionImage> */}
+        {/* <Image src={heroImage.src} fill alt="" className="object-cover" />
+         */}
+        <section className="w-full gap-2 dark:bg-black bg-white border rounded-lg overflow-hidden ">
+          <figure
+            className="relative h-[70vh] bg-fixed bg-cover bg-center origin-right  "
+            style={{
+              backgroundImage: "url('/images/couple.webp')",
+
+              // maskImage: "url('/images/hero-image.webp')",
+
+              maskSize: 'contain',
+
+              maskRepeat: 'no-repeat',
+
+              maskPosition: 'center',
+            }}
+          >
+            {/* <div className="absolute inset-0 bg-gradient-to-b from-secondary to-secondary opacity-30" /> */}
+          </figure>
+        </section>
 
         <motion.div
           className="p-2"
