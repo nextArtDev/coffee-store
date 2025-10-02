@@ -53,7 +53,7 @@ const CarouselItemComponent = ({
   return (
     <CarouselItem
       key={item.id}
-      className="pl-1 basis-1/1 md:pl-2 md:basis-1/2 lg:basis-1/3 xl:pl-4 xl:basis-1/4"
+      className="pl-1  basis-1/1 xs:basis-2/3 mx-auto  sm:basis-1/2 md:pl-2 md:basis-1/2 lg:basis-1/3 xl:pl-4 xl:basis-1/4"
     >
       <FadeIn
         className="translate-y-5"
@@ -79,7 +79,7 @@ const CarouselItemComponent = ({
                   saturation={1}
                   distortionScale={-180}
                   key={'characteristics'}
-                  className="!px-2 !py-1 !w-fit !h-fit !bg-muted/10  rounded-full  text-black  "
+                  className="!px-2 !py-1 !w-fit !h-fit !bg-muted/10  rounded-full  "
                 >
                   <div className="flex flex-col text-center gap-1">
                     <p className="font-semibold text-muted-foreground text-xs md:text-sm lg:text-base">

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Bounded } from '@/components/shared/Bounded'
 // import Image from 'next/image'
-import heroImage from '../../../public/images/beans.png'
+import heroImage from '../../../public/images/beans.webp'
 // import heroImage from '../../../public/images/bg.jpg'
 
 import { FadeIn } from '@/components/shared/fade-in'
@@ -10,6 +10,7 @@ import { SubCategoryForHomePage } from '@/lib/types/home'
 import { TransitionLink } from '../shared/TransitionLink'
 import { FixedMotionImage } from './fixed-motion-image'
 import LustreText from '../shared/lustre-text'
+import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
 
 const Hero = ({
   subCategories,
@@ -30,7 +31,7 @@ const Hero = ({
           priority={true}
           quality={95}
           // overlayClassNames="bg-gradient-to-b from-black/20 via-black/40 to-black/60"
-          overlayClassNames="bg-transparent"
+          overlayClassNames="!bg-transparent"
         >
           {/* <Image
             unoptimized
@@ -54,7 +55,7 @@ const Hero = ({
         /> */}
         <LustreText
           text="فروشگاه قهوه"
-          className="font-display max-w-xl text-6xl leading-none text-neutral-50 md:text-7xl lg:text-8xl"
+          className="font-display max-w-xl text-6xl leading-none !mix-blend-difference md:text-7xl lg:text-8xl"
         />
         <FadeIn
           // important factor to go up or down: translate-y-8
@@ -62,12 +63,8 @@ const Hero = ({
           vars={{ delay: 1, duration: 1.3 }}
         >
           <p className=" ">
-            {/* An expression of quiet luxury, Côte Royale is designed for the
-            womans who commands attention without seeking it. A reflection of
-            nature’s raw beauty. */}
-            محصولات ما برای زنانی طراحی شده‌اند که به دنبال بیان اصیل شخصیت خود
-            است، نه نشان دادن آن. هر کیف، تجلی زیبایی خام و طبیعی و هنر دستی است
-            که با عشق ساخته شده است.
+            عرضه انواع قهوه، تجهیزات و لوازم جانبی مرتبط و ارسال به سراسر نقاط
+            ایران
           </p>
         </FadeIn>
 
@@ -75,11 +72,24 @@ const Hero = ({
           className="mt-8 translate-y-15"
           vars={{ delay: 1.5, duration: 1.1 }}
         >
-          <TransitionLink
-            href={'/products'}
-            className=" w-fit inline-flex items-center justify-center px-12 py-4 text-center font-extrabold tracking-wider uppercase transition-colors duration-300  border border-white text-white hover:bg-white/20"
-          >
-            محصولات
+          <TransitionLink href={'/products'} className=" ">
+            <GlassSurface
+              // width={'100%'}
+              // height={'100%'}
+              // borderRadius={999}
+              borderWidth={0.8}
+              brightness={70}
+              opacity={0.9}
+              blur={15}
+              displace={1}
+              backgroundOpacity={0.2}
+              saturation={1}
+              distortionScale={-140}
+              key={'products-link'}
+              className="w-fit inline-flex items-center justify-center px-12 py-4 text-center font-extrabold tracking-wider uppercase transition-all duration-300  border border-white text-white hover:bg-white/20 hover:scale-[1.03] active:scale-95 !rounded-xl "
+            >
+              محصولات
+            </GlassSurface>
           </TransitionLink>
         </FadeIn>
         <FadeIn
@@ -96,9 +106,25 @@ const Hero = ({
                   >
                     <TransitionLink
                       href={`/sub-categories/${sub.url}`}
-                      className="bg-gradient-to-b from-white/5 to-white/30 backdrop-blur-[2px] border rounded-none  px-2 py-1 text-center text-white border-white "
+                      className=""
                     >
-                      {sub.name}
+                      <GlassSurface
+                        // width={'100%'}
+                        // height={'100%'}
+                        // borderRadius={999}
+                        borderWidth={0.8}
+                        brightness={30}
+                        opacity={0.7}
+                        blur={15}
+                        displace={1}
+                        backgroundOpacity={0.6}
+                        saturation={1.5}
+                        distortionScale={140}
+                        key={'products-link'}
+                        className="!w-fit !h-fit inline-flex items-center justify-center !px-3 !py-1 text-center font-extrabold tracking-wider uppercase transition-all duration-300  border border-white text-white hover:scale-[1.03] active:scale-95 !rounded-xl "
+                      >
+                        {sub.name}
+                      </GlassSurface>
                     </TransitionLink>
                   </FadeIn>
                 </li>

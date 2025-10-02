@@ -4,8 +4,8 @@ import React, { useRef } from 'react'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { FadeIn } from '@/components/shared/fade-in'
-import { RevealText } from '@/components/shared/reveal-text'
+// import { FadeIn } from '@/components/shared/fade-in'
+// import { RevealText } from '@/components/shared/reveal-text'
 
 gsap.registerPlugin(ScrollTrigger)
 // --- Animation Component Definition ---
@@ -1817,33 +1817,31 @@ export const StyledFlower = () => {
       `}</style>
 
       <section className="relative w-full h-full">
-        <div className="  w-full mx-auto md:w-3/4 lg:w-1/2">
+        <div className="  w-full mx-auto  ">
           <FlowerAnimation />
         </div>
         <div className="sticky inset-0  flex flex-col items-center justify-center  gap-4 ">
-          <RevealText
+          {/* <RevealText
             // text="Effortless Elegance"
             text="آغاز داستان ما"
             id="store-statements"
             className="text-xl md:text-3xl font-bold pt-6"
             staggerAmount={0.2}
             duration={0.8}
-          />
-          <FadeIn
+          /> */}
+          {/* <FadeIn
             className=" translate-y-8 "
             vars={{ delay: 0.6, duration: 0.6 }}
           >
             <p className="text-center text-pretty md:text-lg">
-              {/* Since 1898, we have been dreaming up, designing and crafting premium and
-            essential bags and accessories that have stood the test of the years,
-            with their truly timeless design. */}
+              
               فروشگاه کوچک ما، جایی است که رویاهای قهوهی به واقعیت می‌پیوندند.
               ما با اشتیاقی وافر و چشمداشت به فردایی درخشان، کار خود را با طراحی
               و ساخت کیف‌ها و اکسسوری‌ها آغاز کرده‌ایم. بر این باوریم که طراحی
               بی‌زمان و کیفیت استثنایی، هسته اصلی خلق محصولاتی هستند که قرار است
               برای سال‌ها همراه همیشگی شما باشند.
             </p>
-          </FadeIn>
+          </FadeIn> */}
         </div>
       </section>
     </>
