@@ -58,9 +58,9 @@ export default function MobileNav({ navigation, session }: MobileNavProps) {
         aria-haspopup="true"
       >
         {isMobileMenuOpen ? (
-          <X className="h-6 w-6" />
+          <X className="h-6 w-6 text-white " />
         ) : (
-          <Menu className="h-6 w-6" />
+          <Menu className="h-6 w-6 text-white " />
         )}
       </motion.button>
 
@@ -68,7 +68,7 @@ export default function MobileNav({ navigation, session }: MobileNavProps) {
         {isMobileMenuOpen && (
           <>
             <motion.div
-              className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
+              className="fixed inset-0 z-40  lg:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}

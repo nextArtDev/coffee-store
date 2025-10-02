@@ -1,15 +1,15 @@
 'use client'
 import React from 'react'
-import FixedVideoPlay from './FixedVideoPlay'
-import heroImage from '../../../public/images/hero-image.webp'
+// import FixedVideoPlay from './FixedVideoPlay'
+// import heroImage from '../../../public/images/hero-image.webp'
 import { RevealText } from '@/components/shared/reveal-text'
 import { FadeIn } from '@/components/shared/fade-in'
 import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
 import { motion, Variants } from 'framer-motion'
 import { CategoryWithStats } from '@/lib/types/home'
 import { TransitionLink } from './TransitionLink'
-import { FixedMotionImage } from '../hero/fixed-motion-image'
-import Image from 'next/image'
+// import { FixedMotionImage } from '../hero/fixed-motion-image'
+// import Image from 'next/image'
 const WorkVideo = ({ categories }: { categories: CategoryWithStats[] }) => {
   const listContainerVariants: Variants = {
     hidden: { opacity: 0 },

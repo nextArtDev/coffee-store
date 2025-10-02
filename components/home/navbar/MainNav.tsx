@@ -35,9 +35,9 @@ export const ListItem = React.forwardRef<
         <div className="text-sm font-medium leading-none text-foreground">
           {title}
         </div>
-        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+        {/* <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
           مشاهده
-        </p>
+        </p> */}
       </TransitionLink>
     </NavigationMenuLink>
   )
@@ -66,7 +66,7 @@ export default function MainNav({
           <div className="">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="flex h-16 items-center justify-between">
-                <div className="flex flex-1 min-w-[30vw] mx-auto items-center lg:hidden">
+                <div className="flex flex-1 min-w-[40vw] mx-auto items-center lg:hidden">
                   <MobileNav navigation={navigation} session={session} />
                 </div>
 

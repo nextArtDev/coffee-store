@@ -52,7 +52,7 @@ const StickyNav: FC<StickyNavProps> = ({
       } z-10 flex w-full justify-center `}
     >
       <nav
-        className={` rounded-xl p-2 *:rounded-xl   *:transition-colors *:duration-300  ${className} `}
+        className={`  rounded-xl  *:rounded-xl   *:transition-colors *:duration-300  ${className} `}
       >
         <GlassSurface
           borderWidth={0.8}
