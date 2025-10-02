@@ -361,10 +361,10 @@ export default async function Home() {
         <div className="py-16">
           <StoreStatement />
         </div>
-        <div className="py-8 w-full min-h-dvh">
-          {/* <DualOrbitCarousel categories={categories} /> */}
+        {/* <div className="py-8 w-full min-h-dvh">
+          <DualOrbitCarousel categories={categories} />
           <GooeyCarousel categories={categories} />
-        </div>
+        </div> */}
         {!!bestSellers && (
           <section className="relative w-full h-full flex flex-col gap-8 py-8 px-3 ">
             <h2 className="text-xl md:text-3xl font-bold uppercase text-center py-8">
@@ -380,7 +380,7 @@ export default async function Home() {
           <MainPageCarousel items={products} />
         </section>
         <section className="py-12">
-          <WorkVideo />
+          <WorkVideo categories={categories} />
         </section>
         <section className="flex flex-col items-center gap-6 ">
           <h2 className="text-xl md:text-3xl font-bold uppercase text-center  py-8">

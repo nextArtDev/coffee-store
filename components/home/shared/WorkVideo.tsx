@@ -1,9 +1,35 @@
+'use client'
 import React from 'react'
 import FixedVideoPlay from './FixedVideoPlay'
 import { RevealText } from '@/components/shared/reveal-text'
 import { FadeIn } from '@/components/shared/fade-in'
+import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
+import { motion, Variants } from 'framer-motion'
+import { CategoryWithStats } from '@/lib/types/home'
+import { TransitionLink } from './TransitionLink'
+const WorkVideo = ({ categories }: { categories: CategoryWithStats[] }) => {
+  const listContainerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15, // Slower stagger
+        delayChildren: 0.2, // More delay
+      },
+    },
+  }
 
-const WorkVideo = () => {
+  const listItemVariants: Variants = {
+    hidden: { scale: 0.8, opacity: 0 }, // Use scale instead of y movement
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: 'easeOut',
+      },
+    },
+  }
   return (
     <section className="w-full py-12 flex flex-col items-center justify-center mx-auto gap-12  text-center">
       <div className="  w-[90vw] m-w-xl flex flex-col items-center mx-auto gap-4">
@@ -29,9 +55,75 @@ const WorkVideo = () => {
           </p>
         </FadeIn>
       </div>
-      <FixedVideoPlay className="w-full" videoUrl="/videos/vid1.webm">
-        {' '}
-      </FixedVideoPlay>
+      <div className="relative w-full h-full">
+        <GlassSurface
+          // key={'carousel'}
+          width={'100%'}
+          height={'100%'}
+          // borderRadius={999}
+          borderWidth={0.07}
+          brightness={50}
+          opacity={0.5}
+          blur={1}
+          displace={10}
+          backgroundOpacity={0}
+          saturation={1}
+          distortionScale={-180}
+          key={'vids'}
+          className="p-2 !rounded-xl  "
+        >
+          <FixedVideoPlay
+            className="relative bg-transparent w-full  rounded-xl overflow-hidden"
+            videoUrl="/videos/vid1.webm"
+          >
+            <span></span>
+          </FixedVideoPlay>
+        </GlassSurface>
+
+        <motion.div
+          className="p-2"
+          initial="hidden"
+          animate="visible"
+          variants={listContainerVariants}
+        >
+          <motion.ul
+            className="absolute inset-0 z-10  max-w-3xl mx-auto  space-y-2 w-full h-full   flex justify-evenly items-center flex-wrap gap-0.5 place-content-center py-10 min-h-[50dvh] place-items-center"
+            variants={listContainerVariants}
+          >
+            {categories?.map((subcategory) => (
+              <motion.li
+                key={subcategory.id}
+                className=" relative w-[25%] aspect-square grid grid-rows-1 place-content-center place-items-center rounded-md text-black dark:text-white text-xs sm:text-sm md:text-md cursor-pointer"
+                variants={listItemVariants}
+              >
+                <TransitionLink
+                  href={`/sub-categories/${subcategory.url}`}
+                  className="z-[1] absolute inset-0 flex items-center justify-center "
+                >
+                  <GlassSurface
+                    // key={'carousel'}
+                    width={'100%'}
+                    height={'100%'}
+                    // borderRadius={999}
+                    borderWidth={0.07}
+                    brightness={50}
+                    opacity={0.5}
+                    blur={1}
+                    displace={10}
+                    backgroundOpacity={0}
+                    saturation={1}
+                    distortionScale={-180}
+                    className="p-1 text-accent !rounded-xl aspect-square font-bold text-center text-2xl "
+                  >
+                    {' '}
+                    {subcategory.name}
+                  </GlassSurface>
+                </TransitionLink>
+              </motion.li>
+            ))}
+          </motion.ul>
+        </motion.div>
+      </div>
     </section>
   )
 }
