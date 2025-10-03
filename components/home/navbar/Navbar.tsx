@@ -28,7 +28,7 @@ const Navbar = async () => {
   //   console.log(navigation)
   return (
     <div>
-      <StickyNav isTop>
+      <StickyNav isTop className="z-50">
         <MainNav navigation={navigation} session={session} />
       </StickyNav>
     </div>

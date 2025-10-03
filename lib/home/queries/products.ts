@@ -944,6 +944,31 @@ export async function getSubCategoryBySlug({ slug }: { slug: string }) {
     },
   })
 }
+export async function getCategoryBySlug({ slug }: { slug: string }) {
+  return await prisma.category.findFirst({
+    where: {
+      url: slug,
+    },
+    include: {
+      images: {
+        select: { url: true },
+      },
+
+      subCategories: {
+        select: {
+          id: true,
+          name: true,
+          url: true,
+
+          images: {
+            select: { url: true },
+            take: 1,
+          },
+        },
+      },
+    },
+  })
+}
 
 export const getHomePageReviews = async (): Promise<
   | (Review & {

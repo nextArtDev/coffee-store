@@ -106,14 +106,14 @@ const WorkVideo = ({ categories }: { categories: CategoryWithStats[] }) => {
             className="absolute inset-0 z-10  max-w-3xl mx-auto  space-y-2 w-full h-full   flex justify-evenly items-center flex-wrap gap-0.5 place-content-center py-10 min-h-[50dvh] place-items-center"
             variants={listContainerVariants}
           >
-            {categories?.map((subcategory) => (
+            {categories?.map((category) => (
               <motion.li
-                key={subcategory.id}
+                key={category.id}
                 className=" relative w-[25%] aspect-square grid grid-rows-1 place-content-center place-items-center rounded-md text-black dark:text-white text-xs sm:text-sm md:text-md cursor-pointer"
                 variants={listItemVariants}
               >
                 <TransitionLink
-                  href={`/sub-categories/${subcategory.url}`}
+                  href={`/categories/${category.url}`}
                   className="z-[1] absolute inset-0 flex items-center justify-center "
                 >
                   <GlassSurface
@@ -132,7 +132,7 @@ const WorkVideo = ({ categories }: { categories: CategoryWithStats[] }) => {
                     className="p-1 text-accent !rounded-xl aspect-square font-bold text-center text-2xl "
                   >
                     {' '}
-                    {subcategory.name}
+                    {category.name}
                   </GlassSurface>
                 </TransitionLink>
               </motion.li>

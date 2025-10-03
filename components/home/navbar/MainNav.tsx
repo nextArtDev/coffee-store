@@ -59,7 +59,7 @@ export default function MainNav({
 
   return (
     <div className="">
-      <header className="relative">
+      <header className="relative z-50">
         <nav aria-label="Main navigation">
           {/* <TopBanner /> */}
 
