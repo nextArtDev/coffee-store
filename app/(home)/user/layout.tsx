@@ -16,7 +16,7 @@ export default function UserLayout({
 }>) {
   return (
     <>
-      <div className="w-full h-full flex flex-col">
+      <div className="w-full h-full flex flex-col pt-24">
         <div className="w-full h-full border-b  mx-auto">
           <div className="w-full  flex justify-around items-center h-16 px-4">
             {/* <article>

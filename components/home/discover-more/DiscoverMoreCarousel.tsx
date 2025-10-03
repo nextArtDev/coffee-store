@@ -48,7 +48,8 @@ export default function DiscoverMoreCarousel({
           {subCategories.map((item, i) => (
             <CarouselItem
               key={item.id}
-              className="pr-1 basis-4/5 md:basis-2/3 xl:basis-1/4 w-full mx-auto" // Removed mx-auto to avoid centering issues
+              // className="pr-1 basis-4/5 md:basis-2/3 xl:basis-1/4 w-full mx-auto"
+              className="pl-1.5 mx-auto basis-6/7  md:basis-3/7 lg:basis-1/3 xl:basics-1/4 2xl:basis-1/5 w-full " // Adjusted for better responsiveness
             >
               <FadeIn
                 vars={{ delay: 0.2 * i, duration: 0.5, ease: 'sine.inOut' }}

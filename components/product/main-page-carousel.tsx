@@ -53,7 +53,7 @@ const CarouselItemComponent = ({
   return (
     <CarouselItem
       key={item.id}
-      className="pl-1  basis-1/1 xs:basis-2/3 mx-auto  sm:basis-1/2 md:pl-2 md:basis-1/2 lg:basis-1/3 xl:pl-4 xl:basis-1/4"
+      className="pl-1.5 mx-auto basis-6/7  md:basis-3/7 lg:basis-1/3 xl:basics-1/4 2xl:basis-1/5 w-full"
     >
       <FadeIn
         className="translate-y-5"

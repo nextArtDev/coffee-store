@@ -12,7 +12,7 @@ const page = async () => {
   if (!user) redirect('/sign-in')
 
   return (
-    <div>
+    <div className="pt-24">
       <CartContainer />
     </div>
   )
