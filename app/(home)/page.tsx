@@ -1,7 +1,7 @@
 import DiscoverMoreCarousel from '@/components/home/discover-more/DiscoverMoreCarousel'
 import Hero from '@/components/home/hero/hero'
 // import DualOrbitCarousel from '@/components/home/orbit-carousel'
-import GooeyCarousel from '@/components/home/orbit-carousel/tabs-carousel'
+// import GooeyCarousel from '@/components/home/orbit-carousel/tabs-carousel'
 import Commitments from '@/components/home/shared/Commitments'
 import Iridescence from '@/components/home/shared/Iridescence'
 import StoreStatement from '@/components/home/shared/StoreStatement'

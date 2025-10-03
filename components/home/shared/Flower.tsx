@@ -68,6 +68,11 @@ const FlowerAnimation = () => {
       tl.set('#Footer_group_1_', { autoAlpha: 1 })
         .to(mainStems, { strokeDashoffset: 0, duration: 1.5 }, 'start')
         .fromTo(
+          '#logo-shape',
+          { autoAlpha: 0, scale: 0.5, transformOrigin: '50% 100%' },
+          { autoAlpha: 1, scale: 1, duration: 2 }
+        )
+        .fromTo(
           '#BaseGroup16_1_ path',
           { autoAlpha: 1, scale: 0, transformOrigin: '-10% 130%' },
           { scale: 1, duration: 1 },
@@ -394,6 +399,16 @@ const FlowerAnimation = () => {
       viewBox="0 0 641.5 637.3"
       className="flowerFrame"
     >
+      <image
+        id="logo-shape"
+        href="/coffee-logo1.svg"
+        x="120.75" // 320.75 - 200
+        y="118.65" // 318.65 - 200
+        width="400" // 200 * 2
+        height="400" // 200 * 2
+        // clipPath="url(#center-circle-clip)"
+        className="object-contain rounded-full "
+      />
       <g id="Footer_group_1_">
         <path
           id="Dots_1_"
@@ -1733,7 +1748,7 @@ export const StyledFlower = () => {
     <>
       <style jsx global>{`
         .flowerFrame {
-          height: 90vh;
+          height: 70vh;
           width: 100%;
         }
         .flowerFrame #Footer_group_1_,
@@ -1816,7 +1831,7 @@ export const StyledFlower = () => {
         }
       `}</style>
 
-      <section className="relative w-full h-full">
+      <section className="relative w-full  h-[70vh] md:h-[90vh]">
         <div className="  w-full mx-auto  ">
           <FlowerAnimation />
         </div>
