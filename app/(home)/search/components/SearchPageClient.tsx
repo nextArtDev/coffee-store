@@ -80,8 +80,8 @@ export default function SearchPageClient({
   coffeeFiltersData,
   chocolateFiltersData,
   categories,
-  initialFilters,
-}: SearchPageClientProps) {
+}: // initialFilters,
+SearchPageClientProps) {
   const { currentFilters, updateFilters, clearFilters } = useSearchFilters()
   const [results, setResults] = useState(initialResults)
   const [loading, setLoading] = useState(false)

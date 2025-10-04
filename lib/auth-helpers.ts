@@ -45,7 +45,7 @@ export async function getCurrentUserWithFetch() {
     const { data: session, error } = await betterFetch<Session>(
       '/api/auth/get-session',
       {
-        baseURL: process.env.BETTER_AUTH_URL || 'https://kharak.liara.run',
+        baseURL: process.env.BETTER_AUTH_URL || '',
         headers: {
           cookie: cookies || '',
         },

@@ -134,8 +134,47 @@ async function SearchPageContent({ searchParams }: SearchPageProps) {
         />
         <SearchPageClient
           initialResults={searchResults}
-          coffeeFiltersData={filtersData.coffeeFiltersData}
-          chocolateFiltersData={filtersData.chocolateFiltersData}
+          coffeeFiltersData={
+            filtersData.coffeeFiltersData
+              ? {
+                  ...filtersData.coffeeFiltersData,
+                  roastLevels: filtersData.coffeeFiltersData.roastLevels.filter(
+                    (level) => level !== null
+                  ),
+                  processingMethods:
+                    filtersData.coffeeFiltersData.processingMethods.filter(
+                      (method) => method !== null
+                    ),
+                  origins: filtersData.coffeeFiltersData.origins.filter(
+                    (origin) => origin !== null
+                  ),
+                  grindSizes: filtersData.coffeeFiltersData.grindSizes.filter(
+                    (size) => size !== null
+                  ),
+                }
+              : null
+          }
+          chocolateFiltersData={
+            filtersData.chocolateFiltersData
+              ? {
+                  ...filtersData.chocolateFiltersData,
+                  chocolateTypes:
+                    filtersData.chocolateFiltersData.chocolateTypes.filter(
+                      (type) => type !== null
+                    ),
+                  origins: filtersData.chocolateFiltersData.origins.filter(
+                    (origin) => origin !== null
+                  ),
+                  textures: filtersData.chocolateFiltersData.textures.filter(
+                    (texture) => texture !== null
+                  ),
+                  flavorNotes:
+                    filtersData.chocolateFiltersData.flavorNotes.filter(
+                      (note) => note !== null
+                    ),
+                }
+              : null
+          }
           filtersData={filtersData}
           categories={categoriesData.categories}
           initialFilters={filters}
