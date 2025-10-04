@@ -2,7 +2,7 @@
 
 import { CategoryData, FiltersData, SearchFilters } from '@/lib/types/home'
 import { Candy, Coffee, Package } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 // import SearchSidebar from './SearchSidebbar'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -72,13 +72,13 @@ export default function SearchSidebar({
   >(currentFilters.productType || 'general')
 
   // DEBUG: Log what data we're receiving
-  useEffect(() => {
-    console.log('🔍 SearchSidebar Debug:')
-    console.log('coffeeFiltersData:', coffeeFiltersData)
-    console.log('chocolateFiltersData:', chocolateFiltersData)
-    console.log('Has coffee data?', !!coffeeFiltersData)
-    console.log('Has chocolate data?', !!chocolateFiltersData)
-  }, [coffeeFiltersData, chocolateFiltersData])
+  // useEffect(() => {
+  //   console.log('🔍 SearchSidebar Debug:')
+  //   console.log('coffeeFiltersData:', coffeeFiltersData)
+  //   console.log('chocolateFiltersData:', chocolateFiltersData)
+  //   console.log('Has coffee data?', !!coffeeFiltersData)
+  //   console.log('Has chocolate data?', !!chocolateFiltersData)
+  // }, [coffeeFiltersData, chocolateFiltersData])
 
   const handleTabChange = (value: string) => {
     const newTab = value as 'general' | 'coffee' | 'chocolate'
@@ -97,7 +97,7 @@ export default function SearchSidebar({
       <ScrollArea className="h-[calc(100vh-10px)]">
         <div className="space-y-6 p-1">
           {/* DEBUG INFO - Remove in production */}
-          {showDebugInfo && (
+          {/* {showDebugInfo && (
             <div className="bg-yellow-50 border border-yellow-200 rounded p-3 text-xs">
               <p className="font-bold mb-2">🐛 Debug Info:</p>
               <div className="space-y-1">
@@ -125,7 +125,7 @@ export default function SearchSidebar({
                 )}
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Show tabs only if we have special filter data */}
           {coffeeFiltersData || chocolateFiltersData ? (

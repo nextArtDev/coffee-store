@@ -106,7 +106,7 @@ export const getAllSubCategories = cache(
         skip: skipAmount,
         take: pageSize,
       }),
-      prisma.category.count({}),
+      prisma.subCategory.count({}),
     ])
     const isNext = count > skipAmount + subCategories.length
 

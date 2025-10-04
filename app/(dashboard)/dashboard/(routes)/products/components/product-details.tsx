@@ -378,7 +378,7 @@ const ProductDetails: FC<ProductFormProps> = ({
     )
 
     if (isDuplicate) {
-      toast.info(`A variant with the color ${color.name} already exists.`)
+      toast.info(`قبلاایجاد شده است. ${color.name} وریانت با رنگ`)
       return
     }
 

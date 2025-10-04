@@ -42,7 +42,7 @@ export async function createProduct(
       errors: result.error.flatten().fieldErrors,
     }
   }
-
+  // console.log({ result })
   const user = await currentUser()
   if (!user || user.role !== 'admin') {
     return {

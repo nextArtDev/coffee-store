@@ -82,10 +82,10 @@ const CarouselItemComponent = ({
                   className="!px-2 !py-1 !w-fit !h-fit !bg-muted/10  rounded-full  "
                 >
                   <div className="flex flex-col text-center gap-1">
-                    <p className="font-semibold text-muted-foreground text-xs md:text-sm lg:text-base">
+                    <p className="font-semibold  text-xs md:text-sm lg:text-base">
                       {item.category!.name}
                     </p>
-                    <p className="font-bold">{item.name!}</p>
+                    <p className="font-bold text-white">{item.name!}</p>
                   </div>
                 </GlassSurface>
               </div>
@@ -103,7 +103,7 @@ const CarouselItemComponent = ({
                   saturation={1}
                   distortionScale={-180}
                   key={'characteristics'}
-                  className="!px-1 !py-1 !w-fit !h-fit !bg-accent  rounded-full  text-primary/20  "
+                  className="!p-0 !w-fit !h-fit !bg-accent  rounded-full "
                 >
                   {!!item.variants && (
                     <>
@@ -133,7 +133,7 @@ const CarouselItemComponent = ({
                   )}
                 </GlassSurface>
               </div>
-              <article className="absolute w-fit h-fit top-[15%] left-4  ">
+              <article className="absolute w-full h-fit top-[15%] left-4  ">
                 {/* <p className="font-bold">{item.name}</p> */}
                 {avgRating && (
                   <div className="flex gap-0.5 items-center text-accent">
@@ -146,7 +146,7 @@ const CarouselItemComponent = ({
                   </div>
                 )}
               </article>
-              <figure className="relative w-full border-none rounded-xl h-[450px] ">
+              <figure className="relative w-full !p-0 border-none rounded-xl min-h-[450px] ">
                 <Image
                   unoptimized
                   src={
@@ -155,7 +155,7 @@ const CarouselItemComponent = ({
                   }
                   fill
                   alt={item.name!}
-                  className="object-contain rounded-xl scale-65 hover:scale-75 transition-transform duration-500 ease-in-out"
+                  className="object-contain rounded-xl scale-55 hover:scale-75 transition-transform duration-500 ease-in-out"
                   sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
                   priority={index < 4} // Prioritize first 4 images (visible on load)
                   quality={85} // Slightly reduced quality for faster loading
