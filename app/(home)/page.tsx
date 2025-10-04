@@ -8,6 +8,7 @@ import StoreStatement from '@/components/home/shared/StoreStatement'
 import WorkVideo from '@/components/home/shared/WorkVideo'
 import TestimonialCarousel from '@/components/home/testemonial/Testemonial'
 import MainPageCarousel from '@/components/product/main-page-carousel'
+// import { seed } from '@/lib/home/actions/seed'
 
 import {
   getBestSellers,
@@ -125,6 +126,7 @@ export default async function Home() {
   //     getSubCategories(),
   //     getHomePageReviews(),
   //   ])
+
   const [products, bestSellers, categories, subCategories, reviews] =
     await Promise.all([
       getHomepageProducts(),

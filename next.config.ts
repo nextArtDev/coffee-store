@@ -34,7 +34,7 @@ const getCorsOrigins = () => {
       'http://127.0.0.1:3000',
     ]
   }
-  return ['']
+  return ['https://sepid-leather.iran.liara.run']
 }
 
 const nextConfig: NextConfig = {
