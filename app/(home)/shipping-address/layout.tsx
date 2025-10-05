@@ -7,5 +7,5 @@ export default function ShippingAddressLayout({
 }: {
   children: React.ReactNode
 }) {
-  return <div className="  min-h-screen">{children}</div>
+  return <div className="pt-20  min-h-screen">{children}</div>
 }

@@ -53,7 +53,7 @@ const PlaceOrderPage = async () => {
   const shippingAddress = await getUserShippingAddressById(userId)
   if (!shippingAddress) redirect('/shipping-address')
   return (
-    <section className="px-2">
+    <section className="pt-20 px-2">
       <CheckoutSteps current={2} />
       <h1 className="py-4 text-2xl font-bold text-center">تایید سفارش</h1>
 

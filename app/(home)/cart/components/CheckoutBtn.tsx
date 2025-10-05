@@ -19,7 +19,7 @@ const CheckoutBtn = ({ cartItems }: Props) => {
       const res = await saveAllToCart(cartItems)
       // console.log(res)
       if (!res.success) {
-        toast.success(res.message)
+        toast.error(res.message)
         return
       }
       router.push('/shipping-address')

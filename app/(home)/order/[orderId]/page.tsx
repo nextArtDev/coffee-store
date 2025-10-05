@@ -62,7 +62,7 @@ const OrderDetailsPage = async ({
   const isAdmin = currentUser?.role === 'admin' || false
 
   return (
-    <section>
+    <section className="pt-20">
       <Suspense fallback={<OrderDetailsSkeleton />}>
         <OrderDetailsTableWrapper order={order} isAdmin={isAdmin} />
       </Suspense>
