@@ -17,9 +17,12 @@ import Link from 'next/link'
 import FAQItem from '../../faq/components/FAQItem'
 import Countdown from './count-down'
 import ProductProperties from './ProductProperties'
-import { StarRating } from '@/components/home/testemonial/StarRating'
 // import SliderFlowerButton from '@/components/product/SliderFlowerButton'
 import EnhancedProductSpecs from './EnhancedProductSpecs'
+import BookmarkBtn from './BookmarkBtn'
+import ViewNumbers from './view-numbers'
+import { ShareButton } from './share-button'
+import { SingleStarRating } from '@/components/home/testemonial/SingleStartRating'
 
 type ProductPageProp = {
   data: NonNullable<ProductDetails>
@@ -30,6 +33,7 @@ type ProductPageProp = {
   selectedSizeId: string
   selectedColorId: string
   relatedProducts: RelatedProduct[] | null
+  isInWishList: boolean
 }
 const ProductPage: FC<ProductPageProp> = ({
   data,
@@ -41,6 +45,7 @@ const ProductPage: FC<ProductPageProp> = ({
 
   selectedColorId,
   selectedSizeId,
+  isInWishList,
 }) => {
   const {
     description,
@@ -67,9 +72,9 @@ const ProductPage: FC<ProductPageProp> = ({
     coffeeCharacteristics,
     chocolateCharacteristics,
     equipmentSpecs,
+    views,
     // rating,
     // sales,
-    // views,
     // isFeatured,
     // createdAt,
     // updatedAt,
@@ -114,21 +119,19 @@ const ProductPage: FC<ProductPageProp> = ({
 
         {/* <ProductDetails /> */}
         <article className="grid grid-row-5 gap-4">
-          <div className="flex gap-2">
+          <div className="flex items-center justify-between gap-2">
             {productAverageRating && (
-              <>
-                {/* <SingleStarRating rating={productAverageRating.rating} /> */}
+              <Link href={'#product-reviews'} className="flex gap-2">
+                <SingleStarRating rating={productAverageRating.rating} />
                 {productAverageRating.rating}
                 <p>{' از'}</p>
                 {productAverageRating.count}
                 <p>{' نفر'}</p>
-                <StarRating
-                  allowHalfStars
-                  disabled
-                  value={productAverageRating.rating}
-                />
-              </>
+              </Link>
             )}
+            <ViewNumbers views={views} />
+            <BookmarkBtn isInWishList={isInWishList} productId={id} />
+            <ShareButton />
           </div>
           <p className="text-sm font-semibold">{brand}</p>
           <p className="text-base font-bold">
@@ -363,6 +366,7 @@ const ProductPage: FC<ProductPageProp> = ({
           </div>
         )}
         <Separator />
+        <article id="product-reviews"></article>
         <ReviewList
           reviews={reviews}
           productId={id}
