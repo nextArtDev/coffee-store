@@ -332,7 +332,7 @@ const ProductDetailsPage = async ({
     ],
   }
   return (
-    <div>
+    <div className="pt-20">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

@@ -1,21 +1,15 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { Share, Link, Share2 } from 'lucide-react'
-import { toast } from 'sonner'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { Share2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 export function ShareButton() {
   const [url, setUrl] = useState('')
 
@@ -54,7 +48,7 @@ export function ShareButton() {
       <TooltipTrigger asChild>
         <Button variant="ghost" size="sm" onClick={handleCopyLink}>
           <Share2
-            //   onClick={handleNativeShare}
+            onClick={handleNativeShare}
             size={32}
             className={cn('cursor-pointer w-10 h-10 scale-150')}
           />

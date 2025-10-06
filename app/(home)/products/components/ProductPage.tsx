@@ -23,6 +23,7 @@ import BookmarkBtn from './BookmarkBtn'
 import ViewNumbers from './view-numbers'
 import { ShareButton } from './share-button'
 import { SingleStarRating } from '@/components/home/testemonial/SingleStartRating'
+import ProductBreadcrumb from './ProductBreadcrumb'
 
 type ProductPageProp = {
   data: NonNullable<ProductDetails>
@@ -73,6 +74,7 @@ const ProductPage: FC<ProductPageProp> = ({
     chocolateCharacteristics,
     equipmentSpecs,
     views,
+    subCategory,
     // rating,
     // sales,
     // isFeatured,
@@ -110,6 +112,17 @@ const ProductPage: FC<ProductPageProp> = ({
 
   return (
     <section className="pb-24 w-full h-full  ">
+      <ProductBreadcrumb
+        links={[
+          { id: '1', label: 'سارینا', href: '/' },
+          {
+            id: '2',
+            label: subCategory.name,
+            href: `/sub-categories/${subCategory.url}`,
+          },
+          { id: '3', label: name, href: slug },
+        ]}
+      />
       <div className="max-w-2xl px-4 mx-auto  flex flex-col gap-4">
         <article className=" ">
           <ProductDetailCarousel
