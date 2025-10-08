@@ -63,6 +63,8 @@ interface SearchPageProps {
 //   return generateSearchMetadata(params)
 // }
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({
   searchParams,
 }: SearchPageProps): Promise<Metadata> {

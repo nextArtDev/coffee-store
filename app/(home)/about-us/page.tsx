@@ -28,6 +28,7 @@ interface AboutUsProps {
   }>
   className?: string
 }
+export const dynamic = 'force-dynamic'
 
 const iconComponents = {
   ScanHeart: ScanHeart,

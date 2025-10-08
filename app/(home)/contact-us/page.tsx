@@ -9,6 +9,8 @@ import { BorderBeam } from '../about-us/components/border-beam'
 
 //https://blocks.mvp-subha.me/docs/mainsections/about
 
+export const dynamic = 'force-dynamic'
+
 export default function AboutUs1() {
   const missionRef = useRef(null)
   const missionInView = useInView(missionRef, { once: true, amount: 0.3 })

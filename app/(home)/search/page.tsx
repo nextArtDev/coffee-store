@@ -24,6 +24,8 @@ interface SearchPageProps {
   }>
 }
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata({
   searchParams,
 }: SearchPageProps): Promise<Metadata> {

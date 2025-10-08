@@ -5,6 +5,8 @@ import { Spotlight } from '../about-us/components/spotlight'
 import FAQ from './components/FAQ'
 // import { Button } from '@/components/ui/button'
 
+export const dynamic = 'force-dynamic'
+
 const faqs = [
   {
     id: '1',
