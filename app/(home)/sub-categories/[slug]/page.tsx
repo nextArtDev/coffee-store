@@ -9,6 +9,7 @@ import { RevealText } from '@/components/shared/reveal-text'
 import ProductGrid from '../../search/components/ProductGrid'
 import { Metadata } from 'next'
 
+export const dynamic = 'force-dynamic'
 interface SubcategoryPageProps {
   params: Promise<{ slug: string }>
 }
