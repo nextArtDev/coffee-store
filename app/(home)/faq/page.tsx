@@ -1,12 +1,13 @@
-'use client'
-// import { PhoneCall } from 'lucide-react'
-// import { Badge } from '@/components/ui/badge'
-import { Spotlight } from '../about-us/components/spotlight'
+import dynamic from 'next/dynamic'
 import FAQ from './components/FAQ'
-// import { Button } from '@/components/ui/button'
 
-export const dynamic = 'force-dynamic'
-
+const Spotlight = dynamic(
+  () =>
+    import('../about-us/components/spotlight').then((mod) => ({
+      default: mod.Spotlight,
+    })),
+  { ssr: false }
+)
 const faqs = [
   {
     id: '1',
