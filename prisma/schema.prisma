@@ -758,6 +758,7 @@ model PaymentRateLimit {
 }
 
 // Coffee Specific
+
 model CategorySpecTemplate {
   id         String       @id @default(uuid())
   name       String // e.g., "Caffeine Content", "Roast Level", "Origin"
@@ -857,6 +858,7 @@ enum GrindSize {
 //   coffees     CoffeeProfile[]
 // }
 // Equipment specifications
+
 model EquipmentSpecs {
   id String @id @default(uuid())
 
@@ -902,6 +904,7 @@ enum FilterType {
 }
 
 // Accessory specifications
+
 model AccessorySpecs {
   id String @id @default(uuid())
 

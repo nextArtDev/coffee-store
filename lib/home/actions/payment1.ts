@@ -108,10 +108,7 @@ async function createPaymentRequest(order: any, orderId: string) {
   await checkRateLimit(user.id)
 
   // Use the new API route for callback
-  const callbackURL =
-    process.env.NODE_ENV === 'production'
-      ? `${process.env.NEXT_PUBLIC_APP_URL}/api/payment/callback?orderId=${orderId}`
-      : `http://localhost:3000/api/payment/callback?orderId=${orderId}`
+  const callbackURL = `${process.env.NEXT_PUBLIC_APP_URL}/api/payment/callback?orderId=${orderId}`
 
   const payment = (await zarinpal.PaymentRequest({
     Amount: Number(order.total),
