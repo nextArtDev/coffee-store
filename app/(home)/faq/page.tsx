@@ -1,13 +1,4 @@
-import dynamic from 'next/dynamic'
 import FAQ from './components/FAQ'
-
-const Spotlight = dynamic(
-  () =>
-    import('../about-us/components/spotlight').then((mod) => ({
-      default: mod.Spotlight,
-    })),
-  { ssr: false }
-)
 const faqs = [
   {
     id: '1',
@@ -48,14 +39,7 @@ const faqs = [
 ]
 const FaqPage = () => {
   return (
-    <section className="relative w-full overflow-hidden py-16">
-      <Spotlight
-        gradientFirst="radial-gradient(68.54% 68.72% at 55.02% 31.46%, hsla(336, 100%, 50%, 0.08) 0, hsla(341, 100%, 55%, 0.04) 50%, hsla(336, 100%, 45%, 0) 80%)"
-        gradientSecond="radial-gradient(50% 50% at 50% 50%, hsla(333, 100%, 85%, 0.08) 0, hsla(335, 100%, 55%, 0.04) 80%, transparent 100%)"
-        gradientThird="radial-gradient(50% 50% at 50% 50%, hsla(332, 100%, 85%, 0.06) 0, hsla(327, 100%, 85%, 0.06) 80%, transparent 100%)"
-      />
-      <div className="bg-primary/5 absolute top-20 -left-20 h-64 w-64 rounded-full blur-3xl" />
-      <div className="bg-primary/5 absolute -right-20 bottom-20 h-64 w-64 rounded-full blur-3xl" />
+    <section className="w-full overflow-hidden py-16 ">
       <FAQ faqs={faqs} />
     </section>
   )
