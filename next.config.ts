@@ -39,6 +39,12 @@ const getCorsOrigins = () => {
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: '5mb',

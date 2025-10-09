@@ -1,4 +1,6 @@
 import FAQ from './components/FAQ'
+
+export const dynamic = 'force-dynamic'
 const faqs = [
   {
     id: '1',

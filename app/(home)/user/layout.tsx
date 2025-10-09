@@ -9,6 +9,8 @@ export const metadata = {
   title: 'حساب کاربری',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default function UserLayout({
   children,
 }: Readonly<{
