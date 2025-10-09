@@ -20,6 +20,8 @@ import {
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 
+export const dynamic = 'force-dynamic'
+
 export async function generateMetadata(): Promise<Metadata> {
   // Fetch data for dynamic meta information
   const [categories, reviews] = await Promise.all([
