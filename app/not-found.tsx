@@ -3,6 +3,8 @@
 // import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 
+export const dynamic = 'force-dynamic'
+
 const NotFoundPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
