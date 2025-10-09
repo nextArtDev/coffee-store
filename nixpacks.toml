@@ -1,11 +1,11 @@
 [phases.setup]
-cmds = ["bun install"]
+nixPkgs = ['bun']
+
+[phases.install]
+cmds = ['bun install']
 
 [phases.build]
-cmds = ["bun run build"]
+cmds = ['bun run build --verbose']
 
-[phases.start]
-cmd = "bun start"
-
-[build.env]
-NIXPACKS_PKG_MANAGER = "bun"
+[start]
+cmd = 'bun run start'
