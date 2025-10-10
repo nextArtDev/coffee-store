@@ -11,6 +11,7 @@ import { TransitionLink } from '../shared/TransitionLink'
 import { FixedMotionImage } from './fixed-motion-image'
 import LustreText from '../shared/lustre-text'
 import GlassSurface from '@/components/shared/glass-surface/GlassSurface'
+import Image from 'next/image'
 
 const Hero = ({
   subCategories,
@@ -25,7 +26,7 @@ const Hero = ({
         vars={{ scale: 1, opacity: 0.5 }}
         className=" absolute inset-0   min-h-svh origin-top lg:h-svh motion-safe:scale-125 motion-reduce:opacity-50 "
       >
-        <FixedMotionImage
+        {/* <FixedMotionImage
           imageUrl={heroImage.src}
           imageAlt="Coffee Store"
           priority={true}
@@ -33,16 +34,17 @@ const Hero = ({
           // overlayClassNames="bg-gradient-to-b from-black/20 via-black/40 to-black/60"
           overlayClassNames="!bg-transparent"
         >
-          {/* <Image
-            unoptimized
-            src={heroImage}
-            priority
-            fetchPriority="high"
-            alt="hero image"
-            fill
-            className="object-cover origin-top "
-          /> */}{' '}
-        </FixedMotionImage>
+          {' '}
+        </FixedMotionImage> */}
+        <Image
+          unoptimized
+          src={heroImage}
+          priority
+          fetchPriority="high"
+          alt="hero image"
+          fill
+          className="object-cover origin-top "
+        />
       </FadeIn>
       <div className="relative flex h-screen flex-col justify-center items-center">
         {/* <RevealText
