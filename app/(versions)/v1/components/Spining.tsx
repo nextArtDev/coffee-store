@@ -14,6 +14,7 @@ export interface CarouselItem {
   backgroundColor: string
   image: string
   canImage: string // Individual can texture image for each item
+  mockupImage?: string // Optional individual mockup frame for each item
 }
 
 // Define props for the component
@@ -44,14 +45,12 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
   const [prevActiveIndex, setPrevActiveIndex] = useState(0)
   const [leftMockup, setLeftMockup] = useState(0)
   const [isRightDirection, setIsRightDirection] = useState(false)
-  const [canStripLoaded, setCanStripLoaded] = useState(false)
 
   // Refs for DOM elements
   const carouselRef = useRef<HTMLDivElement>(null)
   const mockupRef = useRef<HTMLDivElement>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const itemRefs = useRef<(HTMLDivElement | null)[]>([])
-  const canStripRef = useRef<HTMLDivElement>(null)
 
   // Calculate left position for each item
   const leftEachItem = items.length > 1 ? 100 / (items.length - 1) : 0
@@ -160,17 +159,8 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
       }
     }
 
-    // Update mockup background position with GSAP
-    if (mockupRef.current) {
-      gsap.to(mockupRef.current, {
-        '--left': `${leftMockup}%`,
-        duration: 0.5,
-        ease: 'power2.inOut',
-      })
-    }
-
     resetInterval()
-  }, [activeIndex, prevActiveIndex, isRightDirection, leftMockup])
+  }, [activeIndex, prevActiveIndex, isRightDirection])
 
   // Get the display status for each item
   const getItemStatus = (index: number) => {
@@ -181,32 +171,8 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
 
   // Create a combined can strip image from all items
   const createCanStrip = () => {
-    // We'll use a different approach - create a CSS variable with all the can images
-    return items
-      .map((item, index) => {
-        return `url(${item.canImage}) ${index * 100}% 0`
-      })
-      .join(', ')
+    return items.map((item) => item.canImage).join(',')
   }
-
-  // Handle can strip loading
-  useEffect(() => {
-    // Preload all can images
-    const preloadImages = async () => {
-      const promises = items.map((item) => {
-        return new Promise<void>((resolve) => {
-          const img = new Image()
-          img.src = item.canImage
-          img.onload = () => resolve()
-        })
-      })
-
-      await Promise.all(promises)
-      setCanStripLoaded(true)
-    }
-
-    preloadImages()
-  }, [items])
 
   return (
     <div className={`min-h-screen bg-gray-100 ${className}`}>
@@ -291,43 +257,65 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
           </div>
         )}
 
-        {/* Mockup with rotating can strip - Fixed implementation */}
+        {/* Mockup with rotating can strip */}
         <div
           ref={mockupRef}
           className="mockup absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20"
-          style={
-            {
-              height: 'calc(673px / 1.5)',
-              width: 'calc(371px / 1.5)',
-              // Use CSS variables for dynamic values
-              '--left': `${leftMockup}%`,
-            } as React.CSSProperties
-          }
+          style={{
+            height: 'calc(673px / 1.5)',
+            width: 'calc(371px / 1.5)',
+            WebkitMaskImage: `url(${
+              items[activeIndex].mockupImage || mockupImage
+            })`,
+            WebkitMaskRepeat: 'no-repeat',
+            WebkitMaskSize: 'auto 100%',
+            maskImage: `url(${items[activeIndex].mockupImage || mockupImage})`,
+            maskRepeat: 'no-repeat',
+            maskSize: 'auto 100%',
+            transition: 'all 0.5s ease-out',
+          }}
         >
-          {/* Can Strip Container - using background images */}
+          {/* Can Strip Container - scrolls horizontally */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div
+              className="flex h-full transition-transform duration-500 ease-out"
+              style={{
+                width: `${items.length * 100}%`,
+                transform: `translateX(-${leftMockup}%)`,
+              }}
+            >
+              {items.map((item, index) => (
+                <div
+                  key={item.id}
+                  className="h-full flex-shrink-0"
+                  style={{
+                    width: `${100 / items.length}%`,
+                  }}
+                >
+                  <Image
+                    src={item.canImage}
+                    alt={`${item.name} can`}
+                    width={247}
+                    height={449}
+                    className="w-full h-full object-cover"
+                    priority={index === 0}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mockup Frame Overlay */}
           <div
-            ref={canStripRef}
-            className="absolute inset-0"
+            className="absolute inset-0 pointer-events-none z-10 transition-opacity duration-500"
             style={{
-              // Create a horizontal strip of all can images
-              backgroundImage: items
-                .map((item, index) => `url(${item.canImage})`)
-                .join(', '),
-              backgroundPosition: items
-                .map((_, index) => `${index * 100}% 0`)
-                .join(', '),
-              backgroundSize: `${items.length * 100}% 100%`,
+              backgroundImage: `url(${
+                items[activeIndex].mockupImage || mockupImage
+              })`,
+              backgroundSize: 'auto 100%',
               backgroundRepeat: 'no-repeat',
-              // Position the strip based on active index
-              backgroundPositionX: `calc(var(--left) * -1)`,
-              transition: 'background-position 0.5s ease-out',
-              // Apply mask to show only the mockup shape
-              WebkitMaskImage: `url(${mockupImage})`,
-              WebkitMaskRepeat: 'no-repeat',
-              WebkitMaskSize: 'auto 100%',
-              maskImage: `url(${mockupImage})`,
-              maskRepeat: 'no-repeat',
-              maskSize: 'auto 100%',
+              backgroundPosition: '0 0',
+              mixBlendMode: 'multiply',
             }}
           />
         </div>
