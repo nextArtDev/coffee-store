@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { gsap } from 'gsap'
-import { CSSPlugin } from 'gsap/CSSPlugin'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // Register GSAP plugins
-gsap.registerPlugin(CSSPlugin)
+gsap.registerPlugin(ScrollTrigger)
 
 // Define the type for carousel items
 export interface CarouselItem {
@@ -19,7 +19,7 @@ export interface CarouselItem {
 }
 
 // Define props for the component
-interface FruitCarouselProps {
+interface SpinningCanCarouselProps {
   items: CarouselItem[]
   mockupImage?: string
   leavesImage?: string
@@ -28,10 +28,12 @@ interface FruitCarouselProps {
   headerNavItems?: string[]
   showHeader?: boolean
   className?: string
+  animateOnView?: boolean
+  rotationDuration?: number
 }
 
 // Carousel component
-const FruitCarousel: React.FC<FruitCarouselProps> = ({
+const SpinningCanCarousel: React.FC<SpinningCanCarouselProps> = ({
   items,
   mockupImage = '/img/mockup.png',
   leavesImage = '/img/leaves.png',
@@ -40,29 +42,95 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
   headerNavItems = ['HOME', 'CONTACT', 'INFO'],
   showHeader = true,
   className = '',
+  animateOnView = true,
+  rotationDuration = 2,
 }) => {
   // State management
   const [activeIndex, setActiveIndex] = useState(0)
   const [prevActiveIndex, setPrevActiveIndex] = useState(0)
-  const [leftMockup, setLeftMockup] = useState(0)
-  const [isRightDirection, setIsRightDirection] = useState(false)
+  const [isInView, setIsInView] = useState(false)
 
   // Refs for DOM elements
   const carouselRef = useRef<HTMLDivElement>(null)
   const mockupRef = useRef<HTMLDivElement>(null)
+  const canStripRef = useRef<HTMLDivElement>(null)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   const itemRefs = useRef<(HTMLDivElement | null)[]>([])
+  const observerRef = useRef<IntersectionObserver | null>(null)
+  const timelineRef = useRef<gsap.core.Timeline | null>(null)
 
-  // Calculate left position for each item
-  const leftEachItem = items.length > 1 ? 100 / (items.length - 1) : 0
+  // Set up intersection observer for view detection
+  useEffect(() => {
+    if (!animateOnView) {
+      setIsInView(true)
+      return
+    }
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsInView(true)
+          }
+        })
+      },
+      { threshold: 0.3 }
+    )
+
+    if (carouselRef.current) {
+      observerRef.current.observe(carouselRef.current)
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+      }
+    }
+  }, [animateOnView])
+
+  // Set up can rotation animation when in view
+  useEffect(() => {
+    if (!isInView || !canStripRef.current) return
+
+    // Kill any existing timeline
+    if (timelineRef.current) {
+      timelineRef.current.kill()
+    }
+
+    // Create a new timeline for the can rotation
+    const tl = gsap.timeline({
+      repeat: -1,
+    })
+
+    // Create a seamless loop by duplicating the first frame at the end
+    const totalFrames = items.length + 1
+
+    // Animate through all frames
+    tl.to(canStripRef.current, {
+      x: `-${(items.length / totalFrames) * 100}%`,
+      duration: rotationDuration,
+      ease: 'none',
+      onComplete: function () {
+        // Reset to the beginning without a jump
+        gsap.set(canStripRef.current, { x: 0 })
+        tl.restart()
+      },
+    })
+
+    timelineRef.current = tl
+
+    return () => {
+      if (timelineRef.current) {
+        timelineRef.current.kill()
+      }
+    }
+  }, [isInView, items.length, rotationDuration])
 
   // Handle next button click
   const handleNext = () => {
     setPrevActiveIndex(activeIndex)
     const newActiveIndex = activeIndex >= items.length - 1 ? 0 : activeIndex + 1
     setActiveIndex(newActiveIndex)
-    setLeftMockup((prev) => prev + leftEachItem)
-    setIsRightDirection(false)
   }
 
   // Handle previous button click
@@ -70,8 +138,6 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
     setPrevActiveIndex(activeIndex)
     const newActiveIndex = activeIndex <= 0 ? items.length - 1 : activeIndex - 1
     setActiveIndex(newActiveIndex)
-    setLeftMockup((prev) => prev - leftEachItem)
-    setIsRightDirection(true)
   }
 
   // Reset auto-play interval
@@ -84,6 +150,8 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
 
   // Set up auto-play and cleanup
   useEffect(() => {
+    if (!isInView) return
+
     intervalRef.current = setInterval(handleNext, autoPlayInterval)
 
     return () => {
@@ -91,11 +159,11 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
         clearInterval(intervalRef.current)
       }
     }
-  }, [])
+  }, [isInView, autoPlayInterval])
 
   // Handle carousel changes with proper animations
   useEffect(() => {
-    if (prevActiveIndex === activeIndex) return
+    if (prevActiveIndex === activeIndex || !isInView) return
 
     const oldItem = itemRefs.current[prevActiveIndex]
     const newItem = itemRefs.current[activeIndex]
@@ -107,7 +175,7 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
       // Animate out old item
       if (oldFruit) {
         gsap.to(oldFruit, {
-          top: isRightDirection ? '100%' : '-100%',
+          top: '100%',
           opacity: 0,
           duration: 0.8,
           ease: 'power2.inOut',
@@ -132,7 +200,7 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
         gsap.fromTo(
           newFruit,
           {
-            top: isRightDirection ? '0%' : '100%',
+            top: '100%',
             opacity: 0,
           },
           {
@@ -161,7 +229,7 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
     }
 
     resetInterval()
-  }, [activeIndex, prevActiveIndex, isRightDirection])
+  }, [activeIndex, prevActiveIndex, isInView])
 
   // Get the display status for each item
   const getItemStatus = (index: number) => {
@@ -169,11 +237,6 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
     if (index === prevActiveIndex) return 'hidden'
     return 'inactive'
   }
-
-  // Create a combined can strip image from all items
-  // const createCanStrip = () => {
-  //   return items.map((item) => item.canImage).join(',')
-  // }
 
   return (
     <div className={`min-h-screen bg-gray-100 ${className}`}>
@@ -198,7 +261,7 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
         ref={carouselRef}
         className={`relative w-full h-screen overflow-hidden ${
           showHeader ? '-mt-12' : ''
-        } ${isRightDirection ? 'right' : ''}`}
+        }`}
       >
         {/* Carousel Items */}
         <div className="list w-full h-full">
@@ -281,10 +344,10 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
           {/* Can Strip Container - scrolls horizontally */}
           <div className="absolute inset-0 overflow-hidden">
             <div
-              className="flex h-full transition-transform duration-500 ease-out"
+              ref={canStripRef}
+              className="flex h-full"
               style={{
                 width: `${items.length * 100}%`,
-                transform: `translateX(-${leftMockup}%)`,
               }}
             >
               {items.map((item, index) => (
@@ -372,4 +435,4 @@ const FruitCarousel: React.FC<FruitCarouselProps> = ({
   )
 }
 
-export default FruitCarousel
+export default SpinningCanCarousel

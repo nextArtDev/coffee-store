@@ -33,7 +33,7 @@ const RotatableCan: React.FC<CanProps> = ({
       },
     },
     animate: {
-      y: -10,
+      //   y: -10,
       transition: {
         duration: 0.7,
       },
@@ -77,7 +77,7 @@ const RotatableCan: React.FC<CanProps> = ({
   return (
     <div ref={ref} className={`relative ${className}`}>
       <motion.div
-        className="relative mx-auto w-[280px] h-[560px] md:w-[400px] md:h-[800px] lg:w-[280px] lg:h-[560px]"
+        className="relative mx-auto aspect-[2/4] w-[280px] h-[560px] md:w-[400px] md:h-[800px] lg:w-[280px] lg:h-[560px]"
         variants={canVariants}
         initial="initial"
         animate={controls}
