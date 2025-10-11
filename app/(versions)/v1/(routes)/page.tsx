@@ -1,9 +1,12 @@
 import React from 'react'
-import FruitCarousel, { CarouselItem } from '../components/Spining'
-import RotatableCan from '../components/RotatableCan'
-import RotatableCanGSAP from '../components/RotatableCanGSAP'
-import SpinningCan from '../components/SpinningCan'
-import SpinningCanCarousel from '../components/SpinningCanCarousel'
+import FruitCarousel, {
+  CarouselItem,
+} from '../components/hero-carousel/Spining'
+import RotatableCan from '../components/hero-carousel/RotatableCan'
+import RotatableCanGSAP from '../components/hero-carousel/RotatableCanGSAP'
+import SpinningCan from '../components/hero-carousel/SpinningCan'
+import SpinningCanCarousel from '../components/hero-carousel/SpinningCanCarousel'
+import RotatingCan from '../components/hero-carousel/CanSpinning'
 const items: CarouselItem[] = [
   {
     id: 1,
@@ -38,7 +41,7 @@ const canFrames = [
 ]
 const page = () => {
   return (
-    <div dir="ltr">
+    <div dir="ltr" className="mt-8">
       <FruitCarousel
         items={items}
         leavesImage="/img/leaves.png"
@@ -47,15 +50,11 @@ const page = () => {
         headerNavItems={['HOME', 'PRODUCTS', 'ABOUT', 'CONTACT']}
         showHeader={true}
       />
-
-      <SpinningCan
-        canImages={canFrames}
-        mockupImage="/img/mockup.png"
-        width={280}
-        height={560}
-        rotationDuration={2}
-        animateOnView={true}
-        autoRotate={true}
+      <RotatingCan
+        mockupImage="/img/cup-mockup1.png"
+        textureImage="/img/listSoda.jpg"
+        width={400}
+        aspectRatio="9 / 7"
       />
       <SpinningCanCarousel
         items={items}
@@ -69,7 +68,16 @@ const page = () => {
       />
       <div className="banner relative h-screen mt-[-50px]">
         <div className="product absolute left-1/2 -translate-x-1/2 bottom-[170px] z-10 w-[500px]">
-          <RotatableCan image="/img/leaves.png" mockup="/img/mockup.png" />
+          <SpinningCan
+            canImages={canFrames}
+            mockupImage="/img/mockup.png"
+            width={280}
+            height={560}
+            rotationDuration={2}
+            animateOnView={true}
+            autoRotate={true}
+          />
+          {/* <RotatableCan image="/img/leaves.png" mockup="/img/mockup.png" /> */}
         </div>
       </div>
 
