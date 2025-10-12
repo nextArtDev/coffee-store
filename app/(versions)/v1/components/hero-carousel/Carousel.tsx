@@ -6,14 +6,15 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel'
-import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Autoplay from 'embla-carousel-autoplay'
 import Fade from 'embla-carousel-fade'
 import RotatingCan from './CanSpinning'
+import { cn } from '@/lib/utils'
 
 type SlideData = {
   backgroundUrl: string
+  backgroundColor?: string
   canMockup: string
   canTexture: string
   canWidth?: number
@@ -27,6 +28,7 @@ type Props = {
 const HeroCarousel = ({ slides }: Props) => {
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [count, setCount] = React.useState(0)
 
   React.useEffect(() => {
@@ -55,15 +57,20 @@ const HeroCarousel = ({ slides }: Props) => {
           }),
         ]}
         orientation="vertical"
-        className="relative z-20 min-h-dvh w-full h-vdh"
+        className=" relative min-h-dvh w-full h-dvh"
       >
-        <CarouselContent className="h-screen w-full mx-auto">
+        <CarouselContent className="!p-0 !m-0 h-dvh  w-full mx-auto ">
           {slides.map((slide, index) => (
             <CarouselItem
               key={`${slide.backgroundUrl}-${index}`}
               className="flex items-center justify-center w-full h-full"
             >
-              <figure className="border-none relative h-full w-full bg-[#eceae8]">
+              <figure
+                className={cn(
+                  'border-none relative h-full w-full',
+                  slide.backgroundColor
+                )}
+              >
                 <Image
                   unoptimized
                   src={slide.backgroundUrl || '/images/fallback-image.webp'}

@@ -48,13 +48,16 @@ const page = () => {
           slides={[
             {
               backgroundUrl: '/img/fruit_avocado.png',
+              backgroundColor: 'bg-green-600',
               canMockup: '/img/mockup.png',
               canTexture: '/img/listSoda.jpg',
-              canWidth: 350,
-              canAspectRatio: '1 / 2',
+              canWidth: 320,
+
+              canAspectRatio: '4 / 7',
             },
             {
               backgroundUrl: '/img/fruit_strawberry.png',
+              backgroundColor: 'bg-red-600',
               canMockup: '/img/cup-mockup1.png',
               canTexture: '/img/listSoda.jpg',
               canWidth: 400,
@@ -62,10 +65,12 @@ const page = () => {
             },
             {
               backgroundUrl: '/img/fruit_orange.png',
+              backgroundColor: 'bg-yellow-600',
               canMockup: '/img/mockup.png',
               canTexture: '/img/listSoda.jpg',
-              canWidth: 350,
-              canAspectRatio: '1 / 2',
+              canWidth: 320,
+
+              canAspectRatio: '4 / 7',
             },
           ]}
         />

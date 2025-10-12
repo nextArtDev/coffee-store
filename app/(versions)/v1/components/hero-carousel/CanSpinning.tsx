@@ -53,7 +53,7 @@ const RotatingCan: React.FC<RotatingCanProps> = ({
           ease: 'power1.inOut',
           onUpdate: function () {
             const progress = this.progress()
-            setTextureOffset(progress * 500)
+            setTextureOffset(progress * 300)
           },
         },
         '-=0.4'
