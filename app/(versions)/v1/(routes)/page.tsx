@@ -7,6 +7,7 @@ import RotatableCanGSAP from '../components/hero-carousel/RotatableCanGSAP'
 import SpinningCan from '../components/hero-carousel/SpinningCan'
 import SpinningCanCarousel from '../components/hero-carousel/SpinningCanCarousel'
 import RotatingCan from '../components/hero-carousel/CanSpinning'
+import HeroCarousel from '../components/hero-carousel/Carousel'
 const items: CarouselItem[] = [
   {
     id: 1,
@@ -41,7 +42,35 @@ const canFrames = [
 ]
 const page = () => {
   return (
-    <div dir="ltr" className="mt-8">
+    <div dir="ltr" className="w-full h-full min-h-screen">
+      <div className="relative h-full w-full">
+        <HeroCarousel
+          slides={[
+            {
+              backgroundUrl: '/img/fruit_avocado.png',
+              canMockup: '/img/mockup.png',
+              canTexture: '/img/listSoda.jpg',
+              canWidth: 350,
+              canAspectRatio: '1 / 2',
+            },
+            {
+              backgroundUrl: '/img/fruit_strawberry.png',
+              canMockup: '/img/cup-mockup1.png',
+              canTexture: '/img/listSoda.jpg',
+              canWidth: 400,
+              canAspectRatio: '22 / 18',
+            },
+            {
+              backgroundUrl: '/img/fruit_orange.png',
+              canMockup: '/img/mockup.png',
+              canTexture: '/img/listSoda.jpg',
+              canWidth: 350,
+              canAspectRatio: '1 / 2',
+            },
+          ]}
+        />
+      </div>
+      {/* <div className="h-[100vh] w-full bg-gradient-to-b from-[#EA3D41] via-[#2D5643] to-[#E7A043]"></div> */}
       <FruitCarousel
         items={items}
         leavesImage="/img/leaves.png"
@@ -54,7 +83,8 @@ const page = () => {
         mockupImage="/img/cup-mockup1.png"
         textureImage="/img/listSoda.jpg"
         width={400}
-        aspectRatio="9 / 7"
+        aspectRatio="22 / 18"
+        className=""
       />
       <SpinningCanCarousel
         items={items}

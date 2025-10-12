@@ -1,9 +1,6 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
 
 interface RotatingCanProps {
   textureImage: string
@@ -11,6 +8,8 @@ interface RotatingCanProps {
   className?: string
   width?: number
   aspectRatio?: string
+  isActive?: boolean // New prop to trigger animation
+  animationTrigger?: 'scroll' | 'active' // Choose animation mode
 }
 
 const RotatingCan: React.FC<RotatingCanProps> = ({
@@ -19,28 +18,29 @@ const RotatingCan: React.FC<RotatingCanProps> = ({
   className = '',
   width = 280,
   aspectRatio = '2 / 4',
+  isActive = true,
+  animationTrigger = 'active',
 }) => {
   const canRef = useRef<HTMLDivElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [textureOffset, setTextureOffset] = useState(0)
+  const timelineRef = useRef<gsap.core.Timeline | null>(null)
 
   useEffect(() => {
     if (!canRef.current || !containerRef.current) return
 
     const ctx = gsap.context(() => {
-      // Create timeline for the animation
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top center',
-          end: 'bottom center',
-          toggleActions: 'play none none reverse',
-        },
-      })
+      // Create timeline but don't play it yet
+      const tl = gsap.timeline({ paused: true })
+      timelineRef.current = tl
+
+      // Set initial state
+      gsap.set(canRef.current, { y: 100, opacity: 0 })
 
       // Animate the can rising up
       tl.to(canRef.current, {
-        y: -100,
+        y: 0,
+        opacity: 1,
         duration: 0.8,
         ease: 'power2.out',
       })
@@ -53,7 +53,6 @@ const RotatingCan: React.FC<RotatingCanProps> = ({
           ease: 'power1.inOut',
           onUpdate: function () {
             const progress = this.progress()
-            // Rotate texture by moving background position
             setTextureOffset(progress * 500)
           },
         },
@@ -61,13 +60,30 @@ const RotatingCan: React.FC<RotatingCanProps> = ({
       )
     }, containerRef)
 
-    return () => ctx.revert()
-  }, [textureImage, mockupImage])
+    return () => {
+      ctx.revert()
+      timelineRef.current = null
+    }
+  }, [])
+
+  // Trigger animation when isActive changes
+  useEffect(() => {
+    if (!timelineRef.current) return
+
+    if (isActive && animationTrigger === 'active') {
+      // Reset and play animation
+      timelineRef.current.restart()
+    } else if (!isActive && animationTrigger === 'active') {
+      // Reset to initial state when not active
+      timelineRef.current.pause(0)
+      setTextureOffset(0)
+    }
+  }, [isActive, animationTrigger])
 
   return (
     <div
       ref={containerRef}
-      className={`relative w-full h-screen flex items-end justify-center overflow-hidden ${className}`}
+      className={`absolute inset-0 w-full h-full flex items-end justify-center overflow-hidden ${className}`}
     >
       <div
         ref={canRef}
@@ -94,37 +110,4 @@ const RotatingCan: React.FC<RotatingCanProps> = ({
   )
 }
 
-// Demo component with example usage
-// const Demo: React.FC = () => {
-//   return (
-//     <div className="min-h-screen bg-gradient-to-b from-sky-300 to-sky-100">
-//       <div className="h-screen flex items-center justify-center">
-//         <div className="text-center">
-//           <h1 className="text-6xl font-bold mb-4">Scroll Down</h1>
-//           <p className="text-xl text-gray-600">
-//             Watch the can animate when it comes into view
-//           </p>
-//         </div>
-//       </div>
-
-//       <RotatingCan
-//         textureImage="https://images.unsplash.com/photo-1610889556528-9a770e32642f?w=400&h=800&fit=crop"
-//         mockupImage="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=400&h=800&fit=crop&mask=ellipse"
-//         width={320}
-//         aspectRatio="1 / 2"
-//       />
-
-//       <div className="h-screen flex items-center justify-center">
-//         <div className="text-center">
-//           <h2 className="text-4xl font-bold mb-4">Animation Complete!</h2>
-//           <p className="text-lg text-gray-600">
-//             Scroll back up to see it reverse
-//           </p>
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
-
-// export default Demo
 export default RotatingCan
