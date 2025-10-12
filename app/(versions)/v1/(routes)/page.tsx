@@ -8,6 +8,7 @@ import SpinningCan from '../components/hero-carousel/SpinningCan'
 import SpinningCanCarousel from '../components/hero-carousel/SpinningCanCarousel'
 import RotatingCan from '../components/hero-carousel/CanSpinning'
 import HeroCarousel from '../components/hero-carousel/Carousel'
+
 const items: CarouselItem[] = [
   {
     id: 1,
@@ -40,6 +41,8 @@ const canFrames = [
   '/img/can-frame-3.png',
   // Add more frames for smoother rotation
 ]
+
+export const dynamic = 'force-dynamic'
 const page = () => {
   return (
     <div dir="ltr" className="w-full h-full min-h-screen">
